@@ -10,7 +10,7 @@ package edu.wpi.first.wpilibj.templates;
  *
  * @author mattmichielsen
  */
-public static class Addresses {
+public final class Addresses {
     public static final int LEFT_FRONT_MOTOR = 1;
     public static final int LEFT_REAR_MOTOR = 2;
     public static final int RIGHT_FRONT_MOTOR = 3;
