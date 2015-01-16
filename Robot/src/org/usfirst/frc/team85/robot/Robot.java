@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package edu.wpi.first.wpilibj.templates;
+package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
 

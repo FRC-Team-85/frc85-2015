@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 
-package edu.wpi.first.wpilibj.templates;
+package org.usfirst.frc.team85.robot;
+
 
 /**
  *
