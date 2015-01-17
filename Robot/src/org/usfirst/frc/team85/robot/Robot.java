@@ -17,8 +17,7 @@ import edu.wpi.first.wpilibj.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
-    private Joystick _rightStick;
-    private Joystick _leftStick;
+    private Joystick _driveController;
         
     private RobotDrive _drive;
     
@@ -30,8 +29,6 @@ public class Robot extends IterativeRobot {
         _driveController = new Joystick(Addresses.DRIVE_CONTROLLER);
         _drive = new RobotDrive(new CANTalon(Addresses.LEFT_FRONT_MOTOR), new CANTalon(Addresses.LEFT_REAR_MOTOR), 
                 new CANTalon(Addresses.RIGHT_FRONT_MOTOR), new CANTalon(Addresses.RIGHT_REAR_MOTOR));
-        _rightStick = new Joystick();
-        _leftStick = new Joystick();
     }
     
     public void autonomousInit() {
@@ -48,7 +45,8 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        _drive.tankDrive(_leftStick, _rightStick);
+        _drive.mecanumDrive_Cartesian(_driveController.getX(), _driveController.getY(),
+                _driveController.getTwist(), 0);
     }
     
     /**
