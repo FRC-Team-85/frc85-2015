@@ -27,8 +27,8 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
         _driveController = new Joystick(Addresses.DRIVE_CONTROLLER);
-        _drive = new RobotDrive(Addresses.LEFT_FRONT_MOTOR, Addresses.LEFT_REAR_MOTOR, 
-                Addresses.RIGHT_FRONT_MOTOR, Addresses.RIGHT_REAR_MOTOR);
+        _drive = new RobotDrive(new CANTalon(Addresses.LEFT_FRONT_MOTOR), new CANTalon(Addresses.LEFT_REAR_MOTOR), 
+                new CANTalon(Addresses.RIGHT_FRONT_MOTOR), new CANTalon(Addresses.RIGHT_REAR_MOTOR));
     }
     
     public void autonomousInit() {
