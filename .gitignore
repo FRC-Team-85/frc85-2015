@@ -13,3 +13,4 @@ hs_err_pid*
 Robot/nbproject/project.bak.xml
 Robot/build/
 Robot/nbproject/private/private.xml
+Robot/sysProps.xml

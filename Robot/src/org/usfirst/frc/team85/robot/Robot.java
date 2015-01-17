@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        _drive.mecanumDrive_Cartesian(_driveController.getX(), _driveController.getY(),
+        _drive.mecanumDrive_Cartesian(-_driveController.getX(), -_driveController.getY(),
                 _driveController.getTwist(), 0);
     }
     
