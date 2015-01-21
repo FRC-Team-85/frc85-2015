@@ -50,7 +50,8 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        _drive.tankDrive(_driveController.getY(), _driveController.getThrottle());
+    	_drive.mecanumDrive_Cartesian(-_driveController.getX(), -_driveController.getY(),
+        _driveController.getTwist(), 0);
         
         if(_driveController.getRawButton(Addresses.SOLENOID_BUTTON)){
         	_solenoidBool = !_solenoidBool;
