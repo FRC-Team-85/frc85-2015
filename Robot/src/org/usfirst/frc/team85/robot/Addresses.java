@@ -17,5 +17,9 @@ public final class Addresses {
     public static final int RIGHT_FRONT_MOTOR = 3;
     public static final int RIGHT_REAR_MOTOR = 4;
     
+    public static final int PNEUMATIC_CONTROLLER_CID = 5;
+    public static final int SOLENOID_CHANNEL = 0;
+    public static final int SOLENOID_BUTTON = 2;
+    
     public static final int DRIVE_CONTROLLER = 1;
 }
