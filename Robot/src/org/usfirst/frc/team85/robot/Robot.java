@@ -8,6 +8,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.vision.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,6 +23,8 @@ public class Robot extends IterativeRobot {
     private Solenoid _solenoid1;
     private Boolean _solenoidBool;
     
+    private CameraServer _camera;
+    
     private RobotDrive _drive;
     
     /**
@@ -34,6 +37,9 @@ public class Robot extends IterativeRobot {
                 new CANTalon(Addresses.RIGHT_FRONT_MOTOR), new CANTalon(Addresses.RIGHT_REAR_MOTOR));
         _solenoid1 = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.SOLENOID_CHANNEL);
         _solenoidBool = false;
+        
+        _camera = CameraServer.getInstance();
+        _camera.startAutomaticCapture("cam0");
     }
     
     public void autonomousInit() {
@@ -50,8 +56,8 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	_drive.mecanumDrive_Cartesian(-_driveController.getX(), -_driveController.getY(),
-        _driveController.getTwist(), 0);
+    	_drive.mecanumDrive_Cartesian(scaleMotor(-_driveController.getX()), scaleMotor(-_driveController.getY()),
+        scaleMotor(_driveController.getTwist()), 0);
         
         if(_driveController.getRawButton(Addresses.SOLENOID_BUTTON)){
         	_solenoidBool = !_solenoidBool;
@@ -69,6 +75,10 @@ public class Robot extends IterativeRobot {
      */
     public void testPeriodic() {
     
+    }
+    
+    private double scaleMotor(double speed) {
+    	return speed * .7;
     }
     
 }
