@@ -8,7 +8,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.vision.*;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +23,8 @@ public class Robot extends IterativeRobot {
     private Solenoid _solenoid1;
     private Boolean _solenoidBool;
     
+    private Encoder encoder;
+    
     private CameraServer _camera;
     
     private RobotDrive _drive;
@@ -33,6 +35,7 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
         _driveController = new Joystick(Addresses.DRIVE_CONTROLLER);
+        
         _drive = new RobotDrive(new CANTalon(Addresses.LEFT_FRONT_MOTOR), new CANTalon(Addresses.LEFT_REAR_MOTOR), 
                 new CANTalon(Addresses.RIGHT_FRONT_MOTOR), new CANTalon(Addresses.RIGHT_REAR_MOTOR));
         _solenoid1 = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.SOLENOID_CHANNEL);
@@ -40,6 +43,12 @@ public class Robot extends IterativeRobot {
         
         _camera = CameraServer.getInstance();
         _camera.startAutomaticCapture("cam0");
+        
+        
+        encoder = new Encoder(Addresses.FRONT_LEFT_ENCODER_CHANNEL_A, Addresses.FRONT_LEFT_ENCODER_CHANNEL_B);
+        System.out.println(encoder.get());
+        
+        
     }
     
     public void autonomousInit() {
