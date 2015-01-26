@@ -23,10 +23,9 @@ public class Robot extends IterativeRobot {
     private Solenoid _solenoid1;
     private Boolean _solenoidBool;
     
-    private Encoder encoder;
-    
     private CameraServer _camera;
     
+
     private RobotDrive _drive;
     
     /**
@@ -44,11 +43,6 @@ public class Robot extends IterativeRobot {
         _camera = CameraServer.getInstance();
         _camera.startAutomaticCapture("cam0");
         
-        
-        encoder = new Encoder(Addresses.FRONT_LEFT_ENCODER_CHANNEL_A, Addresses.FRONT_LEFT_ENCODER_CHANNEL_B);
-        System.out.println(encoder.get());
-        
-        
     }
     
     public void autonomousInit() {
@@ -65,8 +59,8 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	_drive.mecanumDrive_Cartesian(scaleMotor(-_driveController.getX()), scaleMotor(-_driveController.getY()),
-        scaleMotor(_driveController.getTwist()), 0);
+    	_drive.mecanumDrive_Cartesian(scaleDrive(-_driveController.getX()), scaleDrive(-_driveController.getY()),
+        scaleDrive(_driveController.getTwist()), 0);
         
         if(_driveController.getRawButton(Addresses.SOLENOID_BUTTON)){
         	_solenoidBool = !_solenoidBool;
@@ -86,8 +80,8 @@ public class Robot extends IterativeRobot {
     
     }
     
-    private double scaleMotor(double speed) {
-    	return speed * .7;
+    private double scaleDrive(double input) {
+    	return input * .7;
     }
     
 }
