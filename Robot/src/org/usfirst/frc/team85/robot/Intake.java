@@ -4,19 +4,25 @@ import edu.wpi.first.wpilibj.*;
 
 public class Intake {
 
-	private Joystick joystick;
+	private static Joystick joystick;
 	
-	private Solenoid armLeft;
-	private Solenoid armRight;
+	private static Solenoid armLeft;
+	private static Solenoid armRight;
 	
-	private Solenoid wristLeft;
-	private Solenoid wristRight;
+	private static Solenoid wristLeft;
+	private static Solenoid wristRight;
 	
-	private CANTalon phalangeLeft;
-	private CANTalon phalangeRight;
+	private static CANTalon phalangeLeft;
+	private static CANTalon phalangeRight;
 	
-	private double inSpeed;// 0.0
-	private double outSpeed;// -0.0
+	private static final double inSpeed = 0.0;		//positive
+	private static final double outSpeed = 0.0;		//positive
+	
+	private static final int RESET = 1;
+	private static final int TOGGLEARM = 2;
+	private static final int TOGGLEWRIST = 3;
+	private static final int INPHALANGE = 4;
+	private static final int OUTPHALANGE = 5; 		//config not set
 	
 	public Intake (Joystick intakeJoystick,
 			int leftArmAddress,int rightArmAddress,
@@ -97,7 +103,7 @@ public class Intake {
 		}
 	}
 	
-	private void toggleWrist() { // preference is if neither open or closed then open wrist to avoid accidents
+	private void toggleWrist() { 			// preference is if neither open or closed then open wrist to avoid accidents
 		if (!isWristOpen()) {
 			openWrist();
 		} else {
@@ -115,11 +121,51 @@ public class Intake {
 	}
 	
 	private void outPhalange() {
-		setPhalange(outSpeed);
+		setPhalange(-outSpeed);
+	}
+	
+	private void breakPhalanges() {			//named in honor of the maturity of the UberNoobs of the 2015 FRC season
+		setPhalange(0.0);
+	}
+	
+	private void reset() {
+		openArm();
+		openWrist();
+		breakPhalanges();
 	}
 	
 	public void run() {
-		//all that stuff
+		
+		if (!joystick.getRawButton(RESET)) {
+		
+			if (joystick.getRawButton(TOGGLEARM)) {
+				toggleArm();
+			}
+			
+			if (joystick.getRawButton(TOGGLEWRIST)) {
+				toggleWrist();
+			}
+
+			if (joystick.getRawButton(INPHALANGE) && joystick.getRawButton(OUTPHALANGE)) {
+				breakPhalanges();
+			} else {
+				
+				if (joystick.getRawButton(OUTPHALANGE)) {
+					outPhalange();
+				}
+				
+				if (joystick.getRawButton(INPHALANGE)) {
+					inPhalange();
+				}
+				
+			}
+			
+		} else {
+			reset();
+		}
+		
 	}
+	
+	
 	
 }
