@@ -6,11 +6,9 @@ public class Intake {
 
 	private static Joystick joystick;
 	
-	private static Solenoid armLeft;
-	private static Solenoid armRight;
+	private static Solenoid arms;
 	
-	private static Solenoid wristLeft;
-	private static Solenoid wristRight;
+	private static Solenoid wrists;
 	
 	private static CANTalon phalangeLeft;
 	private static CANTalon phalangeRight;
@@ -25,89 +23,75 @@ public class Intake {
 	private static final int OUTPHALANGE = 5; 		//config not set
 	
 	public Intake (Joystick intakeJoystick,
-			int leftArmAddress,int rightArmAddress,
-			int leftWristAddress,int rightWristAddress,
+			int armsAddress
+			int wristsAddress
 			int leftPhalangeAddress,int rightPhalangeAddress) {
 		joystick = intakeJoystick;
-		armLeft = new Solenoid(leftArmAddress);
-		armRight = new Solenoid(rightArmAddress);
-		wristLeft = new Solenoid(leftWristAddress);
-		wristRight = new Solenoid(rightWristAddress);
-		phalangeLeft = new CANTalon(leftPhalangeAddress);
-		phalangeRight = new CANTalon(rightPhalangeAddress);
+		bothArms = new Solenoid(armsAddress);
+		bothWrists = new Solenoid(wristsAddress);
+		phalangeLeft = new CANTalon(phalangeLeftAddress);
+		phalangeRight = new CANTalon (phalangeRightAddress);
 	}
 	
-	private boolean isArmClosed() {
+	private boolean armsOpenOrClosed() {
 		boolean armClosed;
 		armClosed = (armLeft.get() && armRight.get()) ? true : false;
 		return armClosed;
+			boolean armOpen;
+			armOpen = (!armLeft.get() && !armRight.get()) ? true : false;
+			return armOpen;
 	}
 	
-	private boolean isArmOpen() {
-		boolean armOpen;
-		armOpen = (!armLeft.get() && !armRight.get()) ? true : false;
-		return armOpen;
-	}
-
-	private boolean isWristClosed() {
+	private boolean wristsOpenOrClosed() {
 		boolean wristClosed;
 		wristClosed = (wristLeft.get() && wristRight.get()) ? true : false;
 		return wristClosed;
+			boolean wristOpen;
+			wristOpen = (!wristLeft.get() && !wristRight.get()) ? true : false;
+			return wristOpen;
 	}
 	
-	private boolean isWristOpen() {
-		boolean wristOpen;
-		wristOpen = (!wristLeft.get() && !wristRight.get()) ? true : false;
-		return wristOpen;
-	}
-
 	private void setArm(boolean input) {
-		armLeft.set(input);
-		armRight.set(input);
+		arms.set(input);
 	}
 
 	private void setWrist(boolean input) {
-		wristLeft.set(input);
-		wristRight.set(input);
+		wrists.set(input);
 	}
 
-	private void openArm() {
-		if (!isArmOpen()) {
-			setArm(false);
+	private void openOrCloseArms() {
+		if (!armsOpen()) {
+			setArms(false);
+			private void closeArm() {
+				if (!armsClosed()) {
+					setArm(true);
 		}
 	}
 	
-	private void closeArm() {
-		if (!isArmClosed()) {
-			setArm(true);
+
+
+	private void wristsOpenOrClosed() {
+		if (!wristsOpen()) {
+			setWrists(false);
 		}
 	}
 
-	private void openWrist() {
-		if (!isWristOpen()) {
-			setWrist(false);
-		}
-	}
+	
 
-	private void closeWrist() {
-		if (!isWristClosed()) {
-			setWrist(true);
-		}
-	}
 		
-	private void toggleArm() { // preference is if neither open or closed then open arm to avoid accidents
-		if (!isArmOpen()) {
-			openArm();
+	private void toggleArms() { // preference is if neither open or closed then open arm to avoid accidents
+		if (!armsOpen()) {
+			armsClosed();
 		} else {
-			closeArm();
+			closeArms();
 		}
 	}
 	
-	private void toggleWrist() { 			// preference is if neither open or closed then open wrist to avoid accidents
-		if (!isWristOpen()) {
-			openWrist();
+	private void toggleWrists() { 			// preference is if neither open or closed then open wrist to avoid accidents
+		if (!wristsOpen()) {
+			openWrists();
 		} else {
-			closeWrist();
+			closeWrists();
 		}
 	}
 	
@@ -129,8 +113,8 @@ public class Intake {
 	}
 	
 	private void reset() {
-		openArm();
-		openWrist();
+		openArms();
+		openWrists();
 		breakPhalanges();
 	}
 	
