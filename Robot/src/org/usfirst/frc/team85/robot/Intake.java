@@ -37,6 +37,7 @@ public class Intake {
 		}
 		if (!arm.get()) {
 			arm.set(true);
+
 		}
 	}
 	
