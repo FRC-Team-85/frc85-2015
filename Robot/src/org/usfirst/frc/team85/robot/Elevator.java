@@ -15,14 +15,15 @@ public class Elevator {
 	private static CANTalon leftBeltMotor;
 	
 	public Elevator () {
-		topSwitch = new DigitalInput(topSwitchChannel);
+		/*topSwitch = new DigitalInput(topSwitchChannel);
 		bottomSwitch = new DigitalInput(bottomSwitchChannel);
 		rightBeltMotor = new CANTalon(beltMotorOneAddress);
 		leftBeltMotor = new CANTalon(beltMotorTwoAddress);
+	*/
 	}
 	
 	public void runLift() {
-		runMotors();
+		//runMotors();
 		
 	}
 	

@@ -25,6 +25,7 @@ public class Robot extends IterativeRobot {
     
     private CameraServer _camera;
     
+    private Encoder encoder;
 
     private RobotDrive _drive;
     
@@ -43,6 +44,7 @@ public class Robot extends IterativeRobot {
         _camera = CameraServer.getInstance();
         _camera.startAutomaticCapture("cam0");
         
+        encoder = new Encoder(0, 1);
     }
     
     public void autonomousInit() {
@@ -65,6 +67,8 @@ public class Robot extends IterativeRobot {
         if(_driveController.getRawButton(Addresses.SOLENOID_BUTTON)){
         	_solenoidBool = !_solenoidBool;
         }
+        
+        System.out.println(encoder.get());
         /*try {
         	_solenoid1.set(_solenoidBool);
         } catch (Exception ex){

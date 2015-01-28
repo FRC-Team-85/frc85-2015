@@ -29,14 +29,14 @@ public class Drive {
 		
 		_frontLeftEncoder = new Encoder(Addresses.FRONT_LEFT_ENCODER_CHANNEL_A, 
 				Addresses.FRONT_LEFT_ENCODER_CHANNEL_B);
-		/*_frontRightEncoder = new Encoder(Addresses.FRONT_RIGHT_ENCODER_CHANNEL_A,
+		_frontRightEncoder = new Encoder(Addresses.FRONT_RIGHT_ENCODER_CHANNEL_A,
 				Addresses.FRONT_RIGHT_ENCODER_CHANNEL_B);
 		_backLeftEncoder = new Encoder(Addresses.BACK_LEFT_ENCODER_CHANNEL_A,
 				Addresses.BACK_LEFT_ENCODER_CHANNEL_B);
 		_backRightEncoder = new Encoder(Addresses.BACK_RIGHT_ENCODER_CHANNEL_A,
 				Addresses.BACK_RIGHT_ENCODER_CHANNEL_B);
-		*/
-	System.out.print(_frontLeftEncoder.get());
+		
+	
 	}
 	
 }
