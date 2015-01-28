@@ -6,11 +6,9 @@ public class Intake {
 
 	private static Joystick joystick;
 	
-	private static Solenoid armLeft;
-	private static Solenoid armRight;
+	private static Solenoid bothArms;
 	
-	private static Solenoid wristLeft;
-	private static Solenoid wristRight;
+	private static Solenoid bothWrists;
 	
 	private static CANTalon phalangeLeft;
 	private static CANTalon phalangeRight;
@@ -25,63 +23,58 @@ public class Intake {
 	private static final int OUTPHALANGE = 5; 		//config not set
 	
 	public Intake (Joystick intakeJoystick,
-			int leftArmAddress,int rightArmAddress,
-			int leftWristAddress,int rightWristAddress,
+			int bothArmsAddress,
+			int bothWristsAddress,
 			int leftPhalangeAddress,int rightPhalangeAddress) {
 		joystick = intakeJoystick;
-		armLeft = new Solenoid(leftArmAddress);
-		armRight = new Solenoid(rightArmAddress);
-		wristLeft = new Solenoid(leftWristAddress);
-		wristRight = new Solenoid(rightWristAddress);
+		bothArms = new Solenoid(bothArmsAddress);
+		bothWrists = new Solenoid(bothWristsAddress);
 		phalangeLeft = new CANTalon(leftPhalangeAddress);
 		phalangeRight = new CANTalon(rightPhalangeAddress);
 	}
 	
 	private boolean isArmClosed() {
 		boolean armClosed;
-		armClosed = (armLeft.get() && armRight.get()) ? true : false;
+		armClosed = (bothArms.get()) ? true : false;
 		return armClosed;
 	}
 	
 	private boolean isArmOpen() {
 		boolean armOpen;
-		armOpen = (!armLeft.get() && !armRight.get()) ? true : false;
+		armOpen = (!bothArms.get()) ? true : false;
 		return armOpen;
 	}
 
 	private boolean isWristClosed() {
 		boolean wristClosed;
-		wristClosed = (wristLeft.get() && wristRight.get()) ? true : false;
+		wristClosed = (bothWrists.get()) ? true : false;
 		return wristClosed;
 	}
 	
 	private boolean isWristOpen() {
 		boolean wristOpen;
-		wristOpen = (!wristLeft.get() && !wristRight.get()) ? true : false;
+		wristOpen = (!bothWrists.get()) ? true : false;
 		return wristOpen;
 	}
 
 	private void setArm(boolean input) {
-		armLeft.set(input);
-		armRight.set(input);
+		bothArms.set(input);
 	}
 
 	private void setWrist(boolean input) {
-		wristLeft.set(input);
-		wristRight.set(input);
+		bothWrists.set(input);
 	}
 
 	private void openArm() {
 		if (!isArmOpen()) {
 			setArm(false);
-		}
-	}
-	
-	private void closeArm() {
-		if (!isArmClosed()) {
+		if (isArmOpen()) {
 			setArm(true);
 		}
 	}
+	
+		}
+	
 
 	private void openWrist() {
 		if (!isWristOpen()) {
