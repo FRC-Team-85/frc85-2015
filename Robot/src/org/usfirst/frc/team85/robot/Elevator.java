@@ -14,8 +14,13 @@ public class Elevator {
 	private static CANTalon rightBeltMotor;
 	private static CANTalon leftBeltMotor;
 	
+	
+	
 	public Elevator () {
-		/*topSwitch = new DigitalInput(topSwitchChannel);
+	/*
+	  	controller = elevatorController;
+	  	
+		topSwitch = new DigitalInput(topSwitchChannel);
 		bottomSwitch = new DigitalInput(bottomSwitchChannel);
 		rightBeltMotor = new CANTalon(beltMotorOneAddress);
 		leftBeltMotor = new CANTalon(beltMotorTwoAddress);
