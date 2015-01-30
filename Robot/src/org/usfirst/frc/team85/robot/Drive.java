@@ -46,8 +46,22 @@ public class Drive {
 	}
 	
 	public void drive() {
-		_drive.mecanumDrive_Cartesian();
+		if(Math.abs(_controller.getX()) <= .05 && Math.abs(_controller.getY()) <= .05 && Math.abs(_controller.getTwist()) <= .05) {
+			setMotors(0.0, 0.0, 0.0, 0.0);
+			return;
+		}
+			_drive.mecanumDrive_Cartesian(scaleDrive(_controller.getX()), scaleDrive(_controller.getY()), scaleDrive(_controller.getTwist()), 0);
 		
+	}
+	private double scaleDrive(double speed) {
+		return speed * .7;
+	}
+	
+	private void setMotors(double frontLeftSpeed, double frontRightSpeed, double backLeftSpeed, double backRightSpeed) {
+		_frontLeftMotor.set(frontLeftSpeed);
+		_frontRightMotor.set(frontRightSpeed);
+		_backLeftMotor.set(backLeftSpeed);
+		_backRightMotor.set(backRightSpeed);
 	}
 	
 }
