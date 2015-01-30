@@ -50,10 +50,15 @@ public class Robot extends IterativeRobot {
                 new CANTalon(Addresses.RIGHT_FRONT_MOTOR), new CANTalon(Addresses.RIGHT_REAR_MOTOR));
         _solenoid1 = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.SOLENOID_CHANNEL);
         _solenoidBool = false;
-        
-        _camera = CameraServer.getInstance();
-        _camera.startAutomaticCapture("cam0");
-        
+        /*
+        try {
+        	_camera = CameraServer.getInstance();
+        	_camera.startAutomaticCapture("cam0");
+        }
+        catch (Exception ex) {
+        	System.out.println(ex.toString());
+        }
+        */
         encoder = new Encoder(0, 1);
     }
     
