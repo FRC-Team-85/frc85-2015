@@ -19,15 +19,12 @@ import edu.wpi.first.wpilibj.*;
  */
 public class Robot extends IterativeRobot {
     private Joystick _driveController;
-        
-    private Solenoid _solenoid1;
-    private Boolean _solenoidBool;
     
     private CameraServer _camera;
     
     private Encoder encoder;
 
-    private RobotDrive _drive;
+    private Drive _drive;
     
     /*
     
@@ -46,19 +43,11 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         _driveController = new Joystick(Addresses.DRIVE_CONTROLLER);
         
-        _drive = new RobotDrive(new CANTalon(Addresses.LEFT_FRONT_MOTOR), new CANTalon(Addresses.LEFT_REAR_MOTOR), 
-                new CANTalon(Addresses.RIGHT_FRONT_MOTOR), new CANTalon(Addresses.RIGHT_REAR_MOTOR));
-        _solenoid1 = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.SOLENOID_CHANNEL);
-        _solenoidBool = false;
-        /*
-        try {
-        	_camera = CameraServer.getInstance();
-        	_camera.startAutomaticCapture("cam0");
-        }
-        catch (Exception ex) {
-        	System.out.println(ex.toString());
-        }
-        */
+        _drive = new Drive(_driveController);
+        
+        _camera = CameraServer.getInstance();
+        _camera.startAutomaticCapture("cam0");
+        
         encoder = new Encoder(0, 1);
     }
     
@@ -76,19 +65,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	_drive.mecanumDrive_Cartesian(scaleDrive(-_driveController.getX()), scaleDrive(-_driveController.getY()),
-        scaleDrive(_driveController.getTwist()), 0);
-        
-        if(_driveController.getRawButton(Addresses.SOLENOID_BUTTON)){
-        	_solenoidBool = !_solenoidBool;
-        }
-        
-        System.out.println(encoder.get());
-        /*try {
-        	_solenoid1.set(_solenoidBool);
-        } catch (Exception ex){
-        	System.out.println("Fail: " + ex.toString());
-        }*/ 
+    	
     }
     
     
@@ -97,10 +74,6 @@ public class Robot extends IterativeRobot {
      */
     public void testPeriodic() {
     
-    }
-    
-    private double scaleDrive(double input) {
-    	return input * .7;
     }
     
 }
