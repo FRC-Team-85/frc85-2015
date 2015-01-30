@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.*;
 
 public class Elevator {
 
+	private static Joystick controller;
+	
 	private static DigitalInput topSwitch;
 	private static DigitalInput bottomSwitch;
-	
-	private static Joystick controller;
 	
 	private double speed;
 	
@@ -19,11 +19,20 @@ public class Elevator {
 	private double count;
 	private double convertedCount;
 	private double radius = 0.0;// in ___   inch, cm, m, etc
+
+	private static Solenoid locks;
+	
+	private static Solenoid hookA;
+	
+	private static Solenoid hookB;
+	
 	
 	public Elevator (Joystick elevatorController,
 			int topSwitchChannel, int bottomSwitchChannel,
 			int beltMotorOneAddress, int beltMotorTwoAddress,
-			int channelA, int channelB) {
+			int channelA, int channelB,
+			int lockChannel,
+			int hookAChannel, int hookBChannel) {
 	
 	  	controller = elevatorController;
 	  	
@@ -33,6 +42,11 @@ public class Elevator {
 		leftBeltMotor = new CANTalon(beltMotorTwoAddress);
 	
 		elevatorCounter = new Encoder(channelA,channelB);
+		
+		locks = new Solenoid(lockChannel);
+		hookA = new Solenoid(hookAChannel);
+		hookB = new Solenoid(hookBChannel);
+		
 	}
 	
 	public void runLift() {

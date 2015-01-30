@@ -11,8 +11,8 @@ public class Intake {
 	private static CANTalon phalangeLeft;
 	private static CANTalon phalangeRight;
 	
-	private static final double inSpeed = 0.0;		//positive
-	private static final double outSpeed = 0.0;		//positive
+	private static final double INSPEED = 0.0;	//one of these should be neg
+	private static final double OUTSPEED = 0.0;
 	
 	private static final int RESET = 1;
 	private static final int TOGGLEARM = 2;
@@ -31,77 +31,44 @@ public class Intake {
 		phalangeRight = new CANTalon(rightPhalangeAddress);
 	}
 	
-	private void setArm() {
-		if (arm.get()) {
-			arm.set(false);
-		}
-		if (!arm.get()) {
-			arm.set(true);
-
-		}
-	}
-	
-
-	private void setWrist() {
-		if (wrist.get()) {
-			wrist.set(true);
-		}
-		if (!wrist.get()) {
-			wrist.set(false);
-		}
-	}
-	
 	private void setPhalange(double output) {
 		phalangeLeft.set(output);
 		phalangeRight.set(output);
 	}
 	
-	private void inPhalange() {
-		setPhalange(inSpeed);
-	}
-	
-	private void outPhalange() {
-		setPhalange(-outSpeed);
-	}
-	
-	private void breakPhalanges() {			//named in honor of the maturity of the UberNoobs of the 2015 FRC season
-		setPhalange(0.0);
-	}
-	
 	private void reset() {
 		arm.set(true);
 		wrist.set(true);
-		breakPhalanges();
+		setPhalange(0.0);
 	}
 	
 	public void run() {
-		
-		if (!joystick.getRawButton(RESET)) {
-		
-			if (joystick.getRawButton(TOGGLEARM)) {
-				setArm();
-			}
-			
-			if (joystick.getRawButton(TOGGLEWRIST)) {
-				setWrist();
-			}
 
-			if (joystick.getRawButton(INPHALANGE) && joystick.getRawButton(OUTPHALANGE)) {
-				breakPhalanges();
-			} else {
-				
-				if (joystick.getRawButton(OUTPHALANGE)) {
-					outPhalange();
-				}
-				
-				if (joystick.getRawButton(INPHALANGE)) {
-					inPhalange();
-				}
-				
+		if (joystick.getRawButton(RESET)) {
+			reset();
+			return;
+		}
+		
+		if (joystick.getRawButton(TOGGLEARM)) {
+			arm.set(!arm.get());
+		}
+			
+		if (joystick.getRawButton(TOGGLEWRIST)) {
+			wrist.set(!wrist.get());
+		}
+
+		if (joystick.getRawButton(INPHALANGE) && joystick.getRawButton(OUTPHALANGE)) {
+			setPhalange(0.0);
+		} else {		
+			
+			if (joystick.getRawButton(OUTPHALANGE)) {
+				setPhalange(OUTSPEED);
 			}
 			
-		} else {
-			reset();
+			if (joystick.getRawButton(INPHALANGE)) {
+				setPhalange(INSPEED);
+			}
+				
 		}
 		
 	}

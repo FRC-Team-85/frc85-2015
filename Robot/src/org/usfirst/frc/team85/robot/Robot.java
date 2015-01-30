@@ -29,6 +29,16 @@ public class Robot extends IterativeRobot {
 
     private RobotDrive _drive;
     
+    /*
+    
+    private Drive _drive = new Drive(...);
+    
+    private Intake _intake = new Intake(...);
+    
+    private Elevator _elevator = new Elevator(...);
+    
+     */
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
