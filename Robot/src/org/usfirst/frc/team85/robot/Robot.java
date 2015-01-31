@@ -18,23 +18,12 @@ import edu.wpi.first.wpilibj.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
-    private Joystick _driveController;
+    private Joystick _driveController, _operatorController;
     
     private CameraServer _camera;
-    
-    private Encoder encoder;
 
     private Drive _drive;
-    
-    /*
-    
-    private Drive _drive = new Drive(...);
-    
-    private Intake _intake = new Intake(...);
-    
-    private Elevator _elevator = new Elevator(...);
-    
-     */
+    private Intake _intake;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -42,13 +31,14 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
         _driveController = new Joystick(Addresses.DRIVE_CONTROLLER);
+        _operatorController = new Joystick(Addresses.OPERATOR_CONTROLLER);
         
         _drive = new Drive(_driveController);
+        _intake = new Intake(_operatorController);
         
         _camera = CameraServer.getInstance();
         _camera.startAutomaticCapture("cam0");
         
-        encoder = new Encoder(0, 1);
     }
     
     public void autonomousInit() {
@@ -65,7 +55,8 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	
+    	_drive.drive();
+    	_intake.run();
     }
     
     
