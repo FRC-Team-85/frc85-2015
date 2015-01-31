@@ -13,6 +13,9 @@ public class Intake {
 	
 	private static final double INSPEED = 0.0;	//one of these should be neg
 	private static final double OUTSPEED = 0.0;
+
+	private static boolean _armToggleHeld;
+	private static boolean _wristToggleHeld;
 	
 	public Intake (Joystick opController) {
 		_operatorController = opController;
@@ -40,13 +43,15 @@ public class Intake {
 			return;
 		}
 		
-		if (_operatorController.getRawButton(Addresses.TOGGLEARM)) {
+		if (_operatorController.getRawButton(Addresses.TOGGLEARM) && !_armToggleHeld) {
 			_arm.set(!_arm.get());
-		}
+			_armToggleHeld = true;
+		} else { _armToggleHeld = false;}
 			
-		if (_operatorController.getRawButton(Addresses.TOGGLEWRIST)) {
+		if (_operatorController.getRawButton(Addresses.TOGGLEWRIST) && !_wristToggleHeld) {
 			_wrist.set(!_wrist.get());
-		}
+			_wristToggleHeld = true;
+		} else { _wristToggleHeld = false;}
 
 		if (!_operatorController.getRawButton(Addresses.INPHALANGE) && !_operatorController.getRawButton(Addresses.OUTPHALANGE)) {
 			setPhalange(0.0);

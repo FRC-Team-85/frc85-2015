@@ -23,9 +23,10 @@ public class Elevator {
 	private static Solenoid locks;
 	
 	private static Solenoid hookA;
+	private static final double HOOKAPOS = 0.0; //from the bottom
 	
 	private static Solenoid hookB;
-	
+	private static final double HOOKBPOS = 0.0; //from the bottom
 	
 	public Elevator (Joystick elevatorController,
 			int topSwitchChannel, int bottomSwitchChannel,
