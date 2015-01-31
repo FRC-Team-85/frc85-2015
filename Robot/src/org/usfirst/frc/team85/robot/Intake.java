@@ -11,11 +11,9 @@ public class Intake {
 	private static CANTalon _phalangeLeft;
 	private static CANTalon _phalangeRight;
 	
-	private static final double INSPEED = 0.0;	//one of these should be neg
-	private static final double OUTSPEED = 0.0;
+	private static final double INSPEED = 0.0;
 
 	private static boolean _isArmToggleHeld;
-	private static boolean _isWristToggleHeld;
 	
 	public Intake (Joystick opController) {
 		_operatorController = opController;
@@ -30,41 +28,23 @@ public class Intake {
 		_phalangeRight.set(output);
 	}
 	
-	private void reset() {
-		_arm.set(false);
-		_wrist.set(false);
-		setPhalange(0.0);
-	}
-	
 	public void run() {
-
-		if (_operatorController.getRawButton(Addresses.RESET)) {
-			reset();
-			return;
-		}
 		
 		if (_operatorController.getRawButton(Addresses.TOGGLEARM) && !_isArmToggleHeld) {
 			_arm.set(!_arm.get());
 			_isArmToggleHeld = true;
 		} else { _isArmToggleHeld = false;}
-			
-		if (_operatorController.getRawButton(Addresses.TOGGLEWRIST) && !_isWristToggleHeld) {
-			_wrist.set(!_wrist.get());
-			_isWristToggleHeld = true;
-		} else { _isWristToggleHeld = false;}
-
-		if (!_operatorController.getRawButton(Addresses.INPHALANGE) && !_operatorController.getRawButton(Addresses.OUTPHALANGE)) {
-			setPhalange(0.0);
-		} else {		
-			
-			if (_operatorController.getRawButton(Addresses.OUTPHALANGE)) {
-				setPhalange(OUTSPEED);
-			}
-			
-			if (_operatorController.getRawButton(Addresses.INPHALANGE)) {
-				setPhalange(INSPEED);
-			}
-				
+		
+		if (_operatorController.getRawButton(Addresses.TOGGLEWRIST)) {
+			_wrist.set(true);
+		} else {
+			_wrist.set(false);
+		}
+		
+		if (_operatorController.getRawButton(Addresses.INPHALANGE)) {
+			setPhalange(INSPEED);
+		} else {
+			setPhalange(0.0);				
 		}
 		
 	}

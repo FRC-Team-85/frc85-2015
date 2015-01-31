@@ -61,15 +61,11 @@ public final class Addresses {
     	//DriveController
     
     	//OperatorControllerIntake
-    public static final int RESET = 1;
 	public static final int TOGGLEARM = 2;
 	public static final int TOGGLEWRIST = 3;
 	public static final int INPHALANGE = 4;
-	public static final int OUTPHALANGE = 5;
 	
 		//OperatorControllerElevator
-	public static final int LOCKTOGGLE = 6;
-	public static final int HOOK_A_SET = 7;
-	public static final int HOOK_B_SET = 8;
-	public static final int AUTO_STORE = 9;
+	public static final int LOCKTOGGLE = 5;
+	public static final int AUTO_STORE = 6;
 }

@@ -29,6 +29,16 @@ public class Elevator {
 	
 	private static int totesOnElevator = 0;
 	
+	private static int accelDistance = 180;
+	private static int positionTolerance = 10;
+	
+	private static double fastSpeed = .4;
+	private static double slowSpeed = .2;
+	private static int goalPos1 = 100;
+	private static int goalPos2 = 200;
+	private static int goalPos3 = 300;
+	private static int goalPos4 = 400;
+	
 	public Elevator (Joystick opController) {
 	
 	  	controller = opController;
@@ -50,12 +60,13 @@ public class Elevator {
 		runMotors(controller.getY());
 		checkCount();
 		hookSafety(elevatorCounter.get());
-		toggleLocks();
+		locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
+		moveElevator();
 	}
 	
 
 	private void runMotors(double speed) {
-		if(bottomSwitch.get() && speed <= 0.0 || topSwitch.get() && speed >= 0) {
+		if(bottomSwitch.get() && speed <= 0.0 || topSwitch.get() && speed >= 0.0) {
 			rightBeltMotor.set(0.0);
 			leftBeltMotor.set(0.0);
 			return;
@@ -73,33 +84,51 @@ public class Elevator {
 		System.out.println("Count: " + count);
 	}
 	
-	private void toggleLocks() {
-		if (!islockToggleHeld) {
-			locks.set(!locks.get());
-			islockToggleHeld = true;
-		} else {islockToggleHeld = false;}
+	private void hookSafety(int count) {
+		hookA.set(count >= HOOKAPOS);
+		hookB.set(count >= HOOKBPOS);
 	}
 	
-	private void hookSafety(int count) {
-		
-		if(count >= HOOKAPOS && count <= HOOKBPOS) {
-			hookA.set(false);
-			hookB.set(controller.getRawButton(Addresses.HOOK_A_SET));
-		} else if(count >= HOOKBPOS) {
-			hookA.set(false);
-			hookB.set(false);
+	private void moveElevator() {
+		if(controller.getRawButton(1)){
+			moveTo(goalPos1);
+		} else if(controller.getRawButton(2)) {
+			moveTo(goalPos2);
+		} else if(controller.getRawButton(3)) {
+			moveTo(goalPos3);
+		} else if(controller.getRawButton(4)) {
+			moveTo(goalPos4);
 		} else {
-			hookA.set(controller.getRawButton(Addresses.HOOK_A_SET));
-			hookB.set(controller.getRawButton(Addresses.HOOK_B_SET));
+			runMotors(0.0);	//Only test, can be replaced
 		}
 	}
 	
-	private void autoStore() {
+	private void moveTo(int goal) {
+		
+		int currentPos = elevatorCounter.get();
+		double speed;
+		int relativeDist = goal - currentPos;
+		
+		if(Math.abs(relativeDist) < 10) {
+			speed = 0;
+		} else if (Math.abs(relativeDist) < 180) {
+			speed = slowSpeed;
+		} else {
+			speed = fastSpeed;
+		}
+		
+		if(relativeDist < 0) {
+			speed = -speed;
+		}
+		runMotors(speed);
+	}
+	
+	/*private void autoStore() {
 		if(controller.getRawButton(Addresses.AUTO_STORE)) {
 			switch(totesOnElevator) {
 			case 0:
 				
 			}
 		}
-	}
+	}*/
 }
