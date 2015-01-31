@@ -9,18 +9,17 @@ public class Elevator {
 	private static DigitalInput topSwitch;
 	private static DigitalInput bottomSwitch;
 	
-	private double speed;
-	
 	private static CANTalon rightBeltMotor;
 	private static CANTalon leftBeltMotor;
 	
 	private static Encoder elevatorCounter;
 	
 	private double count;
-	private double convertedCount;
-	private double radius = 0.0;// in ___   inch, cm, m, etc
+	//private double convertedCount;
+	//private double radius = 0.0;// in ___   inch, cm, m, etc
 
 	private static Solenoid locks;
+	private static boolean islockToggleHeld;
 	
 	private static Solenoid hookA;
 	private static final double HOOKAPOS = 0.0; //from the bottom
@@ -28,41 +27,39 @@ public class Elevator {
 	private static Solenoid hookB;
 	private static final double HOOKBPOS = 0.0; //from the bottom
 	
-	public Elevator (Joystick elevatorController,
-			int topSwitchChannel, int bottomSwitchChannel,
-			int beltMotorOneAddress, int beltMotorTwoAddress,
-			int channelA, int channelB,
-			int lockChannel,
-			int hookAChannel, int hookBChannel) {
+	private static int totesOnElevator = 0;
 	
-	  	controller = elevatorController;
+	public Elevator (Joystick opController) {
+	
+	  	controller = opController;
 	  	
-		topSwitch = new DigitalInput(topSwitchChannel);
-		bottomSwitch = new DigitalInput(bottomSwitchChannel);
-		rightBeltMotor = new CANTalon(beltMotorOneAddress);
-		leftBeltMotor = new CANTalon(beltMotorTwoAddress);
+		topSwitch = new DigitalInput(Addresses.TOPSWITCH_CHANNEL);
+		bottomSwitch = new DigitalInput(Addresses.BOTTOMSWITCH_CHANNEL);
+		rightBeltMotor = new CANTalon(Addresses.LEFT_BELT_MOTOR);
+		leftBeltMotor = new CANTalon(Addresses.RIGHT_BELT_MOTOR);
 	
-		elevatorCounter = new Encoder(channelA,channelB);
+		elevatorCounter = new Encoder(Addresses.ELEVATOR_ENCODER_CHANNEL_A,Addresses.ELEVATOR_ENCODER_CHANNEL_B);
 		
-		locks = new Solenoid(lockChannel);
-		hookA = new Solenoid(hookAChannel);
-		hookB = new Solenoid(hookBChannel);
+		locks = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.LOCKS_SOLENOID_CHANNEL);
+		hookA = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_A_SOLENOID_CHANNEL);
+		hookB = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_B_SOLENOID_CHANNEL);
 		
 	}
 	
 	public void runLift() {
-		runMotors();
+		runMotors(controller.getY());
 		checkCount();
+		hookSafety(elevatorCounter.get());
+		toggleLocks();
 	}
 	
 
-	private void runMotors() {
-		if(bottomSwitch.get() && controller.getX() <= 0.0 || topSwitch.get() && controller.getX() >= 0) {
+	private void runMotors(double speed) {
+		if(bottomSwitch.get() && speed <= 0.0 || topSwitch.get() && speed >= 0) {
 			rightBeltMotor.set(0.0);
 			leftBeltMotor.set(0.0);
 			return;
 		}
-		speed = controller.getX();
 		rightBeltMotor.set(speed);
 		leftBeltMotor.set(speed);
 	}
@@ -72,9 +69,37 @@ public class Elevator {
 			elevatorCounter.reset();
 		}
 		count = elevatorCounter.get();
-		convertedCount = Math.PI * 2 * radius * count / 360;
+		//convertedCount = Math.PI * 2 * radius * count / 360;
 		System.out.println("Count: " + count);
-		System.out.println("Up " + convertedCount + " in/cm/units");
 	}
 	
+	private void toggleLocks() {
+		if (!islockToggleHeld) {
+			locks.set(!locks.get());
+			islockToggleHeld = true;
+		} else {islockToggleHeld = false;}
+	}
+	
+	private void hookSafety(int count) {
+		
+		if(count >= HOOKAPOS && count <= HOOKBPOS) {
+			hookA.set(false);
+			hookB.set(controller.getRawButton(Addresses.HOOK_A_SET));
+		} else if(count >= HOOKBPOS) {
+			hookA.set(false);
+			hookB.set(false);
+		} else {
+			hookA.set(controller.getRawButton(Addresses.HOOK_A_SET));
+			hookB.set(controller.getRawButton(Addresses.HOOK_B_SET));
+		}
+	}
+	
+	private void autoStore() {
+		if(controller.getRawButton(Addresses.AUTO_STORE)) {
+			switch(totesOnElevator) {
+			case 0:
+				
+			}
+		}
+	}
 }

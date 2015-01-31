@@ -41,6 +41,9 @@ public final class Addresses {
     public static final int HOOK_B_SOLENOID_CHANNEL = 3;
     public static final int LOCKS_SOLENOID_CHANNEL = 4;
     
+    public static final int LEFT_BELT_MOTOR = 8;
+    public static final int RIGHT_BELT_MOTOR = 9;
+    
     	//Intake
     public static final int ARM_SOLENOID_CHANNEL = 0;
     public static final int WRIST_SOLENOID_CHANNEL = 1;
@@ -57,10 +60,16 @@ public final class Addresses {
     
     	//DriveController
     
-    	//OperatorController
-	public static final int RESET = 1;
+    	//OperatorControllerIntake
+    public static final int RESET = 1;
 	public static final int TOGGLEARM = 2;
 	public static final int TOGGLEWRIST = 3;
 	public static final int INPHALANGE = 4;
 	public static final int OUTPHALANGE = 5;
+	
+		//OperatorControllerElevator
+	public static final int LOCKTOGGLE = 6;
+	public static final int HOOK_A_SET = 7;
+	public static final int HOOK_B_SET = 8;
+	public static final int AUTO_STORE = 9;
 }
