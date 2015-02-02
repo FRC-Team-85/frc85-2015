@@ -64,4 +64,10 @@ public class Drive {
 		_backRightMotor.set(backRightSpeed);
 	}
 	
+	public void resetEncoders() {
+		_frontLeftEncoder.reset();
+		_frontRightEncoder.reset();
+		_backLeftEncoder.reset();
+		_backRightEncoder.reset();
+	}
 }
