@@ -19,14 +19,14 @@ public class Autonomous {
 	public void runAuto() {
 		switch(_procedure) {
 		case 0:
-			simpleDrive();
+			//simpleDrive();
 		}
 	}
 	private void simpleDrive(int distance) {
 		
 	}
 	
-	public int countsToDrive() {
+	/*public int countsToDrive() {
 		
-	}
+	}*/
 }
