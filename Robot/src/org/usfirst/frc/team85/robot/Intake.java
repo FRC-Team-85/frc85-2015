@@ -8,32 +8,35 @@ public class Intake {
 	
 	private static Solenoid _arm;
 	private static Solenoid _wrist;
-	private static CANTalon _phalangeLeft;
-	private static CANTalon _phalangeRight;
+	private static CANTalon _leftMotor;
+	private static CANTalon _rightMotor;
 	
 	private static final double INSPEED = 0.0;
 
 	private static boolean _isArmToggleHeld;
 	
+	private boolean _armOutput = false;
+	
 	public Intake (Joystick opController) {
 		_operatorController = opController;
 		_arm = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.ARM_SOLENOID_CHANNEL);
 		_wrist = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.WRIST_SOLENOID_CHANNEL);
-		_phalangeLeft = new CANTalon(Addresses.LEFT_PHALANGE_MOTOR);
-		_phalangeRight = new CANTalon(Addresses.RIGHT_PHALANGE_MOTOR);
+		_leftMotor = new CANTalon(Addresses.LEFT_PHALANGE_MOTOR);
+		_rightMotor = new CANTalon(Addresses.RIGHT_PHALANGE_MOTOR);
 	}
 	
 	private void setPhalange(double output) {
-		_phalangeLeft.set(output);
-		_phalangeRight.set(output);
+		_leftMotor.set(output);
+		_rightMotor.set(output);
 	}
 	
 	public void run() {
 		
-		if (_operatorController.getRawButton(Addresses.TOGGLEARM) && !_isArmToggleHeld) {
-			_arm.set(!_arm.get());
-			_isArmToggleHeld = true;
-		} else { _isArmToggleHeld = false;}
+		if (_operatorController.getRawButton(Addresses.TOGGLEARM)) {
+			//_armOutput = !_armOutput;
+			_arm.set(true);
+			//_isArmToggleHeld = true;
+		} else {_arm.set(false);}
 		
 		if (_operatorController.getRawButton(Addresses.TOGGLEWRIST)) {
 			_wrist.set(true);

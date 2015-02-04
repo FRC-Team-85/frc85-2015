@@ -58,7 +58,7 @@ public class Elevator {
 	
 	public void runLift() {
 		runMotors(controller.getY());
-		checkCount();
+		//checkCount();
 		hookSafety(elevatorCounter.get());
 		locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
 		moveElevator();
@@ -75,14 +75,14 @@ public class Elevator {
 		leftBeltMotor.set(speed);
 	}
 	
-	private void checkCount() {
+	/*private void checkCount() {
 		if (bottomSwitch.get()) {
 			elevatorCounter.reset();
 		}
 		count = elevatorCounter.get();
 		//convertedCount = Math.PI * 2 * radius * count / 360;
 		System.out.println("Count: " + count);
-	}
+	}*/
 	
 	private void hookSafety(int count) {
 		hookA.set(count >= HOOKAPOS);
