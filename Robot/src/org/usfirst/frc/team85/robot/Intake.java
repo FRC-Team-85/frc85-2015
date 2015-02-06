@@ -30,14 +30,14 @@ public class Intake {
 			_isArmToggleHeld = true;
 		} else {_isArmToggleHeld = false;}
 		
-		if (_operatorController.getRawButton(Addresses.INPHALANGE)) {
+		if (_operatorController.getRawButton(Addresses.TRIGGERINPHALANGE)) {
 			setPhalange(INSPEED);
 		} else {
 			setPhalange(0.0);				
 		}
 		
 		_arm.set(_armState);
-		_wrist.set(_operatorController.getRawButton(Addresses.TOGGLEWRIST));
+		_wrist.set(_operatorController.getRawButton(Addresses.TRIGGERWRIST));
 	}
 	
 	private void setPhalange(double output) {

@@ -61,9 +61,9 @@ public final class Addresses {
     	//DriveController
     
     	//OperatorControllerIntake
-	public static final int TOGGLEARM = 2;
-	public static final int TOGGLEWRIST = 3;
-	public static final int INPHALANGE = 4;
+	public static final int TOGGLEARM = 2;			
+	public static final int TRIGGERWRIST = 3;		//bottom right trigger
+	public static final int TRIGGERINPHALANGE = 4;	//top right trigger ("clicky")
 	
 		//OperatorControllerElevator
 	public static final int LOCKTOGGLE = 5;
