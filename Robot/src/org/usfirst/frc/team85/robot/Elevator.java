@@ -61,16 +61,16 @@ public class Elevator {
 		//checkCount();
 		hookSafety(elevatorCounter.get());
 		locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
-		moveElevator();
+		//moveElevator();
 	}
 	
 
 	private void runMotors(double speed) {
-		if(bottomSwitch.get() && speed <= 0.0 || topSwitch.get() && speed >= 0.0) {
+		/*if(bottomSwitch.get() && speed <= 0.0 || topSwitch.get() && speed >= 0.0) {
 			rightBeltMotor.set(0.0);
 			leftBeltMotor.set(0.0);
 			return;
-		}
+		}*/
 		rightBeltMotor.set(speed);
 		leftBeltMotor.set(speed);
 	}

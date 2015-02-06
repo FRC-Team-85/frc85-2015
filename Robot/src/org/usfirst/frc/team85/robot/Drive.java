@@ -70,4 +70,12 @@ public class Drive {
 		_backLeftEncoder.reset();
 		_backRightEncoder.reset();
 	}
+	
+	public int getLeftEncoders() {
+		return (_frontLeftEncoder.get() + _backLeftEncoder.get()) / 2;
+	}
+	
+	public int getRightEncodrs() {
+		return (_frontRightEncoder.get() + _backLeftEncoder.get()) / 2;
+	}
 }

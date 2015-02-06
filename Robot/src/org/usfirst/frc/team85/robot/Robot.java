@@ -24,6 +24,7 @@ public class Robot extends IterativeRobot {
 
     private Drive _drive;
     private Intake _intake;
+    private Elevator _elevator;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -35,9 +36,16 @@ public class Robot extends IterativeRobot {
         
         _drive = new Drive(_driveController);
         _intake = new Intake(_operatorController);
+        _elevator = new Elevator(_operatorController);
         
+        try {
         _camera = CameraServer.getInstance();
         _camera.startAutomaticCapture("cam0");
+        } catch(Exception ex) {
+        	System.out.println("Camera Error");
+        }
+        
+        _drive.resetEncoders();
         
     }
     
@@ -57,6 +65,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	_drive.drive();
     	_intake.run();
+    	_elevator.runLift();
     	//pneumaticsControlls();
     }
     
