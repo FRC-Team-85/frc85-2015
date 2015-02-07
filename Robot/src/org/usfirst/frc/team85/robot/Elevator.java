@@ -74,7 +74,7 @@ private static final double voltageLimit = 2.5;
 
 	private void runMotors(double speed) {
 
-		if(checkLimit(_bottomSwitch) && speed <= 0.0 || checkLimit(_topSwitch) && speed >= 0.0) {
+		if(checkLimit(_bottomSwitch) && speed >= 0.0 || checkLimit(_topSwitch) && speed <= 0.0) {
 			_rightBeltMotor.set(0.0);
 			_leftBeltMotor.set(0.0);
 		} else {
