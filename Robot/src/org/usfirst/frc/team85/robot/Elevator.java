@@ -33,7 +33,7 @@ public class Elevator {
 	private static int _accelDistance = 180;
 	private static int _positionTolerance = 10;
 	
-private static final double voltageLimit = 2.5;
+	private static final double voltageLimit = 2.5;
 
 	private static double _fastSpeed = .4;
 	private static double _slowSpeed = .2;
@@ -42,6 +42,9 @@ private static final double voltageLimit = 2.5;
 	private static int _goalPos3 = 300;
 	private static int _goalPos4 = 400;
 
+	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;
+	private static int SOFT_HEIGHT_LIMIT_LOW = 200;
+	private static double SOFT_LIMIT_SCALE = 0.25;
 	
 	public Elevator (Joystick opController) {
 	
@@ -61,10 +64,14 @@ private static final double voltageLimit = 2.5;
 	}
 	
 	public void runLift() {
-		//moveElevator();
-		runMotors(_controller.getY());
+		if (checkLimit(_bottomSwitch))
+		{
+			_elevatorCounter.reset();
+		}
+		
 		int encoderCount = _elevatorCounter.get();
 		hookSafety(encoderCount);
+		moveElevator(encoderCount);
 		//locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
 		SmartDashboard.putInt("Elevator Encoder", encoderCount);
 		SmartDashboard.putNumber("Top Limit Switch", _topSwitch.getVoltage());
@@ -72,15 +79,15 @@ private static final double voltageLimit = 2.5;
 	}
 	
 
-	private void runMotors(double speed) {
-
-		if(checkLimit(_bottomSwitch) && speed >= 0.0 || checkLimit(_topSwitch) && speed <= 0.0) {
-			_rightBeltMotor.set(0.0);
-			_leftBeltMotor.set(0.0);
-		} else {
-			_rightBeltMotor.set(speed);
-			_leftBeltMotor.set(speed);
+	private void runMotors(double speed, int currentPosition) {
+		if(checkLimit(_bottomSwitch) && speed > 0.0 || checkLimit(_topSwitch) && speed < 0.0) {
+			speed = 0;
+		} else if (currentPosition <= SOFT_HEIGHT_LIMIT_LOW && speed > 0.0 || currentPosition >= SOFT_HEIGHT_LIMIT_HIGH && speed < 0.0) {
+			speed *= SOFT_LIMIT_SCALE;
 		}
+	
+		_leftBeltMotor.set(speed);
+		_rightBeltMotor.set(speed);
 	}
 	
 	private void hookSafety(int count) {
@@ -100,26 +107,24 @@ private static final double voltageLimit = 2.5;
 		}
 	}
 	
-	private void moveElevator() {
+	private void moveElevator(int encoderCount) {
 		double override = _controller.getY();
 		if(override != 0.0) {
-			runMotors(override);
+			runMotors(override, encoderCount);
 		} else if(_controller.getRawButton(1)){
-			moveTo(_goalPos1);
+			moveTo(_goalPos1, encoderCount);
 		} else if(_controller.getRawButton(2)) {
-			moveTo(_goalPos2);
+			moveTo(_goalPos2, encoderCount);
 		} else if(_controller.getRawButton(3)) {
-			moveTo(_goalPos3);
+			moveTo(_goalPos3, encoderCount);
 		} else if(_controller.getRawButton(4)) {
-			moveTo(_goalPos4);
+			moveTo(_goalPos4, encoderCount);
 		} else {
-			runMotors(0.0);	//Only test, can be replaced
+			runMotors(0.0, encoderCount);	//Only test, can be replaced
 		}
 	}
 	
-	private void moveTo(int goal) {
-		
-		int currentPos = _elevatorCounter.get();
+	private void moveTo(int goal, int currentPos) {
 		double speed;
 		int relativeDist = goal - currentPos;
 		
@@ -134,7 +139,7 @@ private static final double voltageLimit = 2.5;
 		if(relativeDist < 0) {
 			speed = -speed;
 		}
-		runMotors(speed);
+		runMotors(speed, currentPos);
 	}
 	
 	/*private void autoStore() {
@@ -144,15 +149,7 @@ private static final double voltageLimit = 2.5;
 				
 			}
 		}
-	}
-	
-	private void checkCount() {
-		if (bottomSwitch.get()) {
-			elevatorCounter.reset();
-		}
-		count = elevatorCounter.get();
-		//convertedCount = Math.PI * 2 * radius * count / 360;
-		System.out.println("Count: " + count);
+
 	}*/
 	
 	private boolean checkLimit(AnalogInput input) {
