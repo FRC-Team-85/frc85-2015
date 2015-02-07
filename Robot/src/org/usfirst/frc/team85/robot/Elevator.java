@@ -4,93 +4,93 @@ import edu.wpi.first.wpilibj.*;
 
 public class Elevator {
 
-	private static Joystick controller;
+	private static Joystick _controller;
 	
-	private static DigitalInput topSwitch;
-	private static DigitalInput bottomSwitch;
+	private static DigitalInput _topSwitch;
+	private static DigitalInput _bottomSwitch;
 	
-	private static CANTalon rightBeltMotor;
-	private static CANTalon leftBeltMotor;
+	private static CANTalon _rightBeltMotor;
+	private static CANTalon _leftBeltMotor;
 	
-	private static Encoder elevatorCounter;
+	private static Encoder _elevatorCounter;
 	
-	private double count;
+	private double _count;
 	//private double convertedCount;
 	//private double radius = 0.0;// in ___   inch, cm, m, etc
 
-	private static Solenoid locks;
-	private static boolean islockToggleHeld;
+	private static Solenoid _locks;
+	private static boolean _islockToggleHeld;
 	
-	private static Solenoid hookA;
+	private static Solenoid _hookA;
 	private static final double HOOKAPOS = 0.0; //from the bottom
 	
-	private static Solenoid hookB;
+	private static Solenoid _hookB;
 	private static final double HOOKBPOS = 0.0; //from the bottom
 	
-	private static int totesOnElevator = 0;
+	private static int _totesOnElevator = 0;
 	
-	private static int accelDistance = 180;
-	private static int positionTolerance = 10;
+	private static int _accelDistance = 180;
+	private static int _positionTolerance = 10;
 	
-	private static double fastSpeed = .4;
-	private static double slowSpeed = .2;
-	private static int goalPos1 = 100;
-	private static int goalPos2 = 200;
-	private static int goalPos3 = 300;
-	private static int goalPos4 = 400;
+	private static double _fastSpeed = .4;
+	private static double _slowSpeed = .2;
+	private static int _goalPos1 = 100;
+	private static int _goalPos2 = 200;
+	private static int _goalPos3 = 300;
+	private static int _goalPos4 = 400;
 	
 	public Elevator (Joystick opController) {
 	
-	  	controller = opController;
+	  	_controller = opController;
 	  	
-		topSwitch = new DigitalInput(Addresses.TOPSWITCH_CHANNEL);
-		bottomSwitch = new DigitalInput(Addresses.BOTTOMSWITCH_CHANNEL);
-		rightBeltMotor = new CANTalon(Addresses.LEFT_BELT_MOTOR);
-		leftBeltMotor = new CANTalon(Addresses.RIGHT_BELT_MOTOR);
+		_topSwitch = new DigitalInput(Addresses.TOPSWITCH_CHANNEL);
+		_bottomSwitch = new DigitalInput(Addresses.BOTTOMSWITCH_CHANNEL);
+		_rightBeltMotor = new CANTalon(Addresses.LEFT_BELT_MOTOR);
+		_leftBeltMotor = new CANTalon(Addresses.RIGHT_BELT_MOTOR);
 	
-		elevatorCounter = new Encoder(Addresses.ELEVATOR_ENCODER_CHANNEL_A,Addresses.ELEVATOR_ENCODER_CHANNEL_B);
+		_elevatorCounter = new Encoder(Addresses.ELEVATOR_ENCODER_CHANNEL_A,Addresses.ELEVATOR_ENCODER_CHANNEL_B);
 		
-		locks = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.LOCKS_SOLENOID_CHANNEL);
-		hookA = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_A_SOLENOID_CHANNEL);
-		hookB = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_B_SOLENOID_CHANNEL);
+		_locks = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.LOCKS_SOLENOID_CHANNEL);
+		_hookA = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_A_SOLENOID_CHANNEL);
+		_hookB = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_B_SOLENOID_CHANNEL);
 		
 	}
 	
 	public void runLift() {
 		//moveElevator();
-		runMotors(controller.getY());
-		hookSafety(elevatorCounter.get());
+		runMotors(_controller.getY());
+		hookSafety(_elevatorCounter.get());
 		//locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
 	}
 	
 
 	private void runMotors(double speed) {
-		if(!bottomSwitch.get() && speed <= 0.0 || !topSwitch.get() && speed >= 0.0) {
-			rightBeltMotor.set(0.0);
-			leftBeltMotor.set(0.0);
+		if(!_bottomSwitch.get() && speed <= 0.0 || !_topSwitch.get() && speed >= 0.0) {
+			_rightBeltMotor.set(0.0);
+			_leftBeltMotor.set(0.0);
 			return;
 		}
-		rightBeltMotor.set(speed);
-		leftBeltMotor.set(speed);
+		_rightBeltMotor.set(speed);
+		_leftBeltMotor.set(speed);
 	}
 	
 	private void hookSafety(int count) {
-		hookA.set(!(count >= HOOKAPOS));
-		hookB.set(!(count >= HOOKBPOS));
+		_hookA.set(!(count >= _HOOKAPOS));
+		_hookB.set(!(count >= _HOOKBPOS));
 	}
 	
 	private void moveElevator() {
-		double override = controller.getY();
+		double override = _controller.getY();
 		if(override != 0.0) {
 			runMotors(override);
-		} else if(controller.getRawButton(1)){
-			moveTo(goalPos1);
-		} else if(controller.getRawButton(2)) {
-			moveTo(goalPos2);
-		} else if(controller.getRawButton(3)) {
-			moveTo(goalPos3);
-		} else if(controller.getRawButton(4)) {
-			moveTo(goalPos4);
+		} else if(_controller.getRawButton(1)){
+			moveTo(_goalPos1);
+		} else if(_controller.getRawButton(2)) {
+			moveTo(_goalPos2);
+		} else if(_controller.getRawButton(3)) {
+			moveTo(_goalPos3);
+		} else if(_controller.getRawButton(4)) {
+			moveTo(_goalPos4);
 		} else {
 			runMotors(0.0);	//Only test, can be replaced
 		}
@@ -98,16 +98,16 @@ public class Elevator {
 	
 	private void moveTo(int goal) {
 		
-		int currentPos = elevatorCounter.get();
+		int currentPos = _elevatorCounter.get();
 		double speed;
 		int relativeDist = goal - currentPos;
 		
 		if(Math.abs(relativeDist) < 10) {
 			speed = 0;
 		} else if (Math.abs(relativeDist) < 180) {
-			speed = slowSpeed;
+			speed = _slowSpeed;
 		} else {
-			speed = fastSpeed;
+			speed = _fastSpeed;
 		}
 		
 		if(relativeDist < 0) {

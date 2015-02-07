@@ -7,7 +7,7 @@ public class Autonomous {
 	private int _procedure;
 	private Drive _drive;
 	
-	private double countsToDrive;
+	private double _countsToDrive;
 	
 	public Autonomous(int procedureID, Drive drive) {
 		_procedure = procedureID;
