@@ -6,8 +6,8 @@ public class Elevator {
 
 	private static Joystick controller;
 	
-	private static DigitalInput topSwitch;
-	private static DigitalInput bottomSwitch;
+	private static AnalogInput topSwitch;
+	private static AnalogInput bottomSwitch;
 	
 	private static CANTalon rightBeltMotor;
 	private static CANTalon leftBeltMotor;
@@ -43,8 +43,8 @@ public class Elevator {
 	
 	  	controller = opController;
 	  	
-		topSwitch = new DigitalInput(Addresses.TOPSWITCH_CHANNEL);
-		bottomSwitch = new DigitalInput(Addresses.BOTTOMSWITCH_CHANNEL);
+		topSwitch = new AnalogInput(Addresses.TOPSWITCH_CHANNEL);
+		bottomSwitch = new AnalogInput(Addresses.BOTTOMSWITCH_CHANNEL);
 		rightBeltMotor = new CANTalon(Addresses.LEFT_BELT_MOTOR);
 		leftBeltMotor = new CANTalon(Addresses.RIGHT_BELT_MOTOR);
 	
@@ -65,7 +65,7 @@ public class Elevator {
 	
 
 	private void runMotors(double speed) {
-		if(!bottomSwitch.get() && speed <= 0.0 || !topSwitch.get() && speed >= 0.0) {
+		if(checkLimit(bottomSwitch) && speed <= 0.0 || checkLimit(bottomSwitch) && speed >= 0.0) {
 			rightBeltMotor.set(0.0);
 			leftBeltMotor.set(0.0);
 			return;
@@ -133,4 +133,8 @@ public class Elevator {
 		//convertedCount = Math.PI * 2 * radius * count / 360;
 		System.out.println("Count: " + count);
 	}*/
+	
+	private boolean checkLimit(AnalogInput input) {
+		return !(input.getVoltage() >= 2.5);
+	}
 }

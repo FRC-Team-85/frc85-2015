@@ -34,8 +34,8 @@ public final class Addresses {
     public static final int ELEVATOR_ENCODER_CHANNEL_A = 8;
     public static final int ELEVATOR_ENCODER_CHANNEL_B = 9;
 
-    public static final int TOPSWITCH_CHANNEL = 10;
-    public static final int BOTTOMSWITCH_CHANNEL = 11;
+    public static final int TOPSWITCH_CHANNEL = 0;
+    public static final int BOTTOMSWITCH_CHANNEL = 1;
 
     public static final int HOOK_A_SOLENOID_CHANNEL = 2;
     public static final int HOOK_B_SOLENOID_CHANNEL = 3;
