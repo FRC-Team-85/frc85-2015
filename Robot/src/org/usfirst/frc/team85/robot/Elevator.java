@@ -57,40 +57,33 @@ public class Elevator {
 	}
 	
 	public void runLift() {
-		runMotors(controller.getY());
-		//checkCount();
-		hookSafety(elevatorCounter.get());
-		locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
 		//moveElevator();
+		runMotors(controller.getY());
+		hookSafety(elevatorCounter.get());
+		//locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
 	}
 	
 
 	private void runMotors(double speed) {
-		/*if(bottomSwitch.get() && speed <= 0.0 || topSwitch.get() && speed >= 0.0) {
+		if(!bottomSwitch.get() && speed <= 0.0 || !topSwitch.get() && speed >= 0.0) {
 			rightBeltMotor.set(0.0);
 			leftBeltMotor.set(0.0);
 			return;
-		}*/
+		}
 		rightBeltMotor.set(speed);
 		leftBeltMotor.set(speed);
 	}
 	
-	/*private void checkCount() {
-		if (bottomSwitch.get()) {
-			elevatorCounter.reset();
-		}
-		count = elevatorCounter.get();
-		//convertedCount = Math.PI * 2 * radius * count / 360;
-		System.out.println("Count: " + count);
-	}*/
-	
 	private void hookSafety(int count) {
-		hookA.set(count >= HOOKAPOS);
-		hookB.set(count >= HOOKBPOS);
+		hookA.set(!(count >= HOOKAPOS));
+		hookB.set(!(count >= HOOKBPOS));
 	}
 	
 	private void moveElevator() {
-		if(controller.getRawButton(1)){
+		double override = controller.getY();
+		if(override != 0.0) {
+			runMotors(override);
+		} else if(controller.getRawButton(1)){
 			moveTo(goalPos1);
 		} else if(controller.getRawButton(2)) {
 			moveTo(goalPos2);
@@ -130,5 +123,14 @@ public class Elevator {
 				
 			}
 		}
+	}
+	
+	private void checkCount() {
+		if (bottomSwitch.get()) {
+			elevatorCounter.reset();
+		}
+		count = elevatorCounter.get();
+		//convertedCount = Math.PI * 2 * radius * count / 360;
+		System.out.println("Count: " + count);
 	}*/
 }

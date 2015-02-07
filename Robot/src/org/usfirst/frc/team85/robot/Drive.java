@@ -50,7 +50,7 @@ public class Drive {
 			setMotors(0.0, 0.0, 0.0, 0.0);
 			return;
 		}
-			_drive.mecanumDrive_Cartesian(scaleDrive(_controller.getX()), scaleDrive(_controller.getY()), scaleDrive(_controller.getTwist()), 0);
+			_drive.mecanumDrive_Cartesian(-scaleDrive(_controller.getX()), -scaleDrive(_controller.getY()), -scaleDrive(_controller.getTwist()), 0);
 		
 	}
 	private double scaleDrive(double speed) {

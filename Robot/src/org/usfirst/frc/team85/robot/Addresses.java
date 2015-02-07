@@ -61,11 +61,13 @@ public final class Addresses {
     	//DriveController
     
     	//OperatorControllerIntake
-	public static final int TOGGLEARM = 2;			
-	public static final int TRIGGERWRIST = 3;		//bottom right trigger
-	public static final int TRIGGERINPHALANGE = 4;	//top right trigger ("clicky")
+    public static final int ARM_IN = 6;
+	public static final int ARM_OUT = 8;			
+	public static final int WRIST_IN = 7;		//bottom right trigger
+	public static final int WRIST_OUT = 5;	//top right trigger ("clicky")
 	
 		//OperatorControllerElevator
-	public static final int LOCKTOGGLE = 5;
-	public static final int AUTO_STORE = 6;
+	public static final int LOCK_IN = 4;
+	public static final int LOCK_OUT = 3;
+	public static final int RUN_INTAKE_MOTORS = 1;
 }

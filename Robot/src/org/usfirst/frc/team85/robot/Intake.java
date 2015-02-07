@@ -11,10 +11,7 @@ public class Intake {
 	private static CANTalon _leftMotor;
 	private static CANTalon _rightMotor;
 	
-	private static final double INSPEED = 0.0;
-
-	private static boolean _isArmToggleHeld;
-	private static boolean _armState;
+	private static final double INSPEED = .5;
 	
 	public Intake (Joystick opController) {
 		_operatorController = opController;
@@ -25,22 +22,24 @@ public class Intake {
 	}
 	
 	public void run() {
-		if (_operatorController.getRawButton(Addresses.TOGGLEARM) && !_isArmToggleHeld) {
-			_armState = !_armState;
-			_isArmToggleHeld = true;
-		} else {_isArmToggleHeld = false;}
-		
-		if (_operatorController.getRawButton(Addresses.TRIGGERINPHALANGE)) {
-			setPhalange(INSPEED);
-		} else {
-			setPhalange(0.0);				
+		if (_operatorController.getRawButton(Addresses.ARM_IN)) {
+			_arm.set(false);
 		}
-		
-		_arm.set(_armState);
-		_wrist.set(_operatorController.getRawButton(Addresses.TRIGGERWRIST));
+		if (_operatorController.getRawButton(Addresses.ARM_OUT)) {
+			_arm.set(true);
+		}
+		if (_operatorController.getRawButton(Addresses.WRIST_IN)) {
+			_wrist.set(false);
+		}
+		if (_operatorController.getRawButton(Addresses.WRIST_OUT)) {
+			_wrist.set(true);
+		}
+		if(_operatorController.getRawButton(Addresses.RUN_INTAKE_MOTORS)) {
+			setIntakeMotors(INSPEED);
+		} else {setIntakeMotors(0.0);}
 	}
 	
-	private void setPhalange(double output) {
+	private void setIntakeMotors(double output) {
 		_leftMotor.set(output);
 		_rightMotor.set(output);
 	}
