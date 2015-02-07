@@ -65,9 +65,12 @@ public final class Addresses {
 	public static final int ARM_OUT = 8;			
 	public static final int WRIST_IN = 7;		//bottom right trigger
 	public static final int WRIST_OUT = 5;	//top right trigger ("clicky")
+	public static final int RUN_INTAKE_MOTORS = 1;
 	
 		//OperatorControllerElevator
-	public static final int LOCK_IN = 4;
-	public static final int LOCK_OUT = 3;
-	public static final int RUN_INTAKE_MOTORS = 1;
+	public static final int HOOK_A_AXIS = 4;
+	public static final int HOOK_B_AXIS= 5;
+	public static final int LOCK_OUT = 11;
+	public static final int LOCK_IN = 12;
+
 }

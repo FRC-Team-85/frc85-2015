@@ -68,15 +68,27 @@ public class Elevator {
 		if(checkLimit(bottomSwitch) && speed <= 0.0 || checkLimit(bottomSwitch) && speed >= 0.0) {
 			rightBeltMotor.set(0.0);
 			leftBeltMotor.set(0.0);
-			return;
+		} else {
+			rightBeltMotor.set(speed);
+			leftBeltMotor.set(speed);
 		}
-		rightBeltMotor.set(speed);
-		leftBeltMotor.set(speed);
 	}
 	
 	private void hookSafety(int count) {
-		hookA.set(!(count >= HOOKAPOS));
-		hookB.set(!(count >= HOOKBPOS));
+		if(count >= HOOKAPOS) {
+			hookA.set(true);
+		} else if(controller.getRawAxis(Addresses.HOOK_A_AXIS) > 0 && count <= HOOKAPOS) {
+			hookA.set(false);
+		} else if(controller.getRawAxis(Addresses.HOOK_A_AXIS) < 0 && count <= HOOKAPOS) {
+			hookA.set(true);
+		}
+		if(count >= HOOKBPOS) {
+			hookB.set(true);
+		} else if(controller.getRawAxis(Addresses.HOOK_B_AXIS) > 0 && count <= HOOKBPOS) {
+			hookB.set(false);
+		} else if(controller.getRawAxis(Addresses.HOOK_B_AXIS) < 0 && count <= HOOKBPOS) {
+			hookB.set(true);
+		}
 	}
 	
 	private void moveElevator() {
