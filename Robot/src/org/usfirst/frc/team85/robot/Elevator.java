@@ -35,12 +35,12 @@ public class Elevator {
 	
 	private static final double voltageLimit = 2.5;
 
-	private static double _fastSpeed = .4;
-	private static double _slowSpeed = .2;
-	private static int _goalPos1 = 100;
-	private static int _goalPos2 = 200;
-	private static int _goalPos3 = 300;
-	private static int _goalPos4 = 400;
+	private static double _fastSpeed = 1;
+	private static double _slowSpeed = .4;
+	private static int _goalPos1 = 0; //bottom
+	private static int _goalPos2 = 550; //load height
+	private static int _goalPos3 = 2275; //hook 1
+	private static int _goalPos4 = 3250; //hook 2
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;
 	private static int SOFT_HEIGHT_LIMIT_LOW = 200;
@@ -85,6 +85,8 @@ public class Elevator {
 		} else if (currentPosition <= SOFT_HEIGHT_LIMIT_LOW && speed > 0.0 || currentPosition >= SOFT_HEIGHT_LIMIT_HIGH && speed < 0.0) {
 			speed *= SOFT_LIMIT_SCALE;
 		}
+		
+		SmartDashboard.putNumber("Elevator motor speed", speed);
 	
 		_leftBeltMotor.set(speed);
 		_rightBeltMotor.set(speed);
@@ -108,10 +110,7 @@ public class Elevator {
 	}
 	
 	private void moveElevator(int encoderCount) {
-		double override = _controller.getY();
-		if(override != 0.0) {
-			runMotors(override, encoderCount);
-		} else if(_controller.getRawButton(1)){
+		if(_controller.getRawButton(1)) {
 			moveTo(_goalPos1, encoderCount);
 		} else if(_controller.getRawButton(2)) {
 			moveTo(_goalPos2, encoderCount);
@@ -120,14 +119,15 @@ public class Elevator {
 		} else if(_controller.getRawButton(4)) {
 			moveTo(_goalPos4, encoderCount);
 		} else {
-			runMotors(0.0, encoderCount);	//Only test, can be replaced
+			runMotors(_controller.getY(), encoderCount);
 		}
 	}
 	
 	private void moveTo(int goal, int currentPos) {
 		double speed;
 		int relativeDist = goal - currentPos;
-		
+		SmartDashboard.putInt("Goal Position", goal);
+		SmartDashboard.putInt("Relative Distance", relativeDist);
 		if(Math.abs(relativeDist) < 10) {
 			speed = 0;
 		} else if (Math.abs(relativeDist) < 180) {
@@ -136,9 +136,10 @@ public class Elevator {
 			speed = _fastSpeed;
 		}
 		
-		if(relativeDist < 0) {
+		if(relativeDist > 0) {
 			speed = -speed;
 		}
+		
 		runMotors(speed, currentPos);
 	}
 	

@@ -25,9 +25,11 @@ public class Intake {
 		if (_operatorController.getRawButton(Addresses.ARM_IN)) {
 			_arm.set(false);
 		}
+		
 		if (_operatorController.getRawButton(Addresses.ARM_OUT)) {
 			_arm.set(true);
 		}
+		
 		if (_operatorController.getRawButton(Addresses.WRIST_IN)) {
 			_wrist.set(false);
 			setIntakeMotors(INSPEED);

@@ -45,8 +45,8 @@ public final class Addresses {
     public static final int RIGHT_BELT_MOTOR = 9;
     
     	//Intake
-    public static final int ARM_SOLENOID_CHANNEL = 0;
-    public static final int WRIST_SOLENOID_CHANNEL = 1;
+    public static final int ARM_SOLENOID_CHANNEL = 1;
+    public static final int WRIST_SOLENOID_CHANNEL = 0;
     
     public static final int LEFT_PHALANGE_MOTOR = 6;
     public static final int RIGHT_PHALANGE_MOTOR = 7;
@@ -61,10 +61,10 @@ public final class Addresses {
     	//DriveController
     
     	//OperatorControllerIntake
-    public static final int ARM_IN = 6;
-	public static final int ARM_OUT = 8;			
-	public static final int WRIST_IN = 7;		//bottom right trigger
-	public static final int WRIST_OUT = 5;	//top right trigger ("clicky")
+    public static final int ARM_IN = 5;
+	public static final int ARM_OUT = 7;			
+	public static final int WRIST_IN = 8;
+	public static final int WRIST_OUT = 6;
 	
 		//OperatorControllerElevator
 	public static final int HOOK_A_AXIS = 4;
