@@ -1,6 +1,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator {
 
@@ -32,6 +33,8 @@ public class Elevator {
 	private static int accelDistance = 180;
 	private static int positionTolerance = 10;
 	
+	private static final double voltageLimit = 2.5;
+	
 	private static double fastSpeed = .4;
 	private static double slowSpeed = .2;
 	private static int goalPos1 = 100;
@@ -53,25 +56,28 @@ public class Elevator {
 		locks = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.LOCKS_SOLENOID_CHANNEL);
 		hookA = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_A_SOLENOID_CHANNEL);
 		hookB = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_B_SOLENOID_CHANNEL);
-		
 	}
 	
 	public void runLift() {
-		//moveElevator();
-		runMotors(controller.getY());
-		hookSafety(elevatorCounter.get());
+		moveElevator();
+		//runMotors(controller.getY());
+		int encoderCount = elevatorCounter.get();
+		hookSafety(encoderCount);
 		//locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
+		SmartDashboard.putInt("Elevator Encoder", encoderCount);
+		SmartDashboard.putNumber("Top Limit Switch", topSwitch.getVoltage());
+		SmartDashboard.putNumber("Bottom Limit Switch", bottomSwitch.getVoltage());
 	}
 	
 
 	private void runMotors(double speed) {
-		if(checkLimit(bottomSwitch) && speed <= 0.0 || checkLimit(bottomSwitch) && speed >= 0.0) {
+		/*if(checkLimit(bottomSwitch) && speed <= 0.0 || checkLimit(topSwitch) && speed >= 0.0) {
 			rightBeltMotor.set(0.0);
 			leftBeltMotor.set(0.0);
-		} else {
+		} else {*/
 			rightBeltMotor.set(speed);
 			leftBeltMotor.set(speed);
-		}
+		//}
 	}
 	
 	private void hookSafety(int count) {
@@ -147,6 +153,6 @@ public class Elevator {
 	}*/
 	
 	private boolean checkLimit(AnalogInput input) {
-		return !(input.getVoltage() >= 2.5);
+		return !(input.getVoltage() >= voltageLimit);
 	}
 }

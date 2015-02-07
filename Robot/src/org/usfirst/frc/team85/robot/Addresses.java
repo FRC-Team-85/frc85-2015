@@ -53,8 +53,8 @@ public final class Addresses {
     
     	//General
     
-    public static final int DRIVE_CONTROLLER = 1;
-    public static final int OPERATOR_CONTROLLER = 2;
+    public static final int DRIVE_CONTROLLER = 0;
+    public static final int OPERATOR_CONTROLLER = 1;
     
     public static final int PNEUMATIC_CONTROLLER_CID = 5;
     
