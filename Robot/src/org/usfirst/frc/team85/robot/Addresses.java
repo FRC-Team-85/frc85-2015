@@ -34,8 +34,8 @@ public final class Addresses {
     public static final int ELEVATOR_ENCODER_CHANNEL_A = 8;
     public static final int ELEVATOR_ENCODER_CHANNEL_B = 9;
 
-    public static final int TOPSWITCH_CHANNEL = 10;
-    public static final int BOTTOMSWITCH_CHANNEL = 11;
+    public static final int TOPSWITCH_CHANNEL = 0;
+    public static final int BOTTOMSWITCH_CHANNEL = 1;
 
     public static final int HOOK_A_SOLENOID_CHANNEL = 2;
     public static final int HOOK_B_SOLENOID_CHANNEL = 3;
@@ -53,8 +53,8 @@ public final class Addresses {
     
     	//General
     
-    public static final int DRIVE_CONTROLLER = 1;
-    public static final int OPERATOR_CONTROLLER = 2;
+    public static final int DRIVE_CONTROLLER = 0;
+    public static final int OPERATOR_CONTROLLER = 1;
     
     public static final int PNEUMATIC_CONTROLLER_CID = 5;
     
@@ -65,9 +65,12 @@ public final class Addresses {
 	public static final int ARM_OUT = 8;			
 	public static final int WRIST_IN = 7;		//bottom right trigger
 	public static final int WRIST_OUT = 5;	//top right trigger ("clicky")
+	public static final int RUN_INTAKE_MOTORS = 1;
 	
 		//OperatorControllerElevator
-	public static final int LOCK_IN = 4;
-	public static final int LOCK_OUT = 3;
-	public static final int RUN_INTAKE_MOTORS = 1;
+	public static final int HOOK_A_AXIS = 4;
+	public static final int HOOK_B_AXIS= 5;
+	public static final int LOCK_OUT = 11;
+	public static final int LOCK_IN = 12;
+
 }

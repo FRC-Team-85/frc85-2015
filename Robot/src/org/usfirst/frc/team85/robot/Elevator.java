@@ -1,13 +1,14 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator {
 
 	private static Joystick _controller;
 	
-	private static DigitalInput _topSwitch;
-	private static DigitalInput _bottomSwitch;
+	private static AnalogInput _topSwitch;
+	private static AnalogInput _bottomSwitch;
 	
 	private static CANTalon _rightBeltMotor;
 	private static CANTalon _leftBeltMotor;
@@ -32,19 +33,22 @@ public class Elevator {
 	private static int _accelDistance = 180;
 	private static int _positionTolerance = 10;
 	
+private static final double voltageLimit = 2.5;
+
 	private static double _fastSpeed = .4;
 	private static double _slowSpeed = .2;
 	private static int _goalPos1 = 100;
 	private static int _goalPos2 = 200;
 	private static int _goalPos3 = 300;
 	private static int _goalPos4 = 400;
+
 	
 	public Elevator (Joystick opController) {
 	
 	  	_controller = opController;
 	  	
-		_topSwitch = new DigitalInput(Addresses.TOPSWITCH_CHANNEL);
-		_bottomSwitch = new DigitalInput(Addresses.BOTTOMSWITCH_CHANNEL);
+		_topSwitch = new AnalogInput(Addresses.TOPSWITCH_CHANNEL);
+		_bottomSwitch = new AnalogInput(Addresses.BOTTOMSWITCH_CHANNEL);
 		_rightBeltMotor = new CANTalon(Addresses.LEFT_BELT_MOTOR);
 		_leftBeltMotor = new CANTalon(Addresses.RIGHT_BELT_MOTOR);
 	
@@ -59,24 +63,41 @@ public class Elevator {
 	public void runLift() {
 		//moveElevator();
 		runMotors(_controller.getY());
-		hookSafety(_elevatorCounter.get());
+		int encoderCount = _elevatorCounter.get();
+		hookSafety(encoderCount);
 		//locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
+		SmartDashboard.putInt("Elevator Encoder", encoderCount);
+		SmartDashboard.putNumber("Top Limit Switch", _topSwitch.getVoltage());
+		SmartDashboard.putNumber("Bottom Limit Switch", _bottomSwitch.getVoltage());
 	}
 	
 
 	private void runMotors(double speed) {
-		if(!_bottomSwitch.get() && speed <= 0.0 || !_topSwitch.get() && speed >= 0.0) {
+
+		if(checkLimit(_bottomSwitch) && speed <= 0.0 || checkLimit(_topSwitch) && speed >= 0.0) {
 			_rightBeltMotor.set(0.0);
 			_leftBeltMotor.set(0.0);
-			return;
+		} else {
+			_rightBeltMotor.set(speed);
+			_leftBeltMotor.set(speed);
 		}
-		_rightBeltMotor.set(speed);
-		_leftBeltMotor.set(speed);
 	}
 	
 	private void hookSafety(int count) {
-		_hookA.set(!(count >= _HOOKAPOS));
-		_hookB.set(!(count >= _HOOKBPOS));
+		if(count >= HOOKAPOS) {
+			_hookA.set(true);
+		} else if(_controller.getRawAxis(Addresses.HOOK_A_AXIS) > 0 && count <= HOOKAPOS) {
+			_hookA.set(false);
+		} else if(_controller.getRawAxis(Addresses.HOOK_A_AXIS) < 0 && count <= HOOKAPOS) {
+			_hookA.set(true);
+		}
+		if(count >= HOOKBPOS) {
+			_hookB.set(true);
+		} else if(_controller.getRawAxis(Addresses.HOOK_B_AXIS) > 0 && count <= HOOKBPOS) {
+			_hookB.set(false);
+		} else if(_controller.getRawAxis(Addresses.HOOK_B_AXIS) < 0 && count <= HOOKBPOS) {
+			_hookB.set(true);
+		}
 	}
 	
 	private void moveElevator() {
@@ -133,4 +154,8 @@ public class Elevator {
 		//convertedCount = Math.PI * 2 * radius * count / 360;
 		System.out.println("Count: " + count);
 	}*/
+	
+	private boolean checkLimit(AnalogInput input) {
+		return !(input.getVoltage() >= voltageLimit);
+	}
 }
