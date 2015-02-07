@@ -30,13 +30,16 @@ public class Intake {
 		}
 		if (_operatorController.getRawButton(Addresses.WRIST_IN)) {
 			_wrist.set(false);
+			setIntakeMotors(INSPEED);
 		}
+		else
+		{
+			setIntakeMotors(0.0);
+		}
+		
 		if (_operatorController.getRawButton(Addresses.WRIST_OUT)) {
 			_wrist.set(true);
 		}
-		if(_operatorController.getRawButton(Addresses.RUN_INTAKE_MOTORS)) {
-			setIntakeMotors(INSPEED);
-		} else {setIntakeMotors(0.0);}
 	}
 	
 	private void setIntakeMotors(double output) {
