@@ -42,7 +42,7 @@ public class Drive {
 		_backRightEncoder = new Encoder(Addresses.BACK_RIGHT_ENCODER_CHANNEL_A,
 				Addresses.BACK_RIGHT_ENCODER_CHANNEL_B);
 		
-		_drive = new RobotDrive(_frontLeftMotor, _frontRightMotor, _backLeftMotor, _backRightMotor);
+		_drive = new RobotDrive(_frontLeftMotor, _backLeftMotor, _frontRightMotor, _backRightMotor);
 	}
 	
 	public void drive() {
@@ -50,7 +50,7 @@ public class Drive {
 			setMotors(0.0, 0.0, 0.0, 0.0);
 			return;
 		}
-			_drive.mecanumDrive_Cartesian(-scaleDrive(_controller.getX()), -scaleDrive(_controller.getY()), -scaleDrive(_controller.getTwist()), 0);
+			_drive.mecanumDrive_Cartesian(scaleDrive(_controller.getX()), scaleDrive(_controller.getY()), scaleDrive(_controller.getTwist()), 0);
 		
 	}
 	private double scaleDrive(double speed) {
