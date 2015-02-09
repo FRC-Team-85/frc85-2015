@@ -20,7 +20,7 @@ public class Drive {
 	
 	private double _frontLeftOutput;
 	private double _frontRightOutput;
-	private double _backLeftOutout;
+	private double _backLeftOutput;
 	private double _backRighOutput;
 	
 	public Drive(Joystick drivecontroller) {

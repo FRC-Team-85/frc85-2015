@@ -39,13 +39,8 @@ public class Elevator {
 	private static double _slowSpeed = .4;
 	private static int _posBottom = 0; //bottom
 	private static int _posLoad = 550; //load height
-	private static int _posHook1 = 2275; //hook 1
-	private static int _posHook2 = 3250; //hook 2
-	
-	private static int _buttonBottom = 1;
-	private static int _buttonLoad = 2;
-	private static int _buttonHook1 = 3;
-	private static int _buttonHook2 = 4;
+	private static int _posHookA = 2275; //hook 1
+	private static int _posHookB = 3250; //hook 2
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;
 	private static int SOFT_HEIGHT_LIMIT_LOW = 200;
@@ -115,14 +110,14 @@ public class Elevator {
 	}
 	
 	private void moveElevator(int encoderCount) {
-		if(_controller.getRawButton(_buttonBottom)) {
+		if(_controller.getRawButton(Addresses.BUTTON_BOTTOM)) {
 			moveTo(_posBottom, encoderCount);
-		} else if(_controller.getRawButton(_buttonLoad)) {
+		} else if(_controller.getRawButton(Addresses.BUTTON_LOAD)) {
 			moveTo(_posLoad, encoderCount);
-		} else if(_controller.getRawButton(_buttonHook1)) {
-			moveTo(_posHook1, encoderCount);
-		} else if(_controller.getRawButton(_buttonHook2)) {
-			moveTo(_posHook2, encoderCount);
+		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_A)) {
+			moveTo(_posHookA, encoderCount);
+		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_B)) {
+			moveTo(_posHookB, encoderCount);
 		} else {
 			runMotors(_controller.getY(), encoderCount);
 		}

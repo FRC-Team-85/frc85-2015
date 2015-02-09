@@ -8,7 +8,8 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.PowerDistributionPanel; 
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -18,6 +19,9 @@ import edu.wpi.first.wpilibj.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	
+	private PowerDistributionPanel PDP = new PowerDistributionPanel();
+	
     private Joystick _driveController, _operatorController;
     
     private CameraServer _camera;
@@ -67,6 +71,7 @@ public class Robot extends IterativeRobot {
     	_intake.run();
     	_elevator.runLift();
     	//pneumaticsControlls();
+    	getAMPs();
     }
     
     
@@ -75,6 +80,21 @@ public class Robot extends IterativeRobot {
      */
     public void testPeriodic() {
     
+    }
+    
+    //0-3
+    //12-15
+    
+    private void getAMPs() {
+    	SmartDashboard.putNumber("Channel 00 AMPs",PDP.getCurrent(0));
+    	SmartDashboard.putNumber("Channel 01 AMPs",PDP.getCurrent(1));
+    	SmartDashboard.putNumber("Channel 02 AMPs",PDP.getCurrent(2));
+    	SmartDashboard.putNumber("Channel 03 AMPs",PDP.getCurrent(3));
+
+    	SmartDashboard.putNumber("Channel 12 AMPs",PDP.getCurrent(12));
+    	SmartDashboard.putNumber("Channel 13 AMPs",PDP.getCurrent(13));
+    	SmartDashboard.putNumber("Channel 14 AMPs",PDP.getCurrent(14));
+    	SmartDashboard.putNumber("Channel 15 AMPs",PDP.getCurrent(15));
     }
     
 }
