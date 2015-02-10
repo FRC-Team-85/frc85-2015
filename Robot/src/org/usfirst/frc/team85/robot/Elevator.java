@@ -42,8 +42,8 @@ public class Elevator {
 	private static int _posHookA = 2275; //hook 1
 	private static int _posHookB = 3250; //hook 2
 
-	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;
-	private static int SOFT_HEIGHT_LIMIT_LOW = 200;
+	private static int SOFT_HEIGHT_LIMIT_HIGH = 3540;	//3700
+	private static int SOFT_HEIGHT_LIMIT_LOW = 360;		// 200
 	private static double SOFT_LIMIT_SCALE = 0.25;
 	
 	public Elevator (Joystick opController) {
