@@ -23,7 +23,7 @@ public class Elevator {
 	private static boolean _islockToggleHeld;
 	
 	private static Solenoid _hookA;
-	private static final double HOOKAPOS = 0.0; //from the bottom
+	private static final int HOOKAPOS = 10000; //from the bottom
 	
 	private static Solenoid _hookB;
 	private static final double HOOKBPOS = 0.0; //from the bottom
