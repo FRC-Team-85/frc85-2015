@@ -39,7 +39,7 @@ public class Intake {
 			setIntakeMotors(0.0);
 		}
 		
-		if (_operatorController.getRawButton(Addresses.WRIST_OUT)) {
+		if (_operatorController.getRawButton(Addresses.BUTTON_LOAD) || _operatorController.getRawButton(Addresses.WRIST_OUT)) {
 			_wrist.set(true);
 		}
 	}

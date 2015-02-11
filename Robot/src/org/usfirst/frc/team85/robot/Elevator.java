@@ -38,13 +38,12 @@ public class Elevator {
 	private static double _fastSpeed = 1;
 	private static double _slowSpeed = .4;
 	private static int _posBottom = 0;//bottom
-	private static int _posLowLoad = 220;
-	private static int _posLoad = 550; //load height
+	private static int _posLoad = 220; //load height
 	private static int _posHookA = 2160; //hook 1
 	private static int _posHookB = 3250; //hook 2
 
-	private static int SOFT_HEIGHT_LIMIT_HIGH = 3540;	//3700
-	private static int SOFT_HEIGHT_LIMIT_LOW = 360;		// 200
+	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
+	private static int SOFT_HEIGHT_LIMIT_LOW = 200;		// 200
 	private static double SOFT_LIMIT_SCALE = 0.25;
 	
 	public Elevator (Joystick opController) {
@@ -82,37 +81,38 @@ public class Elevator {
 	private void runMotors(double speed, int currentPosition) {
 		if(checkLimit(_bottomSwitch) && speed > 0.0 || checkLimit(_topSwitch) && speed < 0.0) {
 			speed = 0;
-		} else if (currentPosition <= SOFT_HEIGHT_LIMIT_LOW && speed > 0.0 || currentPosition >= SOFT_HEIGHT_LIMIT_HIGH && speed < 0.0) {
+		} else if (currentPosition <= SOFT_HEIGHT_LIMIT_LOW && speed > _slowSpeed || currentPosition >= SOFT_HEIGHT_LIMIT_HIGH && speed < -_slowSpeed) {
 			speed *= SOFT_LIMIT_SCALE;
 		}
 		
 		SmartDashboard.putNumber("Elevator motor speed", speed);
-	
+		if(Math.abs(speed) >= .05) {
+			_locks.set(false);
+		}
 		_leftBeltMotor.set(speed);
 		_rightBeltMotor.set(speed);
 	}
 	
 	private void hookSafety(int count) {
-		double hookAAxisValue = _controller.getPOV();
-		if(count >= HOOKAPOS) {
-			_hookA.set(true);
-		} else if(hookAAxisValue == 0) {
-			_hookA.set(false);
-		} else if(hookAAxisValue == 180) {
-			_hookA.set(true);
+		int POV = _controller.getPOV();
+		
+		_hookA.set(count >= HOOKAPOS || _controller.getRawButton(Addresses.LOCK_BUTTON));
+		
+		
+		if(POV == 0) {
+			_locks.set(true);
+		} else if(POV == 180) {
+			_locks.set(false);
 		}
 		
-		SmartDashboard.putNumber("POV", _controller.getPOV());
-		SmartDashboard.putNumber("Hook A Controller Axis", hookAAxisValue);
 		
-		if(count >= HOOKBPOS) {
+		/*if(count >= HOOKBPOS) {
 			_hookB.set(true);
 		} else if(_controller.getRawAxis(Addresses.HOOK_B_AXIS) > 0.0) {
 			_hookB.set(false);
 		} else if(_controller.getRawAxis(Addresses.HOOK_B_AXIS) < 0.0) {
 			_hookB.set(true);
-		}
-		//System.out.println("Count: " + count);
+		}*/
 		
 	}
 	
