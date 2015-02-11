@@ -23,7 +23,7 @@ public class Elevator {
 	private static boolean _islockToggleHeld;
 	
 	private static Solenoid _hookA;
-	private static final int HOOKAPOS = 10000; //from the bottom
+	private static final int HOOKAPOS = 2250; //from the bottom
 	
 	private static Solenoid _hookB;
 	private static final double HOOKBPOS = 0.0; //from the bottom
@@ -37,9 +37,10 @@ public class Elevator {
 
 	private static double _fastSpeed = 1;
 	private static double _slowSpeed = .4;
-	private static int _posBottom = 0; //bottom
+	private static int _posBottom = 0;//bottom
+	private static int _posLowLoad = 220;
 	private static int _posLoad = 550; //load height
-	private static int _posHookA = 2275; //hook 1
+	private static int _posHookA = 2160; //hook 1
 	private static int _posHookB = 3250; //hook 2
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3540;	//3700
@@ -60,7 +61,6 @@ public class Elevator {
 		_locks = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.LOCKS_SOLENOID_CHANNEL);
 		_hookA = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_A_SOLENOID_CHANNEL);
 		_hookB = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_B_SOLENOID_CHANNEL);
-		
 	}
 	
 	public void runLift() {
@@ -93,20 +93,27 @@ public class Elevator {
 	}
 	
 	private void hookSafety(int count) {
+		double hookAAxisValue = _controller.getPOV();
 		if(count >= HOOKAPOS) {
 			_hookA.set(true);
-		} else if(_controller.getRawAxis(Addresses.HOOK_A_AXIS) > 0 && count <= HOOKAPOS) {
+		} else if(hookAAxisValue == 0) {
 			_hookA.set(false);
-		} else if(_controller.getRawAxis(Addresses.HOOK_A_AXIS) < 0 && count <= HOOKAPOS) {
+		} else if(hookAAxisValue == 180) {
 			_hookA.set(true);
 		}
+		
+		SmartDashboard.putNumber("POV", _controller.getPOV());
+		SmartDashboard.putNumber("Hook A Controller Axis", hookAAxisValue);
+		
 		if(count >= HOOKBPOS) {
 			_hookB.set(true);
-		} else if(_controller.getRawAxis(Addresses.HOOK_B_AXIS) > 0 && count <= HOOKBPOS) {
+		} else if(_controller.getRawAxis(Addresses.HOOK_B_AXIS) > 0.0) {
 			_hookB.set(false);
-		} else if(_controller.getRawAxis(Addresses.HOOK_B_AXIS) < 0 && count <= HOOKBPOS) {
+		} else if(_controller.getRawAxis(Addresses.HOOK_B_AXIS) < 0.0) {
 			_hookB.set(true);
 		}
+		//System.out.println("Count: " + count);
+		
 	}
 	
 	private void moveElevator(int encoderCount) {

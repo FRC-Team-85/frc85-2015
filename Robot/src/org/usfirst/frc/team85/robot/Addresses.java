@@ -74,7 +74,7 @@ public final class Addresses {
 	public static final int BUTTON_HOOK_B = 4;
 	public static int HOOK_AXIS = 5;
 	
-	public static final int HOOK_A_AXIS = 6;
+	public static final int HOOK_A_AXIS = 5;
 	public static final int HOOK_B_AXIS= 5;
 	public static final int LOCK_OUT = 11;
 	public static final int LOCK_IN = 12;
