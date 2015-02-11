@@ -17,8 +17,8 @@ public class Intake {
 		_operatorController = opController;
 		_arm = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.ARM_SOLENOID_CHANNEL);
 		_wrist = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.WRIST_SOLENOID_CHANNEL);
-		_leftMotor = new CANTalon(Addresses.LEFT_PHALANGE_MOTOR);
-		_rightMotor = new CANTalon(Addresses.RIGHT_PHALANGE_MOTOR);
+		_leftMotor = new CANTalon(Addresses.LEFT_INTAKE_MOTOR);
+		_rightMotor = new CANTalon(Addresses.RIGHT_INTAKE_MOTOR);
 	}
 	
 	public void run() {

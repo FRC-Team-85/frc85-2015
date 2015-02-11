@@ -37,10 +37,12 @@ public class Elevator {
 
 	private static double _fastSpeed = 1;
 	private static double _slowSpeed = .4;
-	private static int _posBottom = 0;//bottom
-	private static int _posLoad = 220; //load height
-	private static int _posHookA = 2160; //hook 1
-	private static int _posHookB = 3250; //hook 2
+	
+	//Positions for elevator
+	private static int _posBottom = 0;
+	private static int _posLoad = 220; 
+	private static int _posHookA = 2160;
+	private static int _posHookB = 3250; 
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
 	private static int SOFT_HEIGHT_LIMIT_LOW = 200;		// 200
@@ -96,7 +98,7 @@ public class Elevator {
 	private void hookSafety(int count) {
 		int POV = _controller.getPOV();
 		
-		_hookA.set(count >= HOOKAPOS || _controller.getRawButton(Addresses.LOCK_BUTTON));
+		_hookA.set(count >= HOOKAPOS || _controller.getRawButton(Addresses.HOOK_BUTTON));
 		
 		
 		if(POV == 0) {

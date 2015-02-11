@@ -45,11 +45,11 @@ public final class Addresses {
     public static final int RIGHT_BELT_MOTOR = 9;
     
     	//Intake
-    public static final int ARM_SOLENOID_CHANNEL = 1;
     public static final int WRIST_SOLENOID_CHANNEL = 0;
+    public static final int ARM_SOLENOID_CHANNEL = 1;
     
-    public static final int LEFT_PHALANGE_MOTOR = 6;
-    public static final int RIGHT_PHALANGE_MOTOR = 7;
+    public static final int LEFT_INTAKE_MOTOR = 6;
+    public static final int RIGHT_INTAKE_MOTOR = 7;
     
     	//General
     
@@ -72,10 +72,9 @@ public final class Addresses {
 	public static int BUTTON_LOAD = 2;
 	public static final int BUTTON_HOOK_A = 3;
 	public static final int BUTTON_HOOK_B = 4;
+	
 	public static int HOOK_AXIS = 5;
 	
-	public static final int HOOK_A_AXIS = 5;
-	public static final int HOOK_B_AXIS= 5;
-	public static final int LOCK_BUTTON = 12;
+	public static final int HOOK_BUTTON = 12;
 
 }
