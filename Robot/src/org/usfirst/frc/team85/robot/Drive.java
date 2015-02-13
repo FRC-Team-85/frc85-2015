@@ -57,7 +57,7 @@ public class Drive {
 		return speed * .7;
 	}
 	
-	private void setMotors(double frontLeftSpeed, double frontRightSpeed, double backLeftSpeed, double backRightSpeed) {
+	public void setMotors(double frontLeftSpeed, double frontRightSpeed, double backLeftSpeed, double backRightSpeed) {
 		_frontLeftMotor.set(frontLeftSpeed);
 		_frontRightMotor.set(frontRightSpeed);
 		_backLeftMotor.set(backLeftSpeed);

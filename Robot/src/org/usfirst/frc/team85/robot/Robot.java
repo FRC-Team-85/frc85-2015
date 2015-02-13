@@ -30,6 +30,8 @@ public class Robot extends IterativeRobot {
     private Intake _intake;
     private Elevator _elevator;
     
+    private Autonomous _auto;
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -54,13 +56,14 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
+    	_auto = new Autonomous(0, _drive);//, _intake, _elevator);
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-             
+    	_auto.runAuto();
     }
 
     /**

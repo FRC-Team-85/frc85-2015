@@ -26,7 +26,7 @@ public class Elevator {
 	private static final int HOOKAPOS = 2250; //from the bottom
 	
 	private static Solenoid _hookB;
-	private static final double HOOKBPOS = 0.0; //from the bottom
+	private static final double HOOKBPOS = 1240; //from the bottom
 	
 	private static int _totesOnElevator = 0;
 	
@@ -40,9 +40,9 @@ public class Elevator {
 	
 	//Positions for elevator
 	private static int _posBottom = 0;
-	private static int _posLoad = 220; 
-	private static int _posHookA = 2160;
-	private static int _posHookB = 3250; 
+	private static int _posLoad = 240; 
+	private static int _posHookA = 2100;
+	private static int _posHookB = 1240; 
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
 	private static int SOFT_HEIGHT_LIMIT_LOW = 200;		// 200
@@ -74,9 +74,11 @@ public class Elevator {
 		hookSafety(encoderCount);
 		moveElevator(encoderCount);
 		//locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
+		
 		SmartDashboard.putInt("Elevator Encoder", encoderCount);
 		SmartDashboard.putNumber("Top Limit Switch", _topSwitch.getVoltage());
 		SmartDashboard.putNumber("Bottom Limit Switch", _bottomSwitch.getVoltage());
+		
 	}
 	
 
