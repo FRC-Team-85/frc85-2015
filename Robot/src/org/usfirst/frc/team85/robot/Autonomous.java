@@ -5,12 +5,13 @@ import edu.wpi.first.wpilibj.*;
 public class Autonomous {
 	
 	private int tenFootDrive = 2292;
+	private int YELLOWTOTEDRIVE = 1547;
+	//private int TO AUTO ZONE EDGE DRIVE (ST + R) = 1337;
 	
 	private boolean isDoneCalculating = false;
 	
 	private double MAXSPEED = 1.0;
 	private int ACCELERATIONCOUNT = 360; //encoder counts
-	private int TOLERANCE;
 	
 	private int accelerationCount;
 
@@ -29,7 +30,17 @@ public class Autonomous {
 		switch(_procedure) {
 		case 0:
 			linearDrive(tenFootDrive);
+			break;
 		}
+		/*
+		case 1:
+			//intake,up
+			//turn
+			//drive
+			break;
+		
+		
+		 */
 	}
 	
 	private boolean linearDrive(int goal) {	//linear
