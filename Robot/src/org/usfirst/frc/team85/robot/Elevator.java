@@ -39,10 +39,10 @@ public class Elevator {
 	private static double _slowSpeed = .4;
 	
 	//Positions for elevator
-	private static int _posBottom = 0;
-	private static int _posLoad = 240; 
-	private static int _posHookA = 2100;
-	private static int _posHookB = 1240; 
+	public static int posBottom = 0;
+	public static int posLoad = 240; 
+	public static int posHookA = 2100;
+	public static int posRide = 1240; 
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
 	private static int SOFT_HEIGHT_LIMIT_LOW = 200;		// 200
@@ -122,13 +122,13 @@ public class Elevator {
 	
 	private void moveElevator(int encoderCount) {
 		if(_controller.getRawButton(Addresses.BUTTON_BOTTOM)) {
-			moveTo(_posBottom, encoderCount);
+			moveTo(posBottom, encoderCount);
 		} else if(_controller.getRawButton(Addresses.BUTTON_LOAD)) {
-			moveTo(_posLoad, encoderCount);
+			moveTo(posLoad, encoderCount);
 		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_A)) {
-			moveTo(_posHookA, encoderCount);
+			moveTo(posHookA, encoderCount);
 		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_B)) {
-			moveTo(_posHookB, encoderCount);
+			moveTo(posRide, encoderCount);
 		} else {
 			runMotors(_controller.getY(), encoderCount);
 		}
