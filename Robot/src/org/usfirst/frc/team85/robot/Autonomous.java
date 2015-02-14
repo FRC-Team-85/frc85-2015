@@ -82,7 +82,7 @@ public class Autonomous {
 				speed = 0.1;
 			}
 			
-				/*
+				
 				if (shortDrive) {
 					
 					if (currentCount < goal) {
@@ -92,7 +92,7 @@ public class Autonomous {
 						speed = 0.0;
 					}
 					
-				}*/
+				}
 
 			_drive.setMotors(speed, speed, speed, speed);
 			
@@ -115,7 +115,6 @@ public class Autonomous {
 			}
 			
 			goal = target - 180;
-			accelerationCount = ACCELERATIONCOUNT;
 			deccelerationCount = goal - ACCELERATIONCOUNT;
 			isDoneCalculating = true;
 			_drive.setBrakeMode(false);
@@ -125,12 +124,12 @@ public class Autonomous {
 			double currentCount = ((_drive.getLeftEncoders() + _drive.getRightEncodrs()) / 2);
 			double speed = 0.0;
 			
-			if (currentCount <= accelerationCount && currentCount >= 0) {	//triangle one
-				speed = BASE + MAXSPEED * currentCount / accelerationCount;
+			if (currentCount <= ACCELERATIONCOUNT && currentCount >= 0) {	//triangle one
+				speed = BASE + MAXSPEED * currentCount / ACCELERATIONCOUNT;
 			} else if (currentCount > deccelerationCount && currentCount <= goal) {	//triangle two
 				_drive.setBrakeMode(true);
-				speed = 1.0 * (goal - currentCount) / accelerationCount;
-			} else if (currentCount > accelerationCount && currentCount <= deccelerationCount){	//rectangle
+				speed = 1.0 * (goal - currentCount) / ACCELERATIONCOUNT;
+			} else if (currentCount > ACCELERATIONCOUNT && currentCount <= deccelerationCount){	//rectangle
 				speed = 1.0;
 			} else {	//outside
 				speed = 0.0;
