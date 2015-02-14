@@ -64,17 +64,20 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
     	_auto.runAuto();
+    	_drive.displayEncoderCount();
     }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	_drive.setBrakeMode(false);
     	_drive.drive();
     	_intake.run();
     	_elevator.runLift();
     	//pneumaticsControlls();
     	getAMPs();
+    	_drive.displayEncoderCount();
     }
     
     

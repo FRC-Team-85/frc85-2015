@@ -1,6 +1,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive {
 	
@@ -77,5 +78,21 @@ public class Drive {
 	
 	public int getRightEncodrs() {
 		return (_frontRightEncoder.get() + _backLeftEncoder.get()) / 2;
+	}
+	
+	public void setBrakeMode(boolean set) {
+		_frontLeftMotor.enableBrakeMode(set);
+		_backLeftMotor.enableBrakeMode(set);
+		_frontRightMotor.enableBrakeMode(set);
+		_backRightMotor.enableBrakeMode(set);
+	}
+	
+	public void displayEncoderCount(){
+
+    	SmartDashboard.putNumber("Ave. Encoder", (getLeftEncoders() + getRightEncodrs()) / 2);
+    	SmartDashboard.putNumber("FrontLeftEncoder", _frontLeftEncoder.get());
+    	SmartDashboard.putNumber("BackLeftEncoder", _backLeftEncoder.get());
+    	SmartDashboard.putNumber("FrontRightEncoder", _frontRightEncoder.get());
+    	SmartDashboard.putNumber("BackRightEncoder", _backRightEncoder.get());
 	}
 }
