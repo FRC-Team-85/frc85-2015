@@ -4,8 +4,10 @@ import edu.wpi.first.wpilibj.*;
 
 public class Autonomous {
 	
-	private int tenFootDrive = 2292;
+	private int TENFOOTDRIVE = 2292;
 	private int YELLOWTOTEDRIVE = 1547;
+	private int ONETOTE = 516;
+	private int STAGE = 0;
 	//private int TO AUTO ZONE EDGE DRIVE (ST + R) = 1337;
 	
 	private boolean isDoneCalculating = false;
@@ -18,13 +20,19 @@ public class Autonomous {
 	private int goal;
 	private int deccelerationCount;
 
+	private Timer _timer;
 	private int _procedure;
 	private Drive _drive;
+	private Intake _intake;
+	private Elevator _elevator;
 	
 	
-	public Autonomous(int procedureID, Drive drive) {
-		_procedure = procedureID;
+	public Autonomous(int procedureID, Drive drive, Intake intake, Elevator elevator) {
+		_procedure = 1;
 		_drive = drive;
+		_intake = intake;
+		_elevator = elevator;
+		_timer = new Timer();
 		
 		_drive.resetEncoders();
 	}
@@ -32,7 +40,20 @@ public class Autonomous {
 	public void runAuto() {
 		switch(_procedure) {
 		case 0:
-			driveLinear(tenFootDrive);
+			driveLinear(TENFOOTDRIVE);
+			break;
+		case 1:
+			switch(STAGE) {
+			case 0:
+				setPneumatics(false);
+				break;
+			case 1:
+				driveLinear(ONETOTE);
+				break;
+			case 2:
+				setPneumatics(true);
+				break;
+			}
 			break;
 		}
 		/*
@@ -45,66 +66,6 @@ public class Autonomous {
 		
 		 */
 	}
-	/*
-	private void linearDrive(int target) {	//linear
-		//6 inch diameter
-		if (!isDoneCalculating) {
-		//	shortDrive = false;
-			_drive.resetEncoders();
-			if (target <= (2 * ACCELERATIONCOUNT)) {
-		//		shortDrive = true;
-				goal = target - 180;//tempoffset
-			} else {
-		//		shortDrive = false;
-				goal = target -180;
-			}
-			isDoneCalculating = true;
-			deccelerationCount = goal - accelerationCount;
-			_drive.setBrakeMode(false);
-		} else if (isDoneCalculating) {
-			
-			double currentCount = ((_drive.getLeftEncoders() + _drive.getRightEncodrs()) / 2);
-			double speed = 0.0;
-			
-			if (currentCount <= (accelerationCount) && currentCount >= 0) {	//triangle one
-				speed = MAXSPEED * currentCount / accelerationCount + BASE;
-			} else if (currentCount > deccelerationCount && currentCount <= goal) {	//triangle two
-				_drive.setBrakeMode(true);
-				speed = 1.0 * (goal - currentCount) / accelerationCount;
-			} else if (currentCount > accelerationCount && currentCount <= deccelerationCount){	//rectangle
-				speed = 1.0;
-			} else {	//outside
-				speed = 0.0;
-			//	return true;
-			}
-	
-			if (speed <= .1) {
-				speed = 0.1;
-			}
-			
-				
-				if (shortDrive) {
-					
-					if (currentCount < goal) {
-						speed = 0.4;
-					} else {
-						_drive.setBrakeMode(true);
-						speed = 0.0;
-					}
-					
-				}
-
-			_drive.setMotors(speed, speed, speed, speed);
-			
-		}
-
-		//return false;
-		
-	}*/
-	
-	/*public int countsToDrive() {
-		
-	}*/
 	
 	public void driveLinear(int target) {
 		if(!isDoneCalculating) {
@@ -123,22 +84,42 @@ public class Autonomous {
 			
 			double currentCount = ((_drive.getLeftEncoders() + _drive.getRightEncodrs()) / 2);
 			double speed = 0.0;
-			
-			if (currentCount <= ACCELERATIONCOUNT && currentCount >= 0) {	//triangle one
-				speed = BASE + MAXSPEED * currentCount / ACCELERATIONCOUNT;
-			} else if (currentCount > deccelerationCount && currentCount <= goal) {	//triangle two
-				_drive.setBrakeMode(true);
-				speed = 1.0 * (goal - currentCount) / ACCELERATIONCOUNT;
-			} else if (currentCount > ACCELERATIONCOUNT && currentCount <= deccelerationCount){	//rectangle
-				speed = 1.0;
-			} else {	//outside
-				speed = 0.0;
-			//	return true;
+			if(shortDrive) {
+				if(currentCount >= 0 && currentCount <= goal) {
+					speed = BASE;
+				} else {
+					_drive.setBrakeMode(true);
+					speed = 0.0;
+				}
+			} else {
+				if (currentCount <= ACCELERATIONCOUNT && currentCount >= 0) {	//triangle one
+					speed = BASE + MAXSPEED * currentCount / ACCELERATIONCOUNT;
+				} else if (currentCount > deccelerationCount && currentCount <= goal) {	//triangle two
+					_drive.setBrakeMode(true);
+					speed = 1.0 * (goal - currentCount) / ACCELERATIONCOUNT;
+				} else if (currentCount > ACCELERATIONCOUNT && currentCount <= deccelerationCount){	//rectangle
+					speed = 1.0;
+				} else {	//outside
+					speed = 0.0;
+					//	return true;
+					STAGE++;
+				}
 			}
-			
 			_drive.setMotors(speed, speed, speed, speed);
 			
 		}
 		
+	}
+	
+	private void setPneumatics(boolean bool) {
+		_timer.start();
+		_intake.setWrists(bool);
+		_intake.setArms(bool);
+		
+		if(_timer.get() > 1.0) {
+			STAGE++;
+			_timer.stop();
+			_timer.reset();
+		}
 	}
 }

@@ -49,4 +49,16 @@ public class Intake {
 		_rightMotor.set(output);
 	}
 	
+	public void setWrists(boolean bool) {
+		_wrist.set(bool);
+		if(!bool) {
+			setIntakeMotors(INSPEED);
+		} else {
+			setIntakeMotors(0.0);
+		}
+	}
+	
+	public void setArms(boolean bool) {
+		_arm.set(bool);
+	}
 }

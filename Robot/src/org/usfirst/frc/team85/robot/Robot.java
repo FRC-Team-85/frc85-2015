@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
-    	_auto = new Autonomous(0, _drive);//, _intake, _elevator);
+    	_auto = new Autonomous(0, _drive, _intake, _elevator);//, _intake, _elevator);
     }
 
     /**

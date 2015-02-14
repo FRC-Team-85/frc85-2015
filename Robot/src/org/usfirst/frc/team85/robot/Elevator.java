@@ -40,7 +40,7 @@ public class Elevator {
 	
 	//Positions for elevator
 	public static int posBottom = 0;
-	public static int posLoad = 240; 
+	public static int posLoad = 150; 
 	public static int posHookA = 2100;
 	public static int posRide = 1240; 
 
