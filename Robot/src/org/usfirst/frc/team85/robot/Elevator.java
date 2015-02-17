@@ -23,7 +23,7 @@ public class Elevator {
 	private static boolean _islockToggleHeld;
 	
 	private static Solenoid _hookA;
-	private static final int HOOKAPOS = 1950; //from the bottom
+	private static final int HOOKAPOS = 1950; //Practice Bot 2250 Comp Bot 1950
 	
 	private static Solenoid _hookB;
 	private static final double HOOKBPOS = 1240; //from the bottom
@@ -42,6 +42,7 @@ public class Elevator {
 	
 	//Positions for elevator
 	public static int posBottom = 0;
+
 	public static int posLoad = 150; 
 	public static int posHookA = 2100; // Practice Bot 2100 Comp Bot 1745
 	public static int posRide = 1240; 
