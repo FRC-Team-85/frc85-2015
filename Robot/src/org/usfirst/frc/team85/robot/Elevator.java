@@ -23,12 +23,14 @@ public class Elevator {
 	private static boolean _islockToggleHeld;
 	
 	private static Solenoid _hookA;
-	private static final int HOOKAPOS = 2250; //from the bottom
+	private static final int HOOKAPOS = 1950; //from the bottom
 	
 	private static Solenoid _hookB;
 	private static final double HOOKBPOS = 1240; //from the bottom
 	
 	private static int _totesOnElevator = 0;
+	
+	private Timer timer = new Timer();
 	
 	private static int _accelDistance = 180;
 	private static int _positionTolerance = 10;
@@ -41,7 +43,7 @@ public class Elevator {
 	//Positions for elevator
 	public static int posBottom = 0;
 	public static int posLoad = 150; 
-	public static int posHookA = 2100;
+	public static int posHookA = 1745;
 	public static int posRide = 1240; 
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
@@ -141,6 +143,8 @@ public class Elevator {
 		SmartDashboard.putInt("Relative Distance", relativeDist);
 		if(Math.abs(relativeDist) < 10) {
 			speed = 0;
+			timer.stop();
+			timer.reset();
 		} else if (Math.abs(relativeDist) < 180) {
 			speed = _slowSpeed;
 		} else {

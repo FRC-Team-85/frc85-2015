@@ -34,6 +34,7 @@ public class Autonomous {
 		_elevator = elevator;
 		_timer = new Timer();
 		
+		_timer.start();
 		_drive.resetEncoders();
 	}
 	
@@ -45,7 +46,7 @@ public class Autonomous {
 		case 1:
 			switch(STAGE) {
 			case 0:
-				setPneumatics(false);
+				setPneumatics(true);
 				break;
 			case 1:
 				driveLinear(ONETOTE);
@@ -112,14 +113,13 @@ public class Autonomous {
 	}
 	
 	private void setPneumatics(boolean bool) {
-		_timer.start();
-		_intake.setWrists(bool);
+		_intake.setWrists(!bool);
 		_intake.setArms(bool);
 		
 		if(_timer.get() > 1.0) {
 			STAGE++;
-			_timer.stop();
-			_timer.reset();
+			//_timer.stop();
+			//_timer.reset();
 		}
 	}
 }
