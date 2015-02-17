@@ -43,7 +43,7 @@ public class Elevator {
 	//Positions for elevator
 	public static int posBottom = 0;
 	public static int posLoad = 150; 
-	public static int posHookA = 1745; // Practice Bot 2100 Comp Bot 1745
+	public static int posHookA = 2100; // Practice Bot 2100 Comp Bot 1745
 	public static int posRide = 1240; 
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
