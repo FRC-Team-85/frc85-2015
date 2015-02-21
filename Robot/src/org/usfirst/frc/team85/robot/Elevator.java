@@ -140,7 +140,7 @@ public class Elevator {
 		if(Math.abs(relativeDist) < _positionTolerance) {
 			speed = 0.0;
 		} else if (Math.abs(relativeDist) < 180) {
-			speed = _slowSpeed;
+			speed = _fastSpeed * Math.abs(relativeDist) / 180;
 		} else {
 			speed = _fastSpeed;
 		}

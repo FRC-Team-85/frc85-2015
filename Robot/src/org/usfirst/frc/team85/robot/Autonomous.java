@@ -53,9 +53,9 @@ public class Autonomous {
 				}
 				break;
 			case 1:
-				if(_drive.getAveEncoders() < ONETOTE && ) {
+				if(_drive.getAveEncoders() < ONETOTE && Math.abs(_elevator.getCurrentCount() - _elevator.posHookA) <= ) {
 					driveLinear(ONETOTE);
-					_elevator.toHookA(_elevator.getCurrentCount());
+					_elevator.toHookA();
 				} else {
 					STAGE++;
 				}
