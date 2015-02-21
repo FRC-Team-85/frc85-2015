@@ -12,7 +12,7 @@ public class Autonomous {
 	private boolean isDoneCalculating = false;
 	
 	private double MAXSPEED = .6;
-	private double BASE = 1.0 - MAXSPEED;
+	private double BASE = .7 - MAXSPEED; //Changed from 1.0 to .7
 	private int ACCELERATIONCOUNT = 720; //encoder counts
 	
 	private boolean shortDrive = false;
@@ -27,26 +27,38 @@ public class Autonomous {
 	private Timer _timer;
 	
 	
-	public Autonomous(int procedureID, Drive drive) {
+	public Autonomous(int procedureID, Drive drive, Intake intake, Elevator elevator) {
 		_procedure = procedureID;
 		_drive = drive;
+		_intake = intake;
+		_elevator = elevator;
+		_timer = new Timer();
 		
 		_timer.start();
 		_drive.resetEncoders();
 	}
 	
 	public void runAuto() {
-		switch(_procedure) {
+		switch(0) {
 		case 0:
-			driveLinear(TENFOOTDRIVE);
+			driveLinear(ONETOTE);
 			break;
 		case 1:
 			switch(STAGE) {
 			case 0:
-				setPneumatics(true);
+				if(_timer.get() <= 1.00) {
+					setPneumatics(true);
+				} else {
+					STAGE++;
+				}
 				break;
 			case 1:
-				driveLinear(ONETOTE);
+				if(_drive.getAveEncoders() < ONETOTE && ) {
+					driveLinear(ONETOTE);
+					_elevator.toHookA(_elevator.getCurrentCount());
+				} else {
+					STAGE++;
+				}
 				break;
 			case 2:
 				setPneumatics(true);
@@ -80,21 +92,32 @@ public class Autonomous {
 			
 		} else {
 			
-			double currentCount = ((_drive.getLeftEncoders() + _drive.getRightEncodrs()) / 2);
+			double currentCount = ((_drive.getLeftEncoders() + _drive.getRightEncoders()) / 2);
 			double speed = 0.0;
 			
-			if (currentCount <= ACCELERATIONCOUNT && currentCount >= 0) {	//triangle one
-				speed = BASE + MAXSPEED * currentCount / ACCELERATIONCOUNT;
-			} else if (currentCount > deccelerationCount && currentCount <= goal) {	//triangle two
-				_drive.setBrakeMode(true);
-				speed = 1.0 * (goal - currentCount) / ACCELERATIONCOUNT;
-			} else if (currentCount > ACCELERATIONCOUNT && currentCount <= deccelerationCount){	//rectangle
-				speed = 1.0;
-			} else {	//outside
-				speed = 0.0;
-			//	return true;
+			if(!shortDrive) {	
+				if (currentCount <= ACCELERATIONCOUNT && currentCount >= 0) {	//triangle one
+					speed = BASE + MAXSPEED * currentCount / ACCELERATIONCOUNT;
+				} else if (currentCount > deccelerationCount && currentCount <= goal) {	//triangle two
+					_drive.setBrakeMode(true);
+					speed = 1.0 * (goal - currentCount) / ACCELERATIONCOUNT;
+				} else if (currentCount > ACCELERATIONCOUNT && currentCount <= deccelerationCount){	//rectangle
+					speed = 1.0;
+				} else {	//outside
+					speed = 0.0;
+					//	return true;
+				}
+				
+			} else {
+				
+				if(currentCount <= goal) {
+					speed = BASE;
+				} else if(currentCount > goal) {
+					speed = 0.0;
+					_drive.setBrakeMode(true);
+				}
 			}
-			
+		
 			_drive.setMotors(speed, speed, speed, speed);
 			
 		}

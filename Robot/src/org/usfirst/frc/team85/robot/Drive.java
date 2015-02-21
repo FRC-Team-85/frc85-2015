@@ -76,7 +76,7 @@ public class Drive {
 		return (_frontLeftEncoder.get() + _backLeftEncoder.get()) / 2;
 	}
 	
-	public int getRightEncodrs() {
+	public int getRightEncoders() {
 		return (_frontRightEncoder.get() + _backLeftEncoder.get()) / 2;
 	}
 	
@@ -89,10 +89,13 @@ public class Drive {
 	
 	public void displayEncoderCount(){
 
-    	SmartDashboard.putNumber("Ave. Encoder", (getLeftEncoders() + getRightEncodrs()) / 2);
+    	SmartDashboard.putNumber("Ave. Encoder", (getLeftEncoders() + getRightEncoders()) / 2);
     	SmartDashboard.putNumber("FrontLeftEncoder", _frontLeftEncoder.get());
     	SmartDashboard.putNumber("BackLeftEncoder", _backLeftEncoder.get());
     	SmartDashboard.putNumber("FrontRightEncoder", _frontRightEncoder.get());
     	SmartDashboard.putNumber("BackRightEncoder", _backRightEncoder.get());
+	}
+	public int getAveEncoders() {
+		return (getLeftEncoders() + getRightEncoders()) / 2;
 	}
 }

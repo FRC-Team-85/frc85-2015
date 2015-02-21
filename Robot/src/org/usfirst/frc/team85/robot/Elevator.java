@@ -23,12 +23,7 @@ public class Elevator {
 	private static boolean _islockToggleHeld;
 	
 	private static Solenoid _hookA;
-	private static final int HOOKAPOS = 1950; //Practice Bot 2250 Comp Bot 1950
-	
-	private static Solenoid _hookB;
-	private static final double HOOKBPOS = 1240; //from the bottom
-	
-	private static int _totesOnElevator = 0;
+	private static final int HOOKAPOS = 2400; //Practice Bot 2250 Comp Bot 1950
 	
 	private Timer timer = new Timer();
 	
@@ -44,8 +39,8 @@ public class Elevator {
 	public static int posBottom = 0;
 
 	public static int posLoad = 150; 
-	public static int posHookA = 2100; // Practice Bot 2100 Comp Bot 1745
-	public static int posRide = 1240; 
+	public static int posHookA = 2180; //Practice Bot 2100 Comp bot 2180
+	public static int posRide = 615; // practice bot 1240 comp bot 615
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
 	private static int SOFT_HEIGHT_LIMIT_LOW = 200;		// 200
@@ -64,7 +59,6 @@ public class Elevator {
 		
 		_locks = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.LOCKS_SOLENOID_CHANNEL);
 		_hookA = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_A_SOLENOID_CHANNEL);
-		_hookB = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_B_SOLENOID_CHANNEL);
 	}
 	
 	public void runLift() {
@@ -125,27 +119,26 @@ public class Elevator {
 	
 	private void moveElevator(int encoderCount) {
 		if(_controller.getRawButton(Addresses.BUTTON_BOTTOM)) {
-			moveTo(posBottom, encoderCount);
+			moveTo(posBottom);
 		} else if(_controller.getRawButton(Addresses.BUTTON_LOAD)) {
-			moveTo(posLoad, encoderCount);
+			moveTo(posLoad);
 		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_A)) {
-			moveTo(posHookA, encoderCount);
+			moveTo(posHookA);
 		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_B)) {
-			moveTo(posRide, encoderCount);
+			moveTo(posRide);
 		} else {
 			runMotors(_controller.getY(), encoderCount);
 		}
 	}
 	
-	private void moveTo(int goal, int currentPos) {
+	private void moveTo(int goal) {
 		double speed;
+		int currentPos = _elevatorCounter.get();
 		int relativeDist = goal - currentPos;
 		SmartDashboard.putInt("Goal Position", goal);
 		SmartDashboard.putInt("Relative Distance", relativeDist);
-		if(Math.abs(relativeDist) < 10) {
-			speed = 0;
-			timer.stop();
-			timer.reset();
+		if(Math.abs(relativeDist) < _positionTolerance) {
+			speed = 0.0;
 		} else if (Math.abs(relativeDist) < 180) {
 			speed = _slowSpeed;
 		} else {
@@ -171,5 +164,17 @@ public class Elevator {
 	
 	private boolean checkLimit(AnalogInput input) {
 		return !(input.getVoltage() >= voltageLimit);
+	}
+	
+	public int getCurrentCount() {
+		return _elevatorCounter.get();
+	}
+	
+	public void toHookA() {
+		moveTo(posHookA);
+	}
+	
+	public void toBottom() {
+		moveTo(posBottom);
 	}
 }
