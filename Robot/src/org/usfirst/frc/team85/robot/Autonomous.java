@@ -9,6 +9,7 @@ public class Autonomous {
 	private int YELLOWTOTEDRIVE = 1547;
 	private int ONETOTE = 516;
 	private int TOTETOAUTO = 1900;
+	private int CANPICKUP = 50;
 	//private int TO AUTO ZONE EDGE DRIVE (ST + R) = 1337;
 	
 	private boolean isDoneCalculating = false;
@@ -20,7 +21,7 @@ public class Autonomous {
 	private boolean shortDrive = false;
 	private int goal;
 	private int deccelerationCount;
-	private int STAGE = 0;
+	private int STAGE;
 	private int SUBSTAGE = 0;
 
 	private int _procedure;
@@ -43,9 +44,12 @@ public class Autonomous {
 		
 		_timer.start();
 		_drive.resetEncoders();
+		STAGE = 0;
 	}
 	
 	public void runAuto() {
+		SmartDashboard.putNumber("Stage", STAGE);
+		SmartDashboard.putNumber("Substage", SUBSTAGE);
 		switch(_procedure) {
 		case 0://Do nothing, no plastic ramp
 			driveLinear(YELLOWTOTEDRIVE);
@@ -66,8 +70,8 @@ public class Autonomous {
 				}
 				break;
 			case 3:
-				if(Math.abs(_elevator.getCurrentCount() - (_elevator.posBottom + 50)) >= _elevator._positionTolerance) {
-					_elevator.moveTo(_elevator.posBottom + 50);
+				if(Math.abs(_elevator.getCurrentCount() - (CANPICKUP)) >= _elevator._positionTolerance) {
+					_elevator.moveTo(CANPICKUP);
 				} else {
 					STAGE++;
 				}
@@ -191,7 +195,8 @@ public class Autonomous {
 				SUBSTAGE++;
 			}
 			break;
-		default:
+		case 4:
+			STAGE++;
 			break;
 		}
 	}
