@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
         
         _drive = new Drive(_driveController);
         _intake = new Intake(_operatorController);
-        _elevator = new Elevator(_operatorController);
+        _elevator = new Elevator(_operatorController, _intake);
         
         try {
         _camera = CameraServer.getInstance();
@@ -65,6 +65,9 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     	_auto.runAuto();
     	_drive.displayEncoderCount();
+    	SmartDashboard.putNumber("Elevator Encoder", _elevator.getCurrentCount());
+
+    	SmartDashboard.putNumber("TIMER", _auto._timer.get());
     }
 
     /**

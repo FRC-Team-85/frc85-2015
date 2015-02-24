@@ -51,7 +51,7 @@ public class Intake {
 	
 	public void setWrists(boolean bool) {
 		_wrist.set(bool);
-		if(bool) {
+		if(!bool) {
 			setIntakeMotors(INSPEED);
 		} else {
 			setIntakeMotors(0.0);

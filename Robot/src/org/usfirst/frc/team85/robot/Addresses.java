@@ -34,7 +34,7 @@ public final class Addresses {
     public static final int ELEVATOR_ENCODER_CHANNEL_A = 8;
     public static final int ELEVATOR_ENCODER_CHANNEL_B = 9;
 
-    public static final int TOPSWITCH_CHANNEL = 0;
+    public static final int TOPSWITCH_CHANNEL = 2;
     public static final int BOTTOMSWITCH_CHANNEL = 1;
 
     public static final int HOOK_A_SOLENOID_CHANNEL = 2;
@@ -57,6 +57,8 @@ public final class Addresses {
     public static final int OPERATOR_CONTROLLER = 1;
     
     public static final int PNEUMATIC_CONTROLLER_CID = 5;
+    
+    public static final int GYRO_CHANNEL = 0;
     
     	//DriveController
     
