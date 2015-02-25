@@ -73,6 +73,7 @@ public class Autonomous {
 				if(Math.abs(_elevator.getCurrentCount() - (CANPICKUP)) >= _elevator._positionTolerance) {
 					_elevator.moveTo(CANPICKUP);
 				} else {
+					_elevator.stop();
 					STAGE++;
 				}
 				break;

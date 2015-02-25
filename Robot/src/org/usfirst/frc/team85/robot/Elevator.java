@@ -187,4 +187,9 @@ public class Elevator {
 	public int getCurrentCount() {
 		return _elevatorCounter.get();
 	}
+	
+	public void stop() {
+		_leftBeltMotor.set(0.0);
+		_rightBeltMotor.set(0.0);
+	}
 }
