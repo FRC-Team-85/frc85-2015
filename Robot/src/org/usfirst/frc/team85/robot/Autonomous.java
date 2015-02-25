@@ -80,9 +80,21 @@ public class Autonomous {
 				break;
 			}
 			break;
-		case 2:
-			
+		/*
+		case 2://one tote
+			switch(STAGE) {
+			case 0:
+				pickUpTote;
+				break;
+			case 1:
+				turnRight90();
+				break;
+			case 2:
+				driveLinear(YELLOWTOTEDRIVE);
+				break;
+			}
 			break;
+		*/
 		}
 	}
 	
@@ -115,6 +127,7 @@ public class Autonomous {
 				} else {	//outside
 					speed = 0.0;
 					STAGE++;
+					isDoneCalculating = false;
 					_timer.reset();
 				}
 				
@@ -126,6 +139,7 @@ public class Autonomous {
 					speed = 0.0;
 					_drive.setBrakeMode(true);
 					STAGE++;
+					isDoneCalculating = false;
 					_timer.reset();
 				}
 			}
