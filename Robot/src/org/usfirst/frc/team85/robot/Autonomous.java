@@ -14,12 +14,17 @@ public class Autonomous {
 	
 	private boolean isDoneCalculating = false;
 	
-	private double MAXSPEED = .6;
-	private double BASE = .8 - MAXSPEED; //Changed from 1.0 to .7
-	private int ACCELERATIONCOUNT = 720; //encoder counts
+	private final static double RAMPSPEED = .6;
+	private final static double BASE = .8 - RAMPSPEED; //Changed from 1.0 to .7
+	private final static int ACCELERATIONCOUNT = 720; //encoder counts
+	
+	private final static double RAMPTURNSPEED = .6;
+	private final static double TURNBASE = .8 - RAMPTURNSPEED;
+	private final static int TURNACCELERATIONCOUNT = 30;
 	
 	private boolean shortDrive = false;
 	private int goal;
+	private int turnGoal;
 	private int deccelerationCount;
 	private int STAGE;
 	private int SUBSTAGE = 0;
@@ -29,18 +34,18 @@ public class Autonomous {
 	private Intake _intake;
 	private Elevator _elevator;
 	public Timer _timer;
-	//private Gyro _gyro;
+	private Gyro _gyro;
 	
 	private boolean _alreadyRestarted = false;
 	
 	
-	public Autonomous(int procedureID, Drive drive, Intake intake, Elevator elevator) {
+	public Autonomous(int procedureID, Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
 		_procedure = 1;
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;
 		_timer = new Timer();
-		//_gyro = new Gyro(Addresses.GYRO_CHANNEL);
+		_gyro = gyro;
 		
 		_timer.start();
 		_drive.resetEncoders();
@@ -78,7 +83,7 @@ public class Autonomous {
 				}
 				break;
 			case 4:
-				//turnRight90();
+				turn(true, 90);
 				break;
 			case 5:
 				driveLinear(TOTETOAUTO);
@@ -123,12 +128,12 @@ public class Autonomous {
 			
 			if(!shortDrive) {	
 				if (currentCount <= ACCELERATIONCOUNT && currentCount >= 0) {	//triangle one
-					speed = BASE + MAXSPEED * currentCount / ACCELERATIONCOUNT;
+					speed = BASE + RAMPSPEED * currentCount / ACCELERATIONCOUNT;
 				} else if (currentCount > deccelerationCount && currentCount <= goal) {	//triangle two
 					_drive.setBrakeMode(true);
-					speed = 1.0 * (goal - currentCount) / ACCELERATIONCOUNT;
+					speed = (BASE + RAMPSPEED) * (goal - currentCount) / ACCELERATIONCOUNT;
 				} else if (currentCount > ACCELERATIONCOUNT && currentCount <= deccelerationCount){	//rectangle
-					speed = 1.0;
+					speed = (BASE + RAMPSPEED);
 				} else {	//outside
 					speed = 0.0;
 					STAGE++;
@@ -182,12 +187,12 @@ public class Autonomous {
 				_intake.setWrists(true);
 				_alreadyRestarted = true;
 			}
-			if(_timer.get() >= .5) {
+			if(_timer.get() >= .25) {
 				SUBSTAGE++;
 			}
 			break;
 		case 3:
-			if(Math.abs(_elevator.getCurrentCount() - _elevator.posBottom) >= _elevator._positionTolerance) {
+			if (!_elevator.atBottom()) {
 				_elevator.moveTo(_elevator.posBottom);
 				if(_elevator.getCurrentCount() <= (_elevator.posHookA - 600)) {
 					setPneumatics(false);
@@ -201,30 +206,49 @@ public class Autonomous {
 			break;
 		}
 	}
-	/*
-	private void turnRight90() {
-		double currentAngle = _gyro.getAngle();
-		double speed;
-		SmartDashboard.putNumber("GyroAngle", _gyro.getAngle());
-		double TURNCOUNT = 30;//degrees
+	
+	private void turn(boolean turnRight, int turningGoal) {//only works for big enough turns
+		if (!isDoneCalculating) {
+			_gyro.reset();
+			isDoneCalculating = true;
+			if (turnRight) {
+				turnGoal = turningGoal - 20;
+			} else {
+				turnGoal = turningGoal + 20;
+			}
+		} else {
+			double currentAngle = _gyro.getAngle();
+			double speed;
+			SmartDashboard.putNumber("GyroAngle", _gyro.getAngle());
 		
-		if (currentAngle <= TURNCOUNT) {	//triangle one
-			speed = Math.abs(BASE + MAXSPEED * currentAngle / TURNCOUNT);
-		} else if (currentAngle > (90-TURNCOUNT) && currentAngle <= goal) {	//triangle two
-			_drive.setBrakeMode(true);
-			speed = 1.0 * (goal - currentAngle) / TURNCOUNT;
-		} else if (currentAngle > TURNCOUNT && currentAngle <= (90-TURNCOUNT)){	//rectangle
-			speed = 1.0;
-		} else {	//outside
-			speed = 0.0;
-			STAGE++;
-			_timer.reset();
+			if (currentAngle <= TURNACCELERATIONCOUNT) {	//triangle one
+				speed = TURNBASE + Math.abs(RAMPTURNSPEED * currentAngle / TURNACCELERATIONCOUNT);
+			} else if (currentAngle > (turnGoal - TURNACCELERATIONCOUNT) && currentAngle <= turnGoal) {	//triangle two
+				_drive.setBrakeMode(true);
+				speed = TURNBASE + Math.abs(RAMPTURNSPEED * (turnGoal - currentAngle) / TURNACCELERATIONCOUNT);
+			} else if (currentAngle > TURNACCELERATIONCOUNT && currentAngle <= (turnGoal-TURNACCELERATIONCOUNT)){	//rectangle
+				speed = TURNBASE + RAMPTURNSPEED;
+			} else {	//outside
+				speed = 0.0;
+				STAGE++;
+				_timer.reset();
+				isDoneCalculating = false;
+			}
+		
+			if ((turnGoal - currentAngle) < 0) {
+				speed = -speed;
+			}
+		
+			if (turnRight) {
+				_drive.setMotors(speed, -speed, speed, -speed);
+			} else {
+				_drive.setMotors(-speed, speed, -speed, speed);
+			}
+			
 		}
 		
-		_drive.setMotors(speed, -speed, speed, -speed);
-		
 	}
-	*/
+	
 	
 	
 	

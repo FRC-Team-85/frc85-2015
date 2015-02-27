@@ -32,6 +32,8 @@ public class Robot extends IterativeRobot {
     
     private Autonomous _auto;
     
+    private Gyro _gyro;
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -43,6 +45,8 @@ public class Robot extends IterativeRobot {
         _drive = new Drive(_driveController);
         _intake = new Intake(_operatorController);
         _elevator = new Elevator(_operatorController, _intake);
+        _gyro = new Gyro(Addresses.GYRO_CHANNEL);
+        _gyro.initGyro();
         
         try {
         _camera = CameraServer.getInstance();
@@ -56,7 +60,8 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
-    	_auto = new Autonomous(0, _drive, _intake, _elevator);
+    	_auto = new Autonomous(0, _drive, _intake, _elevator, _gyro);
+        _gyro.reset();
     }
 
     /**
@@ -81,6 +86,8 @@ public class Robot extends IterativeRobot {
     	//pneumaticsControlls();
     	getAMPs();
     	_drive.displayEncoderCount();
+
+		SmartDashboard.putNumber("GYRO ANGLE", _gyro.getAngle());
     }
     
     

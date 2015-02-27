@@ -192,4 +192,8 @@ public class Elevator {
 		_leftBeltMotor.set(0.0);
 		_rightBeltMotor.set(0.0);
 	}
+	
+	public boolean atBottom() {
+		return checkLimit(_bottomSwitch);
+	}
 }
