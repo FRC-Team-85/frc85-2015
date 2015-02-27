@@ -31,6 +31,7 @@ public class Robot extends IterativeRobot {
     private Elevator _elevator;
     
     private Autonomous _auto;
+    private boolean autoCheck = false;
     
     private Gyro _gyro;
     
@@ -68,11 +69,19 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	_auto.runAuto();
-    	_drive.displayEncoderCount();
-    	SmartDashboard.putNumber("Elevator Encoder", _elevator.getCurrentCount());
+    	if (!autoCheck) {
+    		if (_elevator.atBottom()) {
+    			autoCheck = true;
+    		} else {
+    			_elevator.moveTo(_elevator.getCurrentCount() - 100);
+    		}
+    	} else {
+    		_auto.runAuto();
+    		_drive.displayEncoderCount();
+    		SmartDashboard.putNumber("Elevator Encoder", _elevator.getCurrentCount());
 
-    	SmartDashboard.putNumber("TIMER", _auto._timer.get());
+    		SmartDashboard.putNumber("TIMER", _auto._timer.get());
+    	}	
     }
 
     /**
