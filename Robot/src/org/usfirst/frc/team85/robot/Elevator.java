@@ -189,8 +189,7 @@ public class Elevator {
 	}
 	
 	public void stop() {
-		_leftBeltMotor.set(0.0);
-		_rightBeltMotor.set(0.0);
+		moveTo(getCurrentCount());
 	}
 	
 	public boolean atBottom() {

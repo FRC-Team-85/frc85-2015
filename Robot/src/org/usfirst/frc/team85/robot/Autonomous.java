@@ -41,7 +41,7 @@ public class Autonomous {
 	
 	
 	public Autonomous(int procedureID, Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
-		_procedure = 1;
+		_procedure = 2;
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;
@@ -90,6 +90,9 @@ public class Autonomous {
 				driveLinear(TOTETOAUTO, false);
 				break;
 			}
+			break;
+		case 2:
+			turn(false,90);
 			break;
 		/*
 		case 2://one tote
