@@ -9,12 +9,13 @@ public class Autonomous {
 	private int YELLOWTOTEDRIVE = 1547;
 	private int ONETOTE = 516;
 	private int TOTETOAUTO = 1900;
-	private int CANPICKUP = 50;
+	private int CANPICKUP = 633;
+	private int CANPICKEDUP = 683;
 	//private int TO AUTO ZONE EDGE DRIVE (ST + R) = 1337;
 	
 	private boolean isDoneCalculating = false;
 	
-	private final static double RAMPSPEED = .6;
+	private final static double RAMPSPEED = .3;
 	private final static double BASE = .8 - RAMPSPEED; //Changed from 1.0 to .7
 	private final static int ACCELERATIONCOUNT = 720; //encoder counts
 	
@@ -57,7 +58,7 @@ public class Autonomous {
 		SmartDashboard.putNumber("Substage", SUBSTAGE);
 		switch(_procedure) {
 		case 0://Do nothing, no plastic ramp
-			driveLinear(YELLOWTOTEDRIVE);
+			driveLinear(YELLOWTOTEDRIVE, false);
 			break;
 		case 1://Pick up tote and can
 			switch(STAGE) {
@@ -65,7 +66,7 @@ public class Autonomous {
 				pickUpTote();
 				break;
 			case 1:
-				driveLinear(ONETOTE);
+				driveLinear(ONETOTE, false);
 				break;
 			case 2:
 				if(_timer.get() <= .5) {
@@ -75,8 +76,8 @@ public class Autonomous {
 				}
 				break;
 			case 3:
-				if(Math.abs(_elevator.getCurrentCount() - (CANPICKUP)) >= _elevator._positionTolerance) {
-					_elevator.moveTo(CANPICKUP);
+				if(Math.abs(_elevator.getCurrentCount() - (CANPICKEDUP)) >= _elevator._positionTolerance) {
+					_elevator.moveTo(CANPICKEDUP);
 				} else {
 					_elevator.stop();
 					STAGE++;
@@ -86,7 +87,7 @@ public class Autonomous {
 				turn(true, 90);
 				break;
 			case 5:
-				driveLinear(TOTETOAUTO);
+				driveLinear(TOTETOAUTO, false);
 				break;
 			}
 			break;
@@ -108,7 +109,7 @@ public class Autonomous {
 		}
 	}
 	
-	public void driveLinear(int target) {
+	public void driveLinear(int target, boolean strafe) {
 		if(!isDoneCalculating) {
 			_drive.resetEncoders();
 			
@@ -153,9 +154,12 @@ public class Autonomous {
 					_timer.reset();
 				}
 			}
-		
-			_drive.setMotors(speed, speed, speed, speed);
 			
+			if(!strafe) {
+				_drive.setMotors(speed, speed, speed, speed);
+			} else {
+				_drive.setMotors(speed, speed, speed, speed);//change two of these to negative
+			}
 		}
 		
 	}
@@ -168,7 +172,7 @@ public class Autonomous {
 	private void pickUpTote() {
 		switch(SUBSTAGE) {
 		case 0:
-			if(_timer.get() <= 1.00) {
+			if(_timer.get() <= .5) {
 				setPneumatics(true);
 			} else {
 				SUBSTAGE++;
@@ -192,8 +196,8 @@ public class Autonomous {
 			}
 			break;
 		case 3:
-			if (!_elevator.atBottom()) {
-				_elevator.moveTo(_elevator.posBottom);
+			if (Math.abs(_elevator.getCurrentCount() - CANPICKUP) >= _elevator._positionTolerance) {
+				_elevator.moveTo(CANPICKUP);
 				if(_elevator.getCurrentCount() <= (_elevator.posHookA - 600)) {
 					setPneumatics(false);
 				}
@@ -249,18 +253,8 @@ public class Autonomous {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void strafe() {
+		
+	}
 	
 }
