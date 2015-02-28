@@ -83,7 +83,7 @@ public class Elevator {
 
 	private void runMotors(double speed, int currentPosition) {
 		if(checkLimit(_bottomSwitch) && speed > 0.0 || checkLimit(_topSwitch) && speed < 0.0) {
-			speed = 0;
+			speed = 0.0;
 		} else if (currentPosition <= SOFT_HEIGHT_LIMIT_LOW && speed > _slowSpeed || currentPosition >= SOFT_HEIGHT_LIMIT_HIGH && speed < -_slowSpeed) {
 			speed *= SOFT_LIMIT_SCALE;
 		}
@@ -144,7 +144,7 @@ public class Elevator {
 		}
 		
 		if(speed <= .2 && speed != 0.0) {
-			speed = .2;
+			speed = .2;//.2 before
 		}
 		
 		if(relativeDist > 0) {
@@ -173,7 +173,7 @@ public class Elevator {
 	}
 	
 	public void stop() {
-		moveTo(getCurrentCount());
+		runMotors(0.0,_elevatorCounter.get());
 	}
 	
 	public boolean atBottom() {

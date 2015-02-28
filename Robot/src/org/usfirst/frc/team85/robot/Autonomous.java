@@ -1,6 +1,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
@@ -41,7 +42,7 @@ public class Autonomous {
 	
 	
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
-		_procedure = (int)SmartDashboard.getNumber("Procedure");
+		_procedure = 1;
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;
@@ -69,8 +70,8 @@ public class Autonomous {
 				driveLinear(ONETOTE, false, false);
 				break;
 			case 2:
-				if(_timer.get() <= .5) {
-					setPneumatics(true);
+				if(_timer.get() <= .1) {
+					_intake.setArms(true);
 				} else {
 					STAGE++;
 				}
@@ -84,14 +85,15 @@ public class Autonomous {
 				}
 				break;
 			case 4:
-				turn(90);
+				turn(80);
 				break;
 			case 5:
-				driveLinear(TOTETOAUTO, false, false);
+				driveLinear(TOTETOAUTO + 100, false, false);
+				_timer.reset();
 				break;
-			case 6:
-				if(Math.abs(_elevator.getCurrentCount() - (CANPICKEDUP)) >= _elevator._positionTolerance) {
-					_elevator.moveTo(CANPICKEDUP);
+			case 6://put timer pause here
+				if(Math.abs(_elevator.getCurrentCount() - (CANPICKEDUP + 200)) >= _elevator._positionTolerance) {
+					_elevator.moveTo(CANPICKEDUP + 200);
 				} else {
 					_elevator.stop();
 					STAGE++;
@@ -107,14 +109,13 @@ public class Autonomous {
 				}
 				break;
 			case 8:
-				setPneumatics(false);
-				driveLinear(50, false, true);
+				_intake.setArms(false);
 			}
 			break;
 		case 2:
 			switch(STAGE) {
 			case 0:
-				turn(-90);
+				driveLinear(500, true, false);
 				break;
 			}
 			break;
@@ -189,7 +190,7 @@ public class Autonomous {
 			if(!strafe) {
 				_drive.setMotors(speed, speed, speed, speed);
 			} else {
-				_drive.setMotors(speed, speed, speed, speed);//change two of these to negative
+				_drive.setMotors(speed, -speed, -speed, speed);//change two of these to negative
 			}
 			
 		}
@@ -223,7 +224,7 @@ public class Autonomous {
 				_intake.setWrists(true);
 				_alreadyRestarted = true;
 			}
-			if(_timer.get() >= .25) {
+			if(_timer.get() >= .2) {
 				SUBSTAGE++;
 			}
 			break;
@@ -254,7 +255,7 @@ public class Autonomous {
 			double speed;
 			double relativeAngle = absTurnGoal - Math.abs(_gyro.getAngle());
 			double absAngle = Math.abs(_gyro.getAngle());
-			SmartDashboard.putNumber("GyroAngle", _gyro.getAngle());
+			SmartDashboard.putNumber("GYRO ANGLE", _gyro.getAngle());
 		
 			if (absAngle <= TURNACCELERATIONCOUNT) {	//triangle one
 				speed = TURNBASE + (RAMPTURNSPEED * absAngle / TURNACCELERATIONCOUNT);

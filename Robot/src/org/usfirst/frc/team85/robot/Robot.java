@@ -8,6 +8,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PowerDistributionPanel; 
 
@@ -93,6 +94,10 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during operator control
      */
+    public void teleopInit() {
+    	_gyro.reset();
+    }
+    
     public void teleopPeriodic() {
     	_elevator.setBrakeMode(true);
     	_drive.setBrakeMode(false);
@@ -111,7 +116,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during test mode
      */
     public void testPeriodic() {
-    
+
     }
     
     //0-3
