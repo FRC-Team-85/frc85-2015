@@ -40,8 +40,8 @@ public class Autonomous {
 	private boolean _alreadyRestarted = false;
 	
 	
-	public Autonomous(int procedureID, Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
-		_procedure = 1;
+	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
+		_procedure = (int)SmartDashboard.getNumber("Procedure");
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;

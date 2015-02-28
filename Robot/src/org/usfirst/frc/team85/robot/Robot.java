@@ -61,7 +61,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
-    	_auto = new Autonomous(0, _drive, _intake, _elevator, _gyro);
+    	_auto = new Autonomous(_drive, _intake, _elevator, _gyro);
     	_elevator.setBrakeMode(true);
         _gyro.reset();
     }
