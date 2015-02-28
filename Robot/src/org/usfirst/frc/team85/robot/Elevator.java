@@ -179,4 +179,9 @@ public class Elevator {
 	public boolean atBottom() {
 		return checkLimit(_bottomSwitch);
 	}
+	
+	public void setHook(boolean set) {
+		_hookA.set(set);
+	}
+	
 }
