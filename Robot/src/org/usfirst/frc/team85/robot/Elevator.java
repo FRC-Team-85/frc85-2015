@@ -23,7 +23,7 @@ public class Elevator {
 	
 	private static Timer _timer;
 	private static Solenoid _hookA;
-	private static final int HOOKAPOS = 2400; //Practice Bot 2250 Comp Bot 1950
+	private static final int HOOKAPOS = 2450; //Practice Bot 2400 Comp Bot 2400
 	
 	private static Intake _intake;
 	
@@ -39,7 +39,7 @@ public class Elevator {
 	public static int posBottom = 0;
 
 	public static int posLoad = 150; 
-	public static int posHookA = 2100; //Practice Bot 2180 Comp bot 2180
+	public static int posHookA = 2180; //Practice Bot 2100 Comp bot 2180
 	public static int posRide = 615; // practice bot 1240 comp bot 615
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
@@ -150,7 +150,7 @@ public class Elevator {
 		if(relativeDist > 0) {
 			speed = -speed;
 		}
-		
+		hookSafety(currentPos);
 		runMotors(speed, currentPos);
 	}
 	
@@ -183,5 +183,11 @@ public class Elevator {
 	public void setHook(boolean set) {
 		_hookA.set(set);
 	}
+	
+	public void setBrakeMode(boolean set) {
+		_rightBeltMotor.enableBrakeMode(set);
+		_leftBeltMotor.enableBrakeMode(set);
+	}
+	
 	
 }

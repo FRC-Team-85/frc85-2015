@@ -62,6 +62,7 @@ public class Robot extends IterativeRobot {
     
     public void autonomousInit() {
     	_auto = new Autonomous(0, _drive, _intake, _elevator, _gyro);
+    	_elevator.setBrakeMode(true);
         _gyro.reset();
     }
 
@@ -83,17 +84,23 @@ public class Robot extends IterativeRobot {
     		SmartDashboard.putNumber("TIMER", _auto._timer.get());
     	}	
     }
+    
+    public void disabledInit() {
+    	_elevator.setBrakeMode(false);
+    	_drive.setBrakeMode(false);
+    }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	_elevator.setBrakeMode(true);
     	_drive.setBrakeMode(false);
     	_drive.drive();
     	_intake.run();
     	_elevator.runLift();
     	//pneumaticsControlls();
-    	getAMPs();
+    	//getAMPs();
     	_drive.displayEncoderCount();
 
 		SmartDashboard.putNumber("GYRO ANGLE", _gyro.getAngle());

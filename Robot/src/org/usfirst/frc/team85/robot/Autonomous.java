@@ -9,8 +9,8 @@ public class Autonomous {
 	private int YELLOWTOTEDRIVE = 1547;
 	private int ONETOTE = 516;
 	private int TOTETOAUTO = 1900;
-	private int CANPICKUP = 630;
-	private int CANPICKEDUP = 650;
+	private int CANPICKUP = 600;
+	private int CANPICKEDUP = 620;
 	//private int TO AUTO ZONE EDGE DRIVE (ST + R) = 1337;
 	
 	private boolean isDoneCalculating = false;
@@ -19,8 +19,8 @@ public class Autonomous {
 	private final static double BASE = .8 - RAMPSPEED; //Changed from 1.0 to .7
 	private final static int ACCELERATIONCOUNT = 720; //encoder counts
 	
-	private final static double RAMPTURNSPEED = .6;
-	private final static double TURNBASE = .8 - RAMPTURNSPEED;
+	private final static double RAMPTURNSPEED = .4;
+	private final static double TURNBASE = .6 - RAMPTURNSPEED;
 	private final static int TURNACCELERATIONCOUNT = 30;
 	
 	private boolean shortDrive = false;
@@ -90,8 +90,8 @@ public class Autonomous {
 				driveLinear(TOTETOAUTO, false, false);
 				break;
 			case 6:
-				if(Math.abs(_elevator.getCurrentCount() - (CANPICKEDUP + 100)) >= _elevator._positionTolerance) {
-					_elevator.moveTo(CANPICKEDUP + 100);
+				if(Math.abs(_elevator.getCurrentCount() - (CANPICKEDUP)) >= _elevator._positionTolerance) {
+					_elevator.moveTo(CANPICKEDUP);
 				} else {
 					_elevator.stop();
 					STAGE++;
