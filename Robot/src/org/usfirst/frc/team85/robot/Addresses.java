@@ -39,7 +39,6 @@ public final class Addresses {
 
     public static final int HOOK_A_SOLENOID_CHANNEL = 2;
     public static final int HOOK_B_SOLENOID_CHANNEL = 3;
-    public static final int LOCKS_SOLENOID_CHANNEL = 4;
     
     public static final int LEFT_BELT_MOTOR = 8;
     public static final int RIGHT_BELT_MOTOR = 9;

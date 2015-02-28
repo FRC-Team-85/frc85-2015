@@ -19,8 +19,6 @@ public class Elevator {
 	//private double convertedCount;
 	//private double radius = 0.0;// in ___   inch, cm, m, etc
 
-	private static Solenoid _locks;
-	private static boolean _islockToggleHeld;
 	private static boolean _alreadyRestarted = false;
 	
 	private static Timer _timer;
@@ -59,7 +57,6 @@ public class Elevator {
 	
 		_elevatorCounter = new Encoder(Addresses.ELEVATOR_ENCODER_CHANNEL_A,Addresses.ELEVATOR_ENCODER_CHANNEL_B);
 		
-		_locks = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.LOCKS_SOLENOID_CHANNEL);
 		_hookA = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.HOOK_A_SOLENOID_CHANNEL);
 		_timer = new Timer();
 		
@@ -76,7 +73,6 @@ public class Elevator {
 		int encoderCount = _elevatorCounter.get();
 		hookSafety(encoderCount);
 		moveElevator(encoderCount);
-		//locks.set(controller.getRawButton(Addresses.LOCKTOGGLE));
 		
 		SmartDashboard.putInt("Elevator Encoder", encoderCount);
 		SmartDashboard.putNumber("Top Limit Switch", _topSwitch.getVoltage());
@@ -91,11 +87,7 @@ public class Elevator {
 		} else if (currentPosition <= SOFT_HEIGHT_LIMIT_LOW && speed > _slowSpeed || currentPosition >= SOFT_HEIGHT_LIMIT_HIGH && speed < -_slowSpeed) {
 			speed *= SOFT_LIMIT_SCALE;
 		}
-		
-		SmartDashboard.putNumber("Elevator motor speed", speed);
-		if(Math.abs(speed) >= .05) {
-			_locks.set(false);
-		}
+
 		_leftBeltMotor.set(speed);
 		_rightBeltMotor.set(speed);
 	}
@@ -104,14 +96,6 @@ public class Elevator {
 		int POV = _controller.getPOV();
 		
 		_hookA.set(count >= HOOKAPOS || _controller.getRawButton(Addresses.HOOK_BUTTON));
-		
-		
-		if(POV == 0) {
-			_locks.set(true);
-		} else if(POV == 180) {
-			_locks.set(false);
-		}
-		
 		
 		/*if(count >= HOOKBPOS) {
 			_hookB.set(true);

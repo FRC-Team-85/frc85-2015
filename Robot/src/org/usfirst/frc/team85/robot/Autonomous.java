@@ -41,7 +41,7 @@ public class Autonomous {
 	
 	
 	public Autonomous(int procedureID, Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
-		_procedure = 2;
+		_procedure = 1;
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;
@@ -92,7 +92,11 @@ public class Autonomous {
 			}
 			break;
 		case 2:
-			turn(false,90);
+			switch(STAGE) {
+			case 0:
+				turn(false , 90);
+				break;
+			}
 			break;
 		/*
 		case 2://one tote
@@ -209,6 +213,7 @@ public class Autonomous {
 			}
 			break;
 		case 4:
+			SUBSTAGE = 0;
 			STAGE++;
 			break;
 		}
@@ -218,22 +223,23 @@ public class Autonomous {
 		if (!isDoneCalculating) {
 			_gyro.reset();
 			isDoneCalculating = true;
+			_drive.setBrakeMode(false);
 			if (turnRight) {
 				turnGoal = turningGoal - 20;
 			} else {
-				turnGoal = turningGoal + 20;
+				turnGoal = -turningGoal + 20;
 			}
 		} else {
 			double currentAngle = _gyro.getAngle();
 			double speed;
 			SmartDashboard.putNumber("GyroAngle", _gyro.getAngle());
 		
-			if (currentAngle <= TURNACCELERATIONCOUNT) {	//triangle one
+			if (Math.abs(currentAngle) <= TURNACCELERATIONCOUNT) {	//triangle one
 				speed = TURNBASE + Math.abs(RAMPTURNSPEED * currentAngle / TURNACCELERATIONCOUNT);
-			} else if (currentAngle > (turnGoal - TURNACCELERATIONCOUNT) && currentAngle <= turnGoal) {	//triangle two
+			} else if (Math.abs(currentAngle) > (turnGoal - TURNACCELERATIONCOUNT) && Math.abs(currentAngle) <= turnGoal) {	//triangle two
 				_drive.setBrakeMode(true);
 				speed = TURNBASE + Math.abs(RAMPTURNSPEED * (turnGoal - currentAngle) / TURNACCELERATIONCOUNT);
-			} else if (currentAngle > TURNACCELERATIONCOUNT && currentAngle <= (turnGoal-TURNACCELERATIONCOUNT)){	//rectangle
+			} else if (Math.abs(currentAngle) > TURNACCELERATIONCOUNT && Math.abs(currentAngle) <= (turnGoal-TURNACCELERATIONCOUNT)){	//rectangle
 				speed = TURNBASE + RAMPTURNSPEED;
 			} else {	//outside
 				speed = 0.0;
@@ -242,7 +248,7 @@ public class Autonomous {
 				isDoneCalculating = false;
 			}
 		
-			if ((turnGoal - currentAngle) < 0) {
+			if ((Math.abs(turnGoal) - Math.abs(currentAngle)) < 0) {
 				speed = -speed;
 			}
 		
