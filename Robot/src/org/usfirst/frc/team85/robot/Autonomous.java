@@ -115,8 +115,26 @@ public class Autonomous {
 		case 2:
 			switch(STAGE) {
 			case 0:
-				driveLinear(500, true, false);
-				break;
+				if(_timer.get() < .5) {
+					_intake.setArms(true);
+				} else {
+					STAGE++;
+				}
+			break;
+			case 1:
+				if(Math.abs(_elevator.getCurrentCount() - 200) >= _elevator._positionTolerance) {
+					_elevator.moveTo(200);
+				} else {
+					_elevator.stop();
+					STAGE++;
+				}
+			break;
+			case 2:
+				if(!_elevator.atBottom()) {
+					_elevator.moveTo(0);
+				} else {
+					_intake.setArms(false);
+				}
 			}
 			break;
 		/*
