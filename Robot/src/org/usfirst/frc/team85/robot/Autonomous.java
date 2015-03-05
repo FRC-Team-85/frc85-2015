@@ -42,7 +42,7 @@ public class Autonomous {
 	
 	
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
-		_procedure = 1;
+		_procedure = 2;
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;
@@ -112,7 +112,7 @@ public class Autonomous {
 				_intake.setArms(false);
 			}
 			break;
-		case 2:
+		case 2://can
 			switch(STAGE) {
 			case 0:
 				if(_timer.get() < .5) {
@@ -130,12 +130,20 @@ public class Autonomous {
 				}
 			break;
 			case 2:
-				if(!_elevator.atBottom()) {
-					_elevator.moveTo(0);
+				driveLinear(TOTETOAUTO + 100, false, false);
+				break;
+			case 3:
+				if(_elevator.atBottom()) {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
 				} else {
 					_intake.setArms(false);
 				}
+			break;
 			}
+		break;
+		case 3://get ready, set,
+			_intake.setArms(true);
+			_elevator.moveTo(_elevator.posLoad);
 			break;
 		/*
 		case 2://one tote
