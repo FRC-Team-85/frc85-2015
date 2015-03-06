@@ -168,7 +168,7 @@ public class Autonomous {
 	}
 	
 	private void doNothing() {
-		String doItYourself = "This is actually a test that Tyler and Brian made, you should know what the actual code for this method is... UBERNOOBS";
+		String doItYourself = "This is actually a test that Tyler and Brian made, you should know what the actual code for this method is... UBERNOOBS";			/*normal Noobs as well*/
 		doItYourself.length();
 	}
 	

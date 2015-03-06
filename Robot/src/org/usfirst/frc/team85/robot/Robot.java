@@ -96,6 +96,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopInit() {
     	_gyro.reset();
+    	_drive.resetEncoders();
     }
     
     public void teleopPeriodic() {
