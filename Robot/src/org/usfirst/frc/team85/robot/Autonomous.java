@@ -120,7 +120,7 @@ public class Autonomous {
 				} else {
 					STAGE++;
 				}
-			break;
+				break;
 			case 1:
 				if(Math.abs(_elevator.getCurrentCount() - 200) >= _elevator._positionTolerance) {
 					_elevator.moveTo(200);
@@ -128,19 +128,19 @@ public class Autonomous {
 					_elevator.stop();
 					STAGE++;
 				}
-			break;
+				break;
 			case 2:
 				driveLinear(TOTETOAUTO + 100, false, false);
-				break;
+					break;
 			case 3:
 				if(_elevator.atBottom()) {
 					_elevator.moveTo(_elevator.getCurrentCount() - 200);
 				} else {
 					_intake.setArms(false);
 				}
-			break;
+				break;
 			}
-		break;
+			break;
 		case 3://get ready, set,
 			_intake.setArms(true);
 			_elevator.moveTo(_elevator.posLoad);
@@ -160,7 +160,15 @@ public class Autonomous {
 			}
 			break;
 		*/
+		default:
+			doNothing();
+			break;
 		}
+	}
+	
+	private void doNothing() {
+		String doItYourself = "This is actually a test that Tyler and Brian made, you should know what the actual code for this method is... UBERNOOBS";
+		doItYourself.length();
 	}
 	
 	public void driveLinear(int target, boolean strafe, boolean goBackwards) {
