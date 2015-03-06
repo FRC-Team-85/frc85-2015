@@ -42,7 +42,7 @@ public class Autonomous {
 	
 	
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
-		_procedure = 2;
+		_procedure = 0;
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;
@@ -57,6 +57,7 @@ public class Autonomous {
 	public void runAuto() {
 		SmartDashboard.putNumber("Stage", STAGE);
 		SmartDashboard.putNumber("Substage", SUBSTAGE);
+		SmartDashboard.putNumber("procedure", _procedure);
 		switch(_procedure) {
 		case 0://Do nothing, no plastic ramp
 			driveLinear(YELLOWTOTEDRIVE, false, false);
