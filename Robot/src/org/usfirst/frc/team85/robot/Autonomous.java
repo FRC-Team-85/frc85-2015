@@ -9,6 +9,8 @@ public class Autonomous {
 	private int SIXFOOTDRIVE = 1375;
 	private int YELLOWTOTEDRIVE = 1547;
 	private int ONETOTE = 516;
+	private int DRIVEINTOAUTO = 1547;
+	private int WALLTOAUTO = 0;
 	private int TOTETOAUTO = 0;//was 1900
 	private int CANPICKUP = 600;
 	private int CANPICKEDUP = 620;
@@ -96,7 +98,7 @@ public class Autonomous {
 				turn(80);
 				break;
 			case 5:
-				driveLinear(TOTETOAUTO + 100);
+				driveLinear(TOTETOAUTO);
 				_timer.reset();
 				break;
 			case 6://put timer pause here
@@ -139,7 +141,7 @@ public class Autonomous {
 				}
 				break;
 			case 2:
-				driveLinear(TOTETOAUTO + 100);
+				driveLinear(WALLTOAUTO);
 					break;
 			case 3:
 				if(_elevator.atBottom()) {
