@@ -39,10 +39,11 @@ public class Autonomous {
 	private Gyro _gyro;
 	
 	private boolean _alreadyRestarted = false;
-	
+	private boolean _overRamp;
 	
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
 		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0");
+		_overRamp = SmartDashboard.getBoolean("DB/Button 0", false);
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;
@@ -62,7 +63,7 @@ public class Autonomous {
 		case 0://Do nothing, no plastic ramp
 			switch(STAGE) {//This is important don't delete
 			case 0:
-				driveLinear(YELLOWTOTEDRIVE, false, false);
+				driveLinear(YELLOWTOTEDRIVE);
 				break;
 			}
 			break;
@@ -72,7 +73,7 @@ public class Autonomous {
 				pickUpTote();
 				break;
 			case 1:
-				driveLinear(ONETOTE, false, false);
+				driveLinear(ONETOTE);
 				break;
 			case 2:
 				if(_timer.get() <= .1) {
@@ -93,7 +94,7 @@ public class Autonomous {
 				turn(80);
 				break;
 			case 5:
-				driveLinear(TOTETOAUTO + 100, false, false);
+				driveLinear(TOTETOAUTO + 100);
 				_timer.reset();
 				break;
 			case 6://put timer pause here
@@ -136,7 +137,7 @@ public class Autonomous {
 				}
 				break;
 			case 2:
-				driveLinear(TOTETOAUTO + 100, false, false);
+				driveLinear(TOTETOAUTO + 100);
 					break;
 			case 3:
 				if(_elevator.atBottom()) {
@@ -177,7 +178,7 @@ public class Autonomous {
 		doItYourself.length();
 	}
 	
-	public void driveLinear(int target, boolean strafe, boolean goBackwards) {
+	public void driveLinear(int target) {
 		if(!isDoneCalculating) {
 			_drive.resetEncoders();
 			
@@ -223,15 +224,11 @@ public class Autonomous {
 				}
 			}
 			
-			if (goBackwards) {
-				speed = -speed;
+			if (_overRamp) {
+				//for decreasing speed
 			}
 			
-			if(!strafe) {
-				_drive.setMotors(speed, speed, speed, speed);
-			} else {
-				_drive.setMotors(speed, -speed, -speed, speed);//change two of these to negative
-			}
+			_drive.setMotors(speed, speed, speed, speed);
 			
 		}
 		
