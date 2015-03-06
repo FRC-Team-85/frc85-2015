@@ -9,7 +9,7 @@ public class Autonomous {
 	private int SIXFOOTDRIVE = 1375;
 	private int YELLOWTOTEDRIVE = 1547;
 	private int ONETOTE = 516;
-	private int TOTETOAUTO = 1900;
+	private int TOTETOAUTO = 0;//was 1900
 	private int CANPICKUP = 600;
 	private int CANPICKEDUP = 620;
 	//private int TO AUTO ZONE EDGE DRIVE (ST + R) = 1337;
@@ -42,8 +42,10 @@ public class Autonomous {
 	private boolean _overRamp;
 	
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
-		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0");
+		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0", 99);
 		_overRamp = SmartDashboard.getBoolean("DB/Button 0", false);
+		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
+		
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;
@@ -76,7 +78,7 @@ public class Autonomous {
 				driveLinear(ONETOTE);
 				break;
 			case 2:
-				if(_timer.get() <= .1) {
+				if(_timer.get() <= .15) {//was .1
 					_intake.setArms(true);
 				} else {
 					STAGE++;
@@ -151,6 +153,13 @@ public class Autonomous {
 		case 3://get ready, set,
 			_intake.setArms(true);
 			_elevator.moveTo(_elevator.posLoad);
+			break;
+		case 4:
+			switch (STAGE) {
+			case 0:
+				turn(90);
+				break;
+			}
 			break;
 		/*
 		case 2://one tote
@@ -311,7 +320,9 @@ public class Autonomous {
 			if (relativeAngle < 0) {//overshoot
 				speed = -speed;
 			}
-		
+			
+			speed *= .8;
+			
 			if (turningGoal > 0) {
 				_drive.setMotors(speed, -speed, speed, -speed);
 			} else {
