@@ -42,7 +42,7 @@ public class Autonomous {
 	
 	
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
-		_procedure = 0;
+		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0");
 		_drive = drive;
 		_intake = intake;
 		_elevator = elevator;
@@ -60,7 +60,11 @@ public class Autonomous {
 		SmartDashboard.putNumber("procedure", _procedure);
 		switch(_procedure) {
 		case 0://Do nothing, no plastic ramp
-			driveLinear(YELLOWTOTEDRIVE, false, false);
+			switch(STAGE) {//This is important don't delete
+			case 0:
+				driveLinear(YELLOWTOTEDRIVE, false, false);
+				break;
+			}
 			break;
 		case 1://Pick up tote and can
 			switch(STAGE) {
@@ -111,6 +115,7 @@ public class Autonomous {
 				break;
 			case 8:
 				_intake.setArms(false);
+				break;
 			}
 			break;
 		case 2://can

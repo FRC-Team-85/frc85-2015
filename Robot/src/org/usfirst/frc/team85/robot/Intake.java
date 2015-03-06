@@ -49,6 +49,12 @@ public class Intake {
 		_rightMotor.set(output);
 	}
 	
+	public void pnumaticsOff() {
+		_wrist.set(false);
+		_arm.set(false);
+		setIntakeMotors(0.0);
+	}
+	
 	public void setWrists(boolean bool) {
 		_wrist.set(bool);
 		if(!bool) {
