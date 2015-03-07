@@ -142,12 +142,15 @@ public class Autonomous {
 				break;
 			case 2:
 				driveLinear(WALLTOAUTO);
-					break;
+				_timer.reset();	
+				break;
 			case 3:
-				if(_elevator.atBottom()) {
-					_elevator.moveTo(_elevator.getCurrentCount() - 200);
-				} else {
-					_intake.setArms(false);
+				if(_timer.get() > .5) {
+					if(_elevator.atBottom()) {
+						_elevator.moveTo(_elevator.getCurrentCount() - 200);
+					} else {
+						_intake.setArms(false);
+					}
 				}
 				break;
 			}
