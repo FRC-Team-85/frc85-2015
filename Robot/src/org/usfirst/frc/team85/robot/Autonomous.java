@@ -182,15 +182,10 @@ public class Autonomous {
 			break;
 		*/
 		default:
-			doNothing();
 			break;
 		}
 	}
-	
-	private void doNothing() {
-		String doItYourself = "This is actually a test that Tyler and Brian made, you should know what the actual code for this method is... UBERNOOBS";			/*normal Noobs as well*/
-		doItYourself.length();
-	}
+
 	
 	public void driveLinear(int target) {
 		if(!isDoneCalculating) {
