@@ -180,6 +180,10 @@ public class Elevator {
 		return checkLimit(_bottomSwitch);
 	}
 	
+	public boolean atTop() {
+		return checkLimit(_topSwitch);
+	}
+	
 	public void setHook(boolean set) {
 		_hookA.set(set);
 	}
