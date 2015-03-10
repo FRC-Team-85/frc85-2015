@@ -142,15 +142,12 @@ public class Autonomous {
 				break;
 			case 2:
 				driveLinear(WALLTOAUTO);
-				_timer.reset();	
-				break;
+					break;
 			case 3:
-				if(_timer.get() > .5) {
-					if(_elevator.atBottom()) {
-						_elevator.moveTo(_elevator.getCurrentCount() - 200);
-					} else {
-						_intake.setArms(false);
-					}
+				if(!_elevator.atBottom()) {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				} else {
+					_intake.setArms(false);
 				}
 				break;
 			}
@@ -181,11 +178,122 @@ public class Autonomous {
 			}
 			break;
 		*/
+			
+					//Griffin's request: 10+
+			
+		case 10:	//3 tote auto
+			switch(STAGE) {
+			case 0:
+				pickUpTote();
+				break;
+			case 1:
+				if (_elevator.atBottom()) {
+					STAGE++;
+				} else {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				}
+				break;
+			case 2:															//timer here?
+				driveLinear(YELLOWTOTEDRIVE);
+				break;
+			case 3:
+				pickUpTote();
+				break;
+			case 4:	//fall through
+				driveLinear(YELLOWTOTEDRIVE);
+			case 5:
+				if (_elevator.atBottom()) {
+					STAGE++;
+				} else {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				}
+				break;
+			case 6:
+				pickUpTote();
+			case 7:
+				turn(90);
+				break;
+			case 8:
+				driveLinear(DRIVEINTOAUTO);		//not sure about this dist
+												//fall through
+			case 9:
+				
+				_elevator.setHook(true);
+				
+				if(Math.abs(_elevator.getCurrentCount() - _elevator.posHookA + 100) >= _elevator._positionTolerance) {
+					_elevator.moveTo(_elevator.posHookA + 100);
+				} else {
+					STAGE++;
+				}
+				break;
+			case 10:
+				if (_elevator.atBottom()) {
+					STAGE++;
+				} else {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				}
+				break;
+			case 11:
+				_intake.setArms(false);
+				STAGE++;
+				break;
+			}
+			break;
+			
+					//PARTY MODE: 100+
+			
+		case 100:	//Uma Uma Dance
+			if (!_elevator.atTop()) {
+				_elevator.moveTo(_elevator.getCurrentCount() + 100);
+			}
+			switch(STAGE) {
+			case 0:
+				turn(65);
+				break;
+			case 1:
+				turn(-65);
+				break;
+			case 2:
+				STAGE = 0;
+				break;
+			}
+			if (Math.abs(_gyro.getAngle()) > 55) {
+				_intake.setWrists(true);
+			} else {
+				_intake.setWrists(false);
+			}
+			break;
+			
+		case 101:	//Spin open
+			switch(STAGE) {
+			case 0:
+				turn(360*5);
+				break;
+			case 1:
+				turn(360*-5);
+				break;
+			case 2:
+				STAGE = 0;
+				break;
+			}
+			if (Math.abs(_gyro.getAngle()) > ((360*5)-15)) {
+				_intake.setArms(false);
+			} else {
+				_intake.setArms(true);
+			}
+			break;
+			
+			
 		default:
+			doNothing();
 			break;
 		}
 	}
-
+	
+	private void doNothing() {
+		String doItYourself = "This is actually a test that Tyler and Brian made, you should know what the actual code for this method is... UBERNOOBS";			/*normal Noobs as well*/
+		doItYourself.length();
+	}
 	
 	public void driveLinear(int target) {
 		if(!isDoneCalculating) {
