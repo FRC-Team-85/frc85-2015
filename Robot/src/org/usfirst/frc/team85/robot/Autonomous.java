@@ -47,6 +47,8 @@ public class Autonomous {
 		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0", 99);
 		_overRamp = SmartDashboard.getBoolean("DB/Button 0", false);
 		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
+		WALLTOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 2", 0));
+		
 		
 		_drive = drive;
 		_intake = intake;
@@ -95,7 +97,7 @@ public class Autonomous {
 				}
 				break;
 			case 4:
-				turn(80);
+				turn(90);
 				break;
 			case 5:
 				driveLinear(TOTETOAUTO);
@@ -123,7 +125,7 @@ public class Autonomous {
 				break;
 			}
 			break;
-		case 2://can
+		case 2://can forward only
 			switch(STAGE) {
 			case 0:
 				if(_timer.get() < .5) {
@@ -152,6 +154,39 @@ public class Autonomous {
 				break;
 			}
 			break;
+		case 3://can and backwards
+			switch(STAGE) {
+			case 0:
+				if(_timer.get() < .5) {
+					_intake.setArms(true);
+				} else {
+					STAGE++;
+				}
+				break;
+			case 1:
+				if(Math.abs(_elevator.getCurrentCount() - 200) >= _elevator._positionTolerance) {
+					_elevator.moveTo(200);
+				} else {
+					_elevator.stop();
+					STAGE++;
+				}
+				break;
+			case 2:
+				driveLinear(WALLTOAUTO);
+					break;
+			case 3:
+				if(!_elevator.atBottom()) {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				} else {
+					_intake.setArms(false);
+				}
+				break;
+			case 4:
+				driveLinear(-WALLTOAUTO+200);
+				break;
+			}
+			break;
+			/*
 		case 3://get ready, set,
 			_intake.setArms(true);
 			_elevator.moveTo(_elevator.posLoad);
@@ -163,6 +198,7 @@ public class Autonomous {
 				break;
 			}
 			break;
+			*/
 		/*
 		case 2://one tote
 			switch(STAGE) {
@@ -299,18 +335,18 @@ public class Autonomous {
 		if(!isDoneCalculating) {
 			_drive.resetEncoders();
 			
-			if(target <=  2 * ACCELERATIONCOUNT) {
+			if(Math.abs(target) <=  2 * ACCELERATIONCOUNT) {
 				shortDrive = true;
 			}
 			
-			goal = target - 180;
+			goal = Math.abs(Math.abs(target) - 180);
 			deccelerationCount = goal - ACCELERATIONCOUNT;
 			isDoneCalculating = true;
 			_drive.setBrakeMode(false);
 			
 		} else {
 			
-			double currentCount = ((_drive.getLeftEncoders() + _drive.getRightEncoders()) / 2);
+			double currentCount = Math.abs((_drive.getLeftEncoders() + _drive.getRightEncoders()) / 2);
 			double speed = 0.0;
 			
 			if(!shortDrive) {	
@@ -343,6 +379,10 @@ public class Autonomous {
 			
 			if (_overRamp) {
 				//for decreasing speed
+			}
+			
+			if (target < 0) {
+				speed *= -1;
 			}
 			
 			_drive.setMotors(speed, speed, speed, speed);
