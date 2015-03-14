@@ -97,7 +97,7 @@ public class Autonomous {
 				}
 				break;
 			case 4:
-				turn(90);
+				turn(80);
 				break;
 			case 5:
 				driveLinear(TOTETOAUTO);
@@ -179,10 +179,14 @@ public class Autonomous {
 					_elevator.moveTo(_elevator.getCurrentCount() - 200);
 				} else {
 					_intake.setArms(false);
+					STAGE++;
 				}
 				break;
 			case 4:
 				driveLinear(-WALLTOAUTO+200);
+				break;
+			case 5:
+				turn(-120);
 				break;
 			}
 			break;
@@ -190,15 +194,15 @@ public class Autonomous {
 		case 3://get ready, set,
 			_intake.setArms(true);
 			_elevator.moveTo(_elevator.posLoad);
-			break;
+			break;*/
 		case 4:
 			switch (STAGE) {
 			case 0:
-				turn(90);
+				turn(80);
 				break;
 			}
 			break;
-			*/
+			
 		/*
 		case 2://one tote
 			switch(STAGE) {
