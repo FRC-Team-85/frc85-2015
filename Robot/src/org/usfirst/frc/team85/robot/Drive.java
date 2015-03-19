@@ -55,7 +55,13 @@ public class Drive {
 		
 	}
 	private double scaleDrive(double speed) {
-		return speed * .7;
+		double scale = speed;
+		if (_controller.getRawButton(Addresses.SLOW_A)) {
+			scale *= 0.5;		}
+		if (_controller.getRawButton(Addresses.SLOW_B)) {
+			scale *= 0.5;
+		}
+		return scale * .7;
 	}
 	
 	public void setMotors(double frontLeftSpeed, double frontRightSpeed, double backLeftSpeed, double backRightSpeed) {

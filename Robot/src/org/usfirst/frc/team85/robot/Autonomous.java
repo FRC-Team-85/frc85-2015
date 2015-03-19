@@ -103,7 +103,12 @@ public class Autonomous {
 				driveLinear(TOTETOAUTO);
 				_timer.reset();
 				break;
-			case 6://put timer pause here
+			case 6:
+				if (_timer.get() >= 0.25) {
+					STAGE++;
+				} 
+				break;
+			case 7://put timer pause here
 				if(Math.abs(_elevator.getCurrentCount() - (CANPICKEDUP + 200)) >= _elevator._positionTolerance) {
 					_elevator.moveTo(CANPICKEDUP + 200);
 				} else {
@@ -111,7 +116,7 @@ public class Autonomous {
 					STAGE++;
 				}
 				break;
-			case 7:
+			case 8:
 				_elevator.setHook(true);
 				if(Math.abs(_elevator.getCurrentCount() - (600)) >= _elevator._positionTolerance) {
 					_elevator.moveTo(600);
@@ -120,7 +125,7 @@ public class Autonomous {
 					STAGE++;
 				}
 				break;
-			case 8:
+			case 9:
 				_intake.setArms(false);
 				break;
 			}
@@ -183,7 +188,7 @@ public class Autonomous {
 				}
 				break;
 			case 4:
-				driveLinear(-WALLTOAUTO+200);
+				driveLinear(-WALLTOAUTO+500);
 				break;
 			case 5:
 				turn(-120);

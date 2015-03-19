@@ -61,6 +61,9 @@ public final class Addresses {
     
     	//DriveController
     
+    public static final int SLOW_A = 5;
+    public static final int SLOW_B = 8;
+    
     	//OperatorControllerIntake
     
     public static final int ARM_IN = 5;
