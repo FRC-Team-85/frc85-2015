@@ -10,8 +10,8 @@ public class Autonomous {
 	private int YELLOWTOTEDRIVE = 1547;
 	private int ONETOTE = 516;
 	private int DRIVEINTOAUTO = 1547;
-	private int WALLTOAUTO = 0;
-	private int TOTETOAUTO = 0;//was 1900
+	private int WALLTOAUTO = 2750;
+	private int TOTETOAUTO = 0;//was 1900 => try 2500
 	private int CANPICKUP = 600;
 	private int CANPICKEDUP = 620;
 	//private int TO AUTO ZONE EDGE DRIVE (ST + R) = 1337;
@@ -47,8 +47,6 @@ public class Autonomous {
 		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0", 99);
 		_overRamp = SmartDashboard.getBoolean("DB/Button 0", false);
 		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
-		WALLTOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 2", 0));
-		
 		
 		_drive = drive;
 		_intake = intake;
@@ -328,6 +326,52 @@ public class Autonomous {
 			}
 			break;
 			
+		case 102:	//Cotton EYEd JOE
+			
+			if (SUBSTAGE == 0) {
+				SUBSTAGE = 1;
+			}
+			
+
+			_elevator.moveTo(_elevator.getCurrentCount() - 200);
+			_intake.setWrists(true);
+			switch(STAGE) {
+			case 0:
+				driveLinear(200);
+				break;
+			case 1:
+				driveLinear(-200);
+				break;
+			case 2:
+				driveLinear(-200);
+				break;
+			case 3:
+				driveLinear(200);
+				break;
+			case 4:
+				turn(45*SUBSTAGE);
+				_elevator.moveTo(_elevator.getCurrentCount() + 200);
+				break;
+			case 5:
+				turn(-45*SUBSTAGE);
+				_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				break;
+			case 6:
+				turn(-45*SUBSTAGE);
+				_elevator.moveTo(_elevator.getCurrentCount() + 200);
+				break;
+			case 7:
+				turn(45*SUBSTAGE);
+				_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				break;
+			case 8://strafe clap strafe clap
+				_intake.setWrists(false);
+				turn(350*SUBSTAGE);
+				break;
+			case 9:
+				STAGE = 0;
+				SUBSTAGE *= -1;
+			}
 			
 		default:
 			doNothing();
