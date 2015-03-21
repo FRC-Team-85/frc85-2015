@@ -12,6 +12,7 @@ public class Autonomous {
 	private int DRIVEINTOAUTO = 1547;
 	private int WALLTOAUTO = 2750;
 	private int TOTETOAUTO = 0;//was 1900 => try 2500
+	private int FORWARD = 0;
 	private int CANPICKUP = 600;
 	private int CANPICKEDUP = 620;
 	//private int TO AUTO ZONE EDGE DRIVE (ST + R) = 1337;
@@ -46,6 +47,7 @@ public class Autonomous {
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
 		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0", 99);
 		_overRamp = SmartDashboard.getBoolean("DB/Button 0", false);
+		FORWARD = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
 		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
 		
 		_drive = drive;
@@ -67,7 +69,7 @@ public class Autonomous {
 		case 0://Do nothing, no plastic ramp
 			switch(STAGE) {//This is important don't delete
 			case 0:
-				driveLinear(YELLOWTOTEDRIVE);
+				driveLinear(FORWARD,false);
 				break;
 			}
 			break;
@@ -77,7 +79,7 @@ public class Autonomous {
 				pickUpTote();
 				break;
 			case 1:
-				driveLinear(ONETOTE);
+				driveLinear(ONETOTE,false);
 				break;
 			case 2:
 				if(_timer.get() <= .15) {//was .1
@@ -98,7 +100,7 @@ public class Autonomous {
 				turn(80);
 				break;
 			case 5:
-				driveLinear(TOTETOAUTO);
+				driveLinear(TOTETOAUTO,false);
 				_timer.reset();
 				break;
 			case 6:
@@ -138,15 +140,15 @@ public class Autonomous {
 				}
 				break;
 			case 1:
-				if(Math.abs(_elevator.getCurrentCount() - 200) >= _elevator._positionTolerance) {
-					_elevator.moveTo(200);
+				if(Math.abs(_elevator.getCurrentCount() - 300) >= _elevator._positionTolerance) {
+					_elevator.moveTo(300);
 				} else {
 					_elevator.stop();
 					STAGE++;
 				}
 				break;
 			case 2:
-				driveLinear(WALLTOAUTO);
+				driveLinear(WALLTOAUTO,true);
 					break;
 			case 3:
 				if(!_elevator.atBottom()) {
@@ -167,15 +169,15 @@ public class Autonomous {
 				}
 				break;
 			case 1:
-				if(Math.abs(_elevator.getCurrentCount() - 200) >= _elevator._positionTolerance) {
-					_elevator.moveTo(200);
+				if(Math.abs(_elevator.getCurrentCount() - 300) >= _elevator._positionTolerance) {
+					_elevator.moveTo(300);
 				} else {
 					_elevator.stop();
 					STAGE++;
 				}
 				break;
 			case 2:
-				driveLinear(WALLTOAUTO);
+				driveLinear(WALLTOAUTO,true);
 					break;
 			case 3:
 				if(!_elevator.atBottom()) {
@@ -186,10 +188,11 @@ public class Autonomous {
 				}
 				break;
 			case 4:
-				driveLinear(-WALLTOAUTO+500);
+				driveLinear(-WALLTOAUTO+500,true);
 				break;
 			case 5:
-				turn(-120);
+				
+				//turn(-120);
 				break;
 			}
 			break;
@@ -201,11 +204,21 @@ public class Autonomous {
 		case 4:
 			switch (STAGE) {
 			case 0:
-				turn(80);
 				break;
 			}
 			break;
 			
+		case 5:
+			switch(STAGE) {
+			case 0:
+				turn(-80);
+				STAGE++;
+				break;
+			case 1:
+				driveLinear(800,false);
+				break;
+			}
+			break;
 		/*
 		case 2://one tote
 			switch(STAGE) {
@@ -237,13 +250,13 @@ public class Autonomous {
 				}
 				break;
 			case 2:															//timer here?
-				driveLinear(YELLOWTOTEDRIVE);
+				driveLinear(YELLOWTOTEDRIVE,false);
 				break;
 			case 3:
 				pickUpTote();
 				break;
 			case 4:	//fall through
-				driveLinear(YELLOWTOTEDRIVE);
+				driveLinear(YELLOWTOTEDRIVE,false);
 			case 5:
 				if (_elevator.atBottom()) {
 					STAGE++;
@@ -257,7 +270,7 @@ public class Autonomous {
 				turn(90);
 				break;
 			case 8:
-				driveLinear(DRIVEINTOAUTO);		//not sure about this dist
+				driveLinear(DRIVEINTOAUTO,false);		//not sure about this dist
 												//fall through
 			case 9:
 				
@@ -337,16 +350,16 @@ public class Autonomous {
 			_intake.setWrists(true);
 			switch(STAGE) {
 			case 0:
-				driveLinear(200);
+				driveLinear(200,false);
 				break;
 			case 1:
-				driveLinear(-200);
+				driveLinear(-200,false);
 				break;
 			case 2:
-				driveLinear(-200);
+				driveLinear(-200,false);
 				break;
 			case 3:
-				driveLinear(200);
+				driveLinear(200,false);
 				break;
 			case 4:
 				turn(45*SUBSTAGE);
@@ -384,7 +397,10 @@ public class Autonomous {
 		doItYourself.length();
 	}
 	
-	public void driveLinear(int target) {
+	public void driveLinear(int target, boolean overRamp) {
+		if(target==0) {
+			return;
+		}
 		if(!isDoneCalculating) {
 			_drive.resetEncoders();
 			
@@ -421,7 +437,8 @@ public class Autonomous {
 				
 				if(currentCount <= goal) {
 					speed = BASE;
-				} else if(currentCount > goal) {
+				} 
+				if(currentCount > goal || (overRamp && currentCount > 2500) ) {
 					speed = 0.0;
 					_drive.setBrakeMode(true);
 					STAGE++;
@@ -430,8 +447,8 @@ public class Autonomous {
 				}
 			}
 			
-			if (_overRamp) {
-				//for decreasing speed
+			if (overRamp) {
+				speed *= .7;
 			}
 			
 			if (target < 0) {
