@@ -20,7 +20,7 @@ public class Autonomous {
 	private boolean isDoneCalculating = false;
 	
 	private final static double RAMPSPEED = .3;
-	private final static double BASE = .8 - RAMPSPEED; //Changed from 1.0 to .7
+	private static double BASE = .8 - RAMPSPEED; //Changed from 1.0 to .7
 	private final static int ACCELERATIONCOUNT = 720; //encoder counts
 	
 	private final static double RAMPTURNSPEED = .4;
@@ -46,7 +46,7 @@ public class Autonomous {
 	
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
 		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0", 99);
-		_overRamp = SmartDashboard.getBoolean("DB/Button 0", false);
+		_overRamp = SmartDashboard.getBoolean("DB/Button 1", false);
 		FORWARD = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
 		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
 		
@@ -148,7 +148,7 @@ public class Autonomous {
 				}
 				break;
 			case 2:
-				driveLinear(WALLTOAUTO,true);
+				driveLinear(WALLTOAUTO, _overRamp);
 					break;
 			case 3:
 				if(!_elevator.atBottom()) {
@@ -177,7 +177,7 @@ public class Autonomous {
 				}
 				break;
 			case 2:
-				driveLinear(WALLTOAUTO,true);
+				driveLinear(WALLTOAUTO, _overRamp);
 					break;
 			case 3:
 				if(!_elevator.atBottom()) {
@@ -188,7 +188,7 @@ public class Autonomous {
 				}
 				break;
 			case 4:
-				driveLinear(-WALLTOAUTO+500,true);
+				driveLinear(-WALLTOAUTO+500, _overRamp);
 				break;
 			case 5:
 				
@@ -413,6 +413,11 @@ public class Autonomous {
 			isDoneCalculating = true;
 			_drive.setBrakeMode(false);
 			
+			if(overRamp) {
+				BASE = .4;
+				goal += 0;
+			}
+			
 		} else {
 			
 			double currentCount = Math.abs((_drive.getLeftEncoders() + _drive.getRightEncoders()) / 2);
@@ -427,8 +432,10 @@ public class Autonomous {
 				} else if (currentCount > ACCELERATIONCOUNT && currentCount <= deccelerationCount){	//rectangle
 					speed = (BASE + RAMPSPEED);
 				} else {	//outside
+					
 					speed = 0.0;
 					STAGE++;
+					BASE = .5;
 					isDoneCalculating = false;
 					_timer.reset();
 				}
@@ -438,21 +445,26 @@ public class Autonomous {
 				if(currentCount <= goal) {
 					speed = BASE;
 				} 
-				if(currentCount > goal || (overRamp && currentCount > 2500) ) {
+				
+				if(currentCount > goal) {
 					speed = 0.0;
 					_drive.setBrakeMode(true);
 					STAGE++;
+					BASE = .5;
 					isDoneCalculating = false;
 					_timer.reset();
 				}
 			}
 			
-			if (overRamp) {
-				speed *= .7;
-			}
-			
 			if (target < 0) {
 				speed *= -1;
+			}
+			
+			if (_overRamp && currentCount > 2500) {
+				speed = 0.0;
+				STAGE++;
+				isDoneCalculating = false;
+				_timer.reset();
 			}
 			
 			_drive.setMotors(speed, speed, speed, speed);
