@@ -69,6 +69,7 @@ public class Robot extends IterativeRobot {
     	_elevator.setBrakeMode(true);
         _gyro.reset();
         _intake.pnumaticsOff();
+        autoCheck = false;
     }
 
     /**

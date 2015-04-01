@@ -19,11 +19,6 @@ public class Drive {
 	private Encoder _backLeftEncoder;
 	private Encoder _backRightEncoder;
 	
-	private double _frontLeftOutput;
-	private double _frontRightOutput;
-	private double _backLeftOutput;
-	private double _backRighOutput;
-	
 	public Drive(Joystick drivecontroller) {
 		
 		_controller = drivecontroller;
@@ -47,6 +42,12 @@ public class Drive {
 	}
 	
 	public void drive() {
+		if(_controller.getRawButton(1)) {
+			resetEncoders();
+		}
+		if(_controller.getRawButton(2)) {
+			SmartDashboard.putString("DB/String 0", getAveEncoders() + "");
+		}
 		if(Math.abs(_controller.getX()) <= .05 && Math.abs(_controller.getY()) <= .05 && Math.abs(_controller.getTwist()) <= .05) {
 			setMotors(0.0, 0.0, 0.0, 0.0);
 			return;
@@ -55,7 +56,13 @@ public class Drive {
 		
 	}
 	private double scaleDrive(double speed) {
-		return speed * .7;
+		double scale = speed;
+		if (_controller.getRawButton(Addresses.SLOW_A)) {
+			scale *= 0.5;		}
+		if (_controller.getRawButton(Addresses.SLOW_B)) {
+			scale *= 0.5;
+		}
+		return scale * .7;
 	}
 	
 	public void setMotors(double frontLeftSpeed, double frontRightSpeed, double backLeftSpeed, double backRightSpeed) {

@@ -23,7 +23,7 @@ public class Elevator {
 	
 	private static Timer _timer;
 	private static Solenoid _hookA;
-	private static final int HOOKAPOS = 2450; //Practice Bot 2400 Comp Bot 2400
+	private static final int HOOKAPOS = 2510; //Practice Bot 2400 Comp Bot 2400		+60
 	
 	private static Intake _intake;
 	
@@ -39,8 +39,8 @@ public class Elevator {
 	public static int posBottom = 0;
 
 	public static int posLoad = 150; 
-	public static int posHookA = 2180; //Practice Bot 2100 Comp bot 2180
-	public static int posRide = 615; // practice bot 1240 comp bot 615
+	public static int posHookA = 2240; //Practice Bot 2100 Comp bot 2180		+1" = 2240
+	public static int posRide = 675; // practice bot 1240 comp bot 615			+60
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
 	private static int SOFT_HEIGHT_LIMIT_LOW = 200;		// 200
@@ -178,6 +178,10 @@ public class Elevator {
 	
 	public boolean atBottom() {
 		return checkLimit(_bottomSwitch);
+	}
+	
+	public boolean atTop() {
+		return checkLimit(_topSwitch);
 	}
 	
 	public void setHook(boolean set) {

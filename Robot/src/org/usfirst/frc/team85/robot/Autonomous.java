@@ -10,8 +10,9 @@ public class Autonomous {
 	private int YELLOWTOTEDRIVE = 1547;
 	private int ONETOTE = 516;
 	private int DRIVEINTOAUTO = 1547;
-	private int WALLTOAUTO = 0;
-	private int TOTETOAUTO = 0;//was 1900
+	private int WALLTOAUTO = 2750;
+	private int TOTETOAUTO = 0;//was 1900 => try 2500
+	private int FORWARD = 0;
 	private int CANPICKUP = 600;
 	private int CANPICKEDUP = 620;
 	//private int TO AUTO ZONE EDGE DRIVE (ST + R) = 1337;
@@ -19,7 +20,7 @@ public class Autonomous {
 	private boolean isDoneCalculating = false;
 	
 	private final static double RAMPSPEED = .3;
-	private final static double BASE = .8 - RAMPSPEED; //Changed from 1.0 to .7
+	private static double BASE = .8 - RAMPSPEED; //Changed from 1.0 to .7
 	private final static int ACCELERATIONCOUNT = 720; //encoder counts
 	
 	private final static double RAMPTURNSPEED = .4;
@@ -45,7 +46,10 @@ public class Autonomous {
 	
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
 		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0", 99);
-		//_overRamp = SmartDashboard.getBoolean("DB/Button 0", false);
+
+		_overRamp = SmartDashboard.getBoolean("DB/Button 1", false);
+		FORWARD = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
+
 		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
 		WALLTOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 2", 0));
 		
@@ -75,7 +79,7 @@ public class Autonomous {
 		case 0://Do nothing, no plastic ramp
 			switch(STAGE) {//This is important don't delete
 			case 0:
-				driveLinear(WALLTOAUTO);
+				driveLinear(FORWARD,false);
 				break;
 			}
 			break;
@@ -85,7 +89,7 @@ public class Autonomous {
 				pickUpTote();
 				break;
 			case 1:
-				driveLinear(ONETOTE);
+				driveLinear(ONETOTE,false);
 				break;
 			case 2:
 				if(_timer.get() <= .15) {//was .1
@@ -106,10 +110,15 @@ public class Autonomous {
 				turn(80);
 				break;
 			case 5:
-				driveLinear(TOTETOAUTO);
+				driveLinear(TOTETOAUTO,false);
 				_timer.reset();
 				break;
-			case 6://put timer pause here
+			case 6:
+				if (_timer.get() >= 0.25) {
+					STAGE++;
+				} 
+				break;
+			case 7://put timer pause here
 				if(Math.abs(_elevator.getCurrentCount() - (CANPICKEDUP + 200)) >= _elevator._positionTolerance) {
 					_elevator.moveTo(CANPICKEDUP + 200);
 				} else {
@@ -117,7 +126,7 @@ public class Autonomous {
 					STAGE++;
 				}
 				break;
-			case 7:
+			case 8:
 				_elevator.setHook(true);
 				if(Math.abs(_elevator.getCurrentCount() - (600)) >= _elevator._positionTolerance) {
 					_elevator.moveTo(600);
@@ -126,12 +135,12 @@ public class Autonomous {
 					STAGE++;
 				}
 				break;
-			case 8:
+			case 9:
 				_intake.setArms(false);
 				break;
 			}
 			break;
-		case 2://can
+		case 2://can forward only
 			switch(STAGE) {
 			case 0:
 				if(_timer.get() < .5) {
@@ -141,36 +150,82 @@ public class Autonomous {
 				}
 				break;
 			case 1:
-				if(Math.abs(_elevator.getCurrentCount() - 200) >= _elevator._positionTolerance) {
-					_elevator.moveTo(200);
+				if(Math.abs(_elevator.getCurrentCount() - 300) >= _elevator._positionTolerance) {
+					_elevator.moveTo(300);
 				} else {
 					_elevator.stop();
 					STAGE++;
 				}
 				break;
 			case 2:
-				driveLinear(WALLTOAUTO);
-				_timer.reset();	
-				break;
+				driveLinear(WALLTOAUTO, _overRamp);
+					break;
 			case 3:
-				if(_timer.get() > .5) {
-					if(_elevator.atBottom()) {
-						_elevator.moveTo(_elevator.getCurrentCount() - 200);
-					} else {
-						_intake.setArms(false);
-					}
+				if(!_elevator.atBottom()) {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				} else {
+					_intake.setArms(false);
 				}
 				break;
 			}
 			break;
+		case 3://can and backwards
+			switch(STAGE) {
+			case 0:
+				if(_timer.get() < .5) {
+					_intake.setArms(true);
+				} else {
+					STAGE++;
+				}
+				break;
+			case 1:
+				if(Math.abs(_elevator.getCurrentCount() - 300) >= _elevator._positionTolerance) {
+					_elevator.moveTo(300);
+				} else {
+					_elevator.stop();
+					STAGE++;
+				}
+				break;
+			case 2:
+				driveLinear(WALLTOAUTO, _overRamp);
+					break;
+			case 3:
+				if(!_elevator.atBottom()) {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				} else {
+					_intake.setArms(false);
+					STAGE++;
+				}
+				break;
+			case 4:
+				driveLinear(-WALLTOAUTO+500, _overRamp);
+				break;
+			case 5:
+				
+				//turn(-120);
+				break;
+			}
+			break;
+			/*
 		case 3://get ready, set,
 			_intake.setArms(true);
 			_elevator.moveTo(_elevator.posLoad);
-			break;
+			break;*/
 		case 4:
 			switch (STAGE) {
 			case 0:
-				turn(90);
+				break;
+			}
+			break;
+			
+		case 5:
+			switch(STAGE) {
+			case 0:
+				turn(-80);
+				STAGE++;
+				break;
+			case 1:
+				driveLinear(800,false);
 				break;
 			}
 			break;
@@ -189,6 +244,158 @@ public class Autonomous {
 			}
 			break;
 		*/
+			
+					//Griffin's request: 10+
+			
+		case 10:	//3 tote auto
+			switch(STAGE) {
+			case 0:
+				pickUpTote();
+				break;
+			case 1:
+				if (_elevator.atBottom()) {
+					STAGE++;
+				} else {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				}
+				break;
+			case 2:															//timer here?
+				driveLinear(YELLOWTOTEDRIVE,false);
+				break;
+			case 3:
+				pickUpTote();
+				break;
+			case 4:	//fall through
+				driveLinear(YELLOWTOTEDRIVE,false);
+			case 5:
+				if (_elevator.atBottom()) {
+					STAGE++;
+				} else {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				}
+				break;
+			case 6:
+				pickUpTote();
+			case 7:
+				turn(90);
+				break;
+			case 8:
+				driveLinear(DRIVEINTOAUTO,false);		//not sure about this dist
+												//fall through
+			case 9:
+				
+				_elevator.setHook(true);
+				
+				if(Math.abs(_elevator.getCurrentCount() - _elevator.posHookA + 100) >= _elevator._positionTolerance) {
+					_elevator.moveTo(_elevator.posHookA + 100);
+				} else {
+					STAGE++;
+				}
+				break;
+			case 10:
+				if (_elevator.atBottom()) {
+					STAGE++;
+				} else {
+					_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				}
+				break;
+			case 11:
+				_intake.setArms(false);
+				STAGE++;
+				break;
+			}
+			break;
+			
+					//PARTY MODE: 100+
+			
+		case 100:	//Uma Uma Dance
+			if (!_elevator.atTop()) {
+				_elevator.moveTo(_elevator.getCurrentCount() + 100);
+			}
+			switch(STAGE) {
+			case 0:
+				turn(65);
+				break;
+			case 1:
+				turn(-65);
+				break;
+			case 2:
+				STAGE = 0;
+				break;
+			}
+			if (Math.abs(_gyro.getAngle()) > 55) {
+				_intake.setWrists(true);
+			} else {
+				_intake.setWrists(false);
+			}
+			break;
+			
+		case 101:	//Spin open
+			switch(STAGE) {
+			case 0:
+				turn(360*5);
+				break;
+			case 1:
+				turn(360*-5);
+				break;
+			case 2:
+				STAGE = 0;
+				break;
+			}
+			if (Math.abs(_gyro.getAngle()) > ((360*5)-15)) {
+				_intake.setArms(false);
+			} else {
+				_intake.setArms(true);
+			}
+			break;
+			
+		case 102:	//Cotton EYEd JOE
+			
+			if (SUBSTAGE == 0) {
+				SUBSTAGE = 1;
+			}
+			
+
+			_elevator.moveTo(_elevator.getCurrentCount() - 200);
+			_intake.setWrists(true);
+			switch(STAGE) {
+			case 0:
+				driveLinear(200,false);
+				break;
+			case 1:
+				driveLinear(-200,false);
+				break;
+			case 2:
+				driveLinear(-200,false);
+				break;
+			case 3:
+				driveLinear(200,false);
+				break;
+			case 4:
+				turn(45*SUBSTAGE);
+				_elevator.moveTo(_elevator.getCurrentCount() + 200);
+				break;
+			case 5:
+				turn(-45*SUBSTAGE);
+				_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				break;
+			case 6:
+				turn(-45*SUBSTAGE);
+				_elevator.moveTo(_elevator.getCurrentCount() + 200);
+				break;
+			case 7:
+				turn(45*SUBSTAGE);
+				_elevator.moveTo(_elevator.getCurrentCount() - 200);
+				break;
+			case 8://strafe clap strafe clap
+				_intake.setWrists(false);
+				turn(350*SUBSTAGE);
+				break;
+			case 9:
+				STAGE = 0;
+				SUBSTAGE *= -1;
+			}
+			
 		default:
 			doNothing();
 			break;
@@ -200,22 +407,30 @@ public class Autonomous {
 		doItYourself.length();
 	}
 	
-	public void driveLinear(int target) {
+	public void driveLinear(int target, boolean overRamp) {
+		if(target==0) {
+			return;
+		}
 		if(!isDoneCalculating) {
 			_drive.resetEncoders();
 			
-			if(target <=  2 * ACCELERATIONCOUNT) {
+			if(Math.abs(target) <=  2 * ACCELERATIONCOUNT) {
 				shortDrive = true;
 			}
 			
-			goal = target - 180;
+			goal = Math.abs(Math.abs(target) - 180);
 			deccelerationCount = goal - ACCELERATIONCOUNT;
 			isDoneCalculating = true;
 			_drive.setBrakeMode(false);
 			
+			if(overRamp) {
+				BASE = .4;
+				goal += 0;
+			}
+			
 		} else {
 			
-			double currentCount = ((_drive.getLeftEncoders() + _drive.getRightEncoders()) / 2);
+			double currentCount = Math.abs((_drive.getLeftEncoders() + _drive.getRightEncoders()) / 2);
 			double speed = 0.0;
 			
 			if(!shortDrive) {	
@@ -227,8 +442,10 @@ public class Autonomous {
 				} else if (currentCount > ACCELERATIONCOUNT && currentCount <= deccelerationCount){	//rectangle
 					speed = (BASE + RAMPSPEED);
 				} else {	//outside
+					
 					speed = 0.0;
 					STAGE++;
+					BASE = .5;
 					isDoneCalculating = false;
 					_timer.reset();
 				}
@@ -237,17 +454,27 @@ public class Autonomous {
 				
 				if(currentCount <= goal) {
 					speed = BASE;
-				} else if(currentCount > goal) {
+				} 
+				
+				if(currentCount > goal) {
 					speed = 0.0;
 					_drive.setBrakeMode(true);
 					STAGE++;
+					BASE = .5;
 					isDoneCalculating = false;
 					_timer.reset();
 				}
 			}
 			
-			if (_overRamp) {
-				//for decreasing speed
+			if (target < 0) {
+				speed *= -1;
+			}
+			
+			if (_overRamp && currentCount > 2500) {
+				speed = 0.0;
+				STAGE++;
+				isDoneCalculating = false;
+				_timer.reset();
 			}
 			
 			_drive.setMotors(speed, speed, speed, speed);
