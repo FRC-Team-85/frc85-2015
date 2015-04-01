@@ -8,7 +8,9 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PowerDistributionPanel; 
 
@@ -35,6 +37,7 @@ public class Robot extends IterativeRobot {
     private boolean autoCheck = false;
     
     private Gyro _gyro;
+
     
     /**
      * This function is run when the robot is first started up and should be
