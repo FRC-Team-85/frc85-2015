@@ -33,6 +33,9 @@ public class Autonomous {
 	private int deccelerationCount;
 	private int STAGE;
 	private int SUBSTAGE = 0;
+	
+	private double HOWMANYSEC;
+	private int ISPOSSTRAFE;
 
 	private int _procedure;
 	private Drive _drive;
@@ -49,6 +52,13 @@ public class Autonomous {
 		_overRamp = SmartDashboard.getBoolean("DB/Button 1", false);
 		FORWARD = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
 		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
+		HOWMANYSEC = Math.abs(SmartDashboard.getNumber("DB/Slider 2", 0));
+		
+		if (HOWMANYSEC > 0) {
+			ISPOSSTRAFE = 1;
+		} else {
+			ISPOSSTRAFE = -1;
+		}
 		
 		_drive = drive;
 		_intake = intake;
@@ -196,14 +206,15 @@ public class Autonomous {
 				break;
 			}
 			break;
-			/*
-		case 3://get ready, set,
-			_intake.setArms(true);
-			_elevator.moveTo(_elevator.posLoad);
-			break;*/
-		case 4:
+			
+		case 4://strafe
 			switch (STAGE) {
 			case 0:
+				if(_timer.get() < HOWMANYSEC) {
+					_drive.autoMech(ISPOSSTRAFE, 0.0, 0.0, _gyro.getAngle());
+				}	else {
+					STAGE++;
+				}
 				break;
 			}
 			break;
@@ -529,9 +540,9 @@ public class Autonomous {
 			absTurnGoal = Math.abs(turningGoal) - 20;
 		} else {
 			double speed;
-			double relativeAngle = absTurnGoal - Math.abs(_gyro.getAngle());
-			double absAngle = Math.abs(_gyro.getAngle());
-			SmartDashboard.putNumber("GYRO ANGLE", _gyro.getAngle());
+			double relativeAngle = absTurnGoal - Math.abs(_gyro.getAngle() * 0.25);
+			double absAngle = Math.abs(_gyro.getAngle() * 0.25);
+			SmartDashboard.putNumber("GYRO ANGLE", _gyro.getAngle() * 0.25);
 		
 			if (absAngle <= TURNACCELERATIONCOUNT) {	//triangle one
 				speed = TURNBASE + (RAMPTURNSPEED * absAngle / TURNACCELERATIONCOUNT);

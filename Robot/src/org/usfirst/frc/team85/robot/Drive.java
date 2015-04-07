@@ -105,4 +105,9 @@ public class Drive {
 	public int getAveEncoders() {
 		return (getLeftEncoders() + getRightEncoders()) / 2;
 	}
+	
+	public void autoMech(double x, double y, double rotation, double gyroAngle) {
+		_drive.mecanumDrive_Cartesian (x, y, rotation, gyroAngle);
+	}
+	
 }

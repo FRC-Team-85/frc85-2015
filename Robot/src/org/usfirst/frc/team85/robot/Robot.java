@@ -111,7 +111,8 @@ public class Robot extends IterativeRobot {
     	//getAMPs();
     	_drive.displayEncoderCount();
 
-		SmartDashboard.putNumber("GYRO ANGLE", _gyro.getAngle());
+		SmartDashboard.putNumber("GYRO COUNT", _gyro.getAngle());
+		SmartDashboard.putNumber("GYRO ANGLE", _gyro.getAngle()*0.25);
     }
     
     
