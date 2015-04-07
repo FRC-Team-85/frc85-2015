@@ -36,7 +36,7 @@ public class Elevator {
 	private static double _slowSpeed = .4;
 	
 	//Positions for elevator
-	public static int posBottom = 0;
+	public static int posSuckItIn = 1045;
 
 	public static int posLoad = 150; 
 	public static int posHookA = 2240; //Practice Bot 2100 Comp bot 2180		+1" = 2240
@@ -109,15 +109,16 @@ public class Elevator {
 	
 	private void moveElevator(int encoderCount) {
 		if(_controller.getRawButton(Addresses.BUTTON_BOTTOM)) {
-			moveTo(posBottom);
-		} else if(_controller.getRawButton(Addresses.BUTTON_LOAD)) {
+			moveTo(posLoad);
+		} 
+		else if(_controller.getRawButton(Addresses.BUTTON_LOAD)) {
 			if(!_alreadyRestarted) {
 				_timer.reset();
 				_alreadyRestarted = true;
 				_intake.setWrists(true);
 			}
 			if(_timer.get() >= .5) {
-				moveTo(posLoad);
+				moveTo(posSuckItIn);
 			}
 		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_A)) {
 			moveTo(posHookA);

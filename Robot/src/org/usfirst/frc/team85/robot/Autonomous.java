@@ -49,8 +49,10 @@ public class Autonomous {
 	
 	public Autonomous(Drive drive, Intake intake, Elevator elevator,Gyro gyro) {
 		_procedure = (int)SmartDashboard.getNumber("DB/Slider 0", 99);
+
 		_overRamp = SmartDashboard.getBoolean("DB/Button 1", false);
 		FORWARD = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
+
 		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
 		HOWMANYSEC = Math.abs(SmartDashboard.getNumber("DB/Slider 2", 0));
 		
@@ -69,6 +71,13 @@ public class Autonomous {
 		_timer.start();
 		_drive.resetEncoders();
 		STAGE = 0;
+		
+		SmartDashboard.putString("DB/String 0", "0: Drive Forward");
+		SmartDashboard.putString("DB/String 1", "1: Tote and Can");
+		SmartDashboard.putString("DB/String 2", "2: Pick up Can");
+		SmartDashboard.putString("DB/String 3", "3: Loading Station");
+		SmartDashboard.putString("DB/String 4", "4: Turn");
+		SmartDashboard.putString("DB/String 5", "Play dead");
 	}
 	
 	public void runAuto() {
