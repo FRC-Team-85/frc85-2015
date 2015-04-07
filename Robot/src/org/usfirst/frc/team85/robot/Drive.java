@@ -19,7 +19,10 @@ public class Drive {
 	private Encoder _backLeftEncoder;
 	private Encoder _backRightEncoder;
 	
-	public Drive(Joystick drivecontroller) {
+	private Solenoid _scythe;
+	private boolean reapingAuthorized = false;
+	
+	public Drive(Joystick drivecontroller, boolean partyTime) {
 		
 		_controller = drivecontroller;
 		
@@ -38,6 +41,9 @@ public class Drive {
 		_backRightEncoder = new Encoder(Addresses.BACK_RIGHT_ENCODER_CHANNEL_A,
 				Addresses.BACK_RIGHT_ENCODER_CHANNEL_B);
 		
+		_scythe = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.SCYTHE_SOLENOID_CHANNEL);
+		reapingAuthorized = partyTime;
+		
 		_drive = new RobotDrive(_frontLeftMotor, _backLeftMotor, _frontRightMotor, _backRightMotor);
 	}
 	
@@ -52,15 +58,28 @@ public class Drive {
 			setMotors(0.0, 0.0, 0.0, 0.0);
 			return;
 		}
-			_drive.mecanumDrive_Cartesian(scaleDrive(_controller.getX()), scaleDrive(_controller.getY()), scaleDrive(_controller.getTwist()), 0);
-		
+	
+		_drive.mecanumDrive_Cartesian(scaleDrive(_controller.getX()), scaleDrive(_controller.getY()), scaleDrive(_controller.getTwist()), 0);	
+	
+		if (reapingAuthorized) {
+			if (_controller.getRawButton(4)) {
+				_scythe.set(true);
+			}
+			if (_controller.getRawButton(1)) {
+				_scythe.set(false);
+			}
+		} else {
+			_scythe.set(false);
+		}
 	}
-	private double scaleDrive(double speed) {
+	
+	private double scaleDrive(double speed) {	//L_35%,__70%,	LR50%,_R100%
 		double scale = speed;
 		if (_controller.getRawButton(Addresses.SLOW_A)) {
-			scale *= 0.5;		}
-		if (_controller.getRawButton(Addresses.SLOW_B)) {
 			scale *= 0.5;
+		}
+		if (_controller.getRawButton(Addresses.FAST_B)) {
+			return scale;
 		}
 		return scale * .7;
 	}

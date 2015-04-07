@@ -29,6 +29,8 @@ public final class Addresses {
     public static final int BACK_RIGHT_ENCODER_CHANNEL_A = 6;
     public static final int BACK_RIGHT_ENCODER_CHANNEL_B = 7;
     
+    public static final int SCYTHE_SOLENOID_CHANNEL = 4;
+    
     	//Elevator
     
     public static final int ELEVATOR_ENCODER_CHANNEL_A = 8;
@@ -61,8 +63,11 @@ public final class Addresses {
     
     	//DriveController
     
+    public static final int CHARGE = 1;
+    public static final int REAP = 4;
+    
     public static final int SLOW_A = 5;
-    public static final int SLOW_B = 8;
+    public static final int FAST_B = 6;
     
     	//OperatorControllerIntake
     
