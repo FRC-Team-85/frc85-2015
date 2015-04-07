@@ -108,12 +108,7 @@ public class Autonomous {
 				}
 				break;
 			case 3:
-				if(Math.abs(_elevator.getCurrentCount() - (CANPICKEDUP)) >= _elevator._positionTolerance) {
-					_elevator.moveTo(CANPICKEDUP);
-				} else {
-					_elevator.stop();
-					STAGE++;
-				}
+				elevatorMove(CANPICKEDUP);
 				break;
 			case 4:
 				turn(80);
@@ -128,21 +123,11 @@ public class Autonomous {
 				} 
 				break;
 			case 7://put timer pause here
-				if(Math.abs(_elevator.getCurrentCount() - (CANPICKEDUP + 200)) >= _elevator._positionTolerance) {
-					_elevator.moveTo(CANPICKEDUP + 200);
-				} else {
-					_elevator.stop();
-					STAGE++;
-				}
+				elevatorMove(CANPICKEDUP + 200);
 				break;
 			case 8:
 				_elevator.setHook(true);
-				if(Math.abs(_elevator.getCurrentCount() - (600)) >= _elevator._positionTolerance) {
-					_elevator.moveTo(600);
-				} else {
-					_elevator.stop();
-					STAGE++;
-				}
+				elevatorMove(600);
 				break;
 			case 9:
 				_intake.setArms(false);
@@ -159,12 +144,7 @@ public class Autonomous {
 				}
 				break;
 			case 1:
-				if(Math.abs(_elevator.getCurrentCount() - 300) >= _elevator._positionTolerance) {
-					_elevator.moveTo(300);
-				} else {
-					_elevator.stop();
-					STAGE++;
-				}
+				elevatorMove(300);
 				break;
 			case 2:
 				driveLinear(WALLTOAUTO, _overRamp);
@@ -188,12 +168,7 @@ public class Autonomous {
 				}
 				break;
 			case 1:
-				if(Math.abs(_elevator.getCurrentCount() - 300) >= _elevator._positionTolerance) {
-					_elevator.moveTo(300);
-				} else {
-					_elevator.stop();
-					STAGE++;
-				}
+				elevatorMove(300);
 				break;
 			case 2:
 				driveLinear(WALLTOAUTO, _overRamp);
@@ -295,12 +270,7 @@ public class Autonomous {
 			case 9:
 				
 				_elevator.setHook(true);
-				
-				if(Math.abs(_elevator.getCurrentCount() - _elevator.posHookA + 100) >= _elevator._positionTolerance) {
-					_elevator.moveTo(_elevator.posHookA + 100);
-				} else {
-					STAGE++;
-				}
+				elevatorMove(_elevator.posHookA + 100);
 				break;
 			case 10:
 				if (_elevator.atBottom()) {
@@ -415,6 +385,15 @@ public class Autonomous {
 	private void doNothing() {
 		String doItYourself = "This is actually a test that Tyler and Brian made, you should know what the actual code for this method is... UBERNOOBS";			/*normal Noobs as well*/
 		doItYourself.length();
+	}
+	
+	public void elevatorMove(int target) {
+		if(Math.abs(_elevator.getCurrentCount() - target) >= _elevator._positionTolerance) {
+			_elevator.moveTo(target);
+		} else {
+			_elevator.stop();
+			STAGE++;
+		}
 	}
 	
 	public void driveLinear(int target, boolean overRamp) {
