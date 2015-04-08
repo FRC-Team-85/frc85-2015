@@ -40,7 +40,6 @@ public final class Addresses {
     public static final int BOTTOMSWITCH_CHANNEL = 1;
 
     public static final int HOOK_A_SOLENOID_CHANNEL = 2;
-    public static final int HOOK_B_SOLENOID_CHANNEL = 3;
     
     public static final int LEFT_BELT_MOTOR = 8;
     public static final int RIGHT_BELT_MOTOR = 9;
@@ -62,9 +61,6 @@ public final class Addresses {
     public static final int GYRO_CHANNEL = 0;
     
     	//DriveController
-    
-    public static final int CHARGE = 1;
-    public static final int REAP = 4;
     
     public static final int SLOW_A = 5;
     public static final int FAST_B = 6;

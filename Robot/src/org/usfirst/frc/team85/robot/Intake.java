@@ -10,15 +10,19 @@ public class Intake {
 	private static Solenoid _wrist;
 	private static CANTalon _leftMotor;
 	private static CANTalon _rightMotor;
+	private Solenoid _scythe;
+	private boolean reapingAuthorized = false;
 	
 	private static final double INSPEED = .5;
 	
-	public Intake (Joystick opController) {
+	public Intake (Joystick opController, boolean partyTime) {
 		_operatorController = opController;
 		_arm = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.ARM_SOLENOID_CHANNEL);
 		_wrist = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.WRIST_SOLENOID_CHANNEL);
 		_leftMotor = new CANTalon(Addresses.LEFT_INTAKE_MOTOR);
 		_rightMotor = new CANTalon(Addresses.RIGHT_INTAKE_MOTOR);
+		_scythe = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.SCYTHE_SOLENOID_CHANNEL);
+		reapingAuthorized = partyTime;
 	}
 	
 	public void run() {
@@ -41,6 +45,31 @@ public class Intake {
 		
 		if (_operatorController.getRawButton(Addresses.BUTTON_LOAD) || _operatorController.getRawButton(Addresses.WRIST_OUT)) {
 			_wrist.set(true);
+		}
+		
+		reap();
+		
+	}
+	
+	private void reap() {
+		if (reapingAuthorized) {
+			int POV = _operatorController.getPOV();
+			if (POV == 0) {
+				_scythe.set(true);
+			}
+			if (POV == 180) {
+				_scythe.set(false);
+			}
+		} else {
+			_scythe.set(false);
+		}
+	}
+	
+	public void reap(boolean reap) {
+		if (reapingAuthorized) {
+			_scythe.set(reap);
+		} else {
+			_scythe.set(false);
 		}
 	}
 	

@@ -56,7 +56,7 @@ public class Autonomous {
 		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
 		HOWMANYSEC = Math.abs(SmartDashboard.getNumber("DB/Slider 2", 0));
 		
-		if (HOWMANYSEC > 0) {
+		if (SmartDashboard.getNumber("DB/Slider 2") > 0) {
 			ISPOSSTRAFE = 1;
 		} else {
 			ISPOSSTRAFE = -1;
@@ -191,11 +191,20 @@ public class Autonomous {
 			}
 			break;
 			
-		case 4://strafe
+		case 4://killSteal
 			switch (STAGE) {
 			case 0:
+				if(_timer.get() > 0.5) {
+					_timer.reset();
+					STAGE++;
+				} else {
+					_intake.reap(true);
+				}
+				break;
+			case 1:
 				if(_timer.get() < HOWMANYSEC) {
-					_drive.autoMech(ISPOSSTRAFE, 0.0, 0.0, _gyro.getAngle());
+					_drive.autoMech(ISPOSSTRAFE);
+					_intake.reap(false);
 				}	else {
 					STAGE++;
 				}
@@ -203,11 +212,11 @@ public class Autonomous {
 			}
 			break;
 			
+			
 		case 5:
 			switch(STAGE) {
 			case 0:
 				turn(-80);
-				STAGE++;
 				break;
 			case 1:
 				driveLinear(800,false);
@@ -289,9 +298,7 @@ public class Autonomous {
 					//PARTY MODE: 100+
 			
 		case 100:	//Uma Uma Dance
-			if (!_elevator.atTop()) {
-				_elevator.moveTo(_elevator.getCurrentCount() + 100);
-			}
+			elevatorMove(3700);
 			switch(STAGE) {
 			case 0:
 				turn(65);
@@ -379,7 +386,9 @@ public class Autonomous {
 		default:
 			doNothing();
 			break;
+			
 		}
+		
 	}
 	
 	private void doNothing() {

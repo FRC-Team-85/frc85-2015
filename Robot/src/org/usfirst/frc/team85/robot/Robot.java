@@ -47,8 +47,8 @@ public class Robot extends IterativeRobot {
         _driveController = new Joystick(Addresses.DRIVE_CONTROLLER);
         _operatorController = new Joystick(Addresses.OPERATOR_CONTROLLER);
         
-        _drive = new Drive(_driveController, true);
-        _intake = new Intake(_operatorController);
+        _drive = new Drive(_driveController);
+        _intake = new Intake(_operatorController, true);
         _elevator = new Elevator(_operatorController, _intake);
         _gyro = new Gyro(Addresses.GYRO_CHANNEL);
         _gyro.initGyro();
