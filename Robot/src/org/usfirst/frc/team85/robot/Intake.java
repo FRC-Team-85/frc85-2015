@@ -13,7 +13,7 @@ public class Intake {
 	private Solenoid _scythe;
 	private boolean reapingAuthorized = false;
 	
-	private static final double INSPEED = .5;
+	private static final double INSPEED = 1;
 	
 	public Intake (Joystick opController, boolean partyTime) {
 		_operatorController = opController;

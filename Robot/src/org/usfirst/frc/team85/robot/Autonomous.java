@@ -1,7 +1,6 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
@@ -191,10 +190,10 @@ public class Autonomous {
 			}
 			break;
 			
-		case 4://killSteal
+		case 4://RIP can
 			switch (STAGE) {
 			case 0:
-				if(_timer.get() > 0.5) {
+				if(_timer.get() > 1.0) {
 					_timer.reset();
 					STAGE++;
 				} else {

@@ -117,10 +117,11 @@ public class Elevator {
 				_alreadyRestarted = true;
 				_intake.setWrists(true);
 			}
-			if(_timer.get() >= .5) {
+			if(_timer.get() >= 0) {
 				moveTo(posSuckItIn);
 			}
 		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_A)) {
+			_intake.setWrists(true);
 			moveTo(posHookA);
 		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_B)) {
 			moveTo(posRide);
