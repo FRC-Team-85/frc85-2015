@@ -62,8 +62,8 @@ public final class Addresses {
     
     	//DriveController
     
-    public static final int SLOW_A = 5;
-    public static final int FAST_B = 6;
+    public static final int MOD_A = 5;
+    public static final int MOD_B = 6;
     
     	//OperatorControllerIntake
     
@@ -78,6 +78,8 @@ public final class Addresses {
 	public static int BUTTON_LOAD = 2;
 	public static final int BUTTON_HOOK_A = 3;
 	public static final int BUTTON_HOOK_B = 4;
+	public static final int TOTE_TOP = 9;
+	public static final int SUCKING_SIDEWAYS = 10;
 	
 	public static int HOOK_AXIS = 5;
 	

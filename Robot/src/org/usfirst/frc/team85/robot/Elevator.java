@@ -38,9 +38,10 @@ public class Elevator {
 	//Positions for elevator
 	public static int posSuckItIn = 1045;
 
-	public static int posLoad = 150; 
+	public static int posLoad = 460;
 	public static int posHookA = 2240; //Practice Bot 2100 Comp bot 2180		+1" = 2240
 	public static int posRide = 675; // practice bot 1240 comp bot 615			+60
+	public static int toteTop = 500;
 
 	private static int SOFT_HEIGHT_LIMIT_HIGH = 3700;	//3700
 	private static int SOFT_HEIGHT_LIMIT_LOW = 200;		// 200
@@ -125,7 +126,13 @@ public class Elevator {
 			moveTo(posHookA);
 		} else if(_controller.getRawButton(Addresses.BUTTON_HOOK_B)) {
 			moveTo(posRide);
-		} else {
+		} 
+		
+		else if(_controller.getRawButton(Addresses.TOTE_TOP)) {
+			moveTo(toteTop);
+		} 
+		
+		else {
 			runMotors(_controller.getY(), encoderCount);
 			_alreadyRestarted = false;
 		}

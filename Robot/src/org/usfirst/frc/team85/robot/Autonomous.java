@@ -9,7 +9,7 @@ public class Autonomous {
 	private int YELLOWTOTEDRIVE = 1547;
 	private int ONETOTE = 516;
 	private int DRIVEINTOAUTO = 1547;
-	private int WALLTOAUTO = 2750;
+	private int WALLTOAUTO;// = 2750;
 	private int TOTETOAUTO = 0;//was 1900 => try 2500
 	private int FORWARD = 0;
 	private int CANPICKUP = 600;
@@ -51,7 +51,9 @@ public class Autonomous {
 
 		_overRamp = SmartDashboard.getBoolean("DB/Button 1", false);
 		FORWARD = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
-
+		//testing
+		WALLTOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
+		//testing
 		TOTETOAUTO = (int)(1000 * SmartDashboard.getNumber("DB/Slider 1", 0));
 		HOWMANYSEC = Math.abs(SmartDashboard.getNumber("DB/Slider 2", 0));
 		
@@ -147,7 +149,7 @@ public class Autonomous {
 				break;
 			case 2:
 				driveLinear(WALLTOAUTO, _overRamp);
-					break;
+				break;
 			case 3:
 				if(!_elevator.atBottom()) {
 					_elevator.moveTo(_elevator.getCurrentCount() - 200);
@@ -193,7 +195,7 @@ public class Autonomous {
 		case 4://RIP can
 			switch (STAGE) {
 			case 0:
-				if(_timer.get() > 1.0) {
+				if(_timer.get() > 0.5) {
 					_timer.reset();
 					STAGE++;
 				} else {
@@ -203,10 +205,13 @@ public class Autonomous {
 			case 1:
 				if(_timer.get() < HOWMANYSEC) {
 					_drive.autoMech(ISPOSSTRAFE);
-					_intake.reap(false);
 				}	else {
 					STAGE++;
 				}
+				break;
+			case 2:
+				_intake.reap(false);
+				STAGE++;
 				break;
 			}
 			break;
@@ -435,7 +440,7 @@ public class Autonomous {
 					speed = BASE + RAMPSPEED * currentCount / ACCELERATIONCOUNT;
 				} else if (currentCount > deccelerationCount && currentCount <= goal) {	//triangle two
 					_drive.setBrakeMode(true);
-					speed = (BASE + RAMPSPEED) * (goal - currentCount) / ACCELERATIONCOUNT;
+					speed = BASE + RAMPSPEED * (goal - currentCount) / ACCELERATIONCOUNT;
 				} else if (currentCount > ACCELERATIONCOUNT && currentCount <= deccelerationCount){	//rectangle
 					speed = (BASE + RAMPSPEED);
 				} else {	//outside

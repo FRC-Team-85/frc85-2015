@@ -1,6 +1,7 @@
 package org.usfirst.frc.team85.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake {
 
@@ -12,8 +13,10 @@ public class Intake {
 	private static CANTalon _rightMotor;
 	private Solenoid _scythe;
 	private boolean reapingAuthorized = false;
+	private Timer _timer;
+	private boolean _timerRestarted;
 	
-	private static final double INSPEED = 1;
+	private static final double INSPEED = .8;
 	
 	public Intake (Joystick opController, boolean partyTime) {
 		_operatorController = opController;
@@ -23,6 +26,8 @@ public class Intake {
 		_rightMotor = new CANTalon(Addresses.RIGHT_INTAKE_MOTOR);
 		_scythe = new Solenoid(Addresses.PNEUMATIC_CONTROLLER_CID, Addresses.SCYTHE_SOLENOID_CHANNEL);
 		reapingAuthorized = partyTime;
+		_timer = new Timer();
+		_timerRestarted = false;
 	}
 	
 	public void run() {
@@ -49,6 +54,24 @@ public class Intake {
 		
 		reap();
 		
+		if(_operatorController.getRawButton(Addresses.SUCKING_SIDEWAYS)) {
+			if(!_timerRestarted) {
+				_timer.reset();
+			}
+			if(_timer.get() <= 1) {
+				_leftMotor.set(INSPEED / 2);
+				_rightMotor.set(-INSPEED / 2);
+			}
+			if(_timer.get() <= 2 && _timer.get() > 1) {
+				setIntakeMotors(INSPEED / 2);
+			}
+			if(_timer.get() > 2) {
+				setIntakeMotors(0.0);
+			}
+		} else {
+			_timerRestarted = false;
+		}
+		SmartDashboard.putNumber("Intake Timer", _timer.get());
 	}
 	
 	private void reap() {

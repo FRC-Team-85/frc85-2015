@@ -57,15 +57,28 @@ public class Drive {
 	
 	}
 	
-	private double scaleDrive(double speed) {	//L_35%,__70%,	LR50%,_R100%
+	private double scaleDrive(double speed) {	//LR100%, L_50%,_R50% __80%
 		double scale = speed;
-		if (_controller.getRawButton(Addresses.SLOW_A)) {
+		boolean left = _controller.getRawButton(Addresses.MOD_A);
+		boolean right = _controller.getRawButton(Addresses.MOD_B);
+		if (left && right) {
+			return scale;
+		} else if (left || right) {
+			return scale * 0.50;
+		} else {
+			return scale * 0.8;
+		}
+	/*
+		//L_35%,__70%,	LR50%,_R100%
+		double scale = speed;
+		if (_controller.getRawButton(Addresses.MOD_A)) {
 			scale *= 0.5;
 		}
-		if (_controller.getRawButton(Addresses.FAST_B)) {
+		if (_controller.getRawButton(Addresses.MOD_B)) {
 			return scale;
 		}
 		return scale * .7;
+	*/
 	}
 	
 	public void setMotors(double frontLeftSpeed, double frontRightSpeed, double backLeftSpeed, double backRightSpeed) {
