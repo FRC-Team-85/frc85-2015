@@ -48,14 +48,13 @@ public class Drive {
 		if(_controller.getRawButton(2)) {
 			SmartDashboard.putString("DB/String 0", getAveEncoders() + "");
 		}
-		
-		/*if(Math.abs(_controller.getX()) <= .05 && Math.abs(_controller.getY()) <= .05 && Math.abs(_controller.getTwist()) <= .05) {
+		if(Math.abs(_controller.getX()) <= .05 && Math.abs(_controller.getY()) <= .05 && Math.abs(_controller.getTwist()) <= .05) {
 			setMotors(0.0, 0.0, 0.0, 0.0);
 			return;
-		}*/
+		}
 	
-		//_drive.mecanumDrive_Cartesian(scaleDrive(_controller.getX()), scaleDrive(_controller.getY()), scaleDrive(_controller.getTwist()), 0);	
-		_drive.tankDrive(_controller.getY(), _controller.getThrottle());
+		_drive.mecanumDrive_Cartesian(scaleDrive(_controller.getX()), scaleDrive(_controller.getY()), scaleDrive(_controller.getTwist()), 0);	
+	
 	}
 	
 	private double scaleDrive(double speed) {	//LR100%, L_50%,_R50% __80%
